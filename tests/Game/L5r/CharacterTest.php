@@ -101,6 +101,22 @@ class CharacterTest extends TestCase {
         $o->receiveAttack($attacker);
     }
 
+    /**
+     * @dataProvider getFighter
+     */
+    public function testAttackWounds(Character $o) {
+        $attacker = $this->createMock(Character::class);
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(20);
+        $attacker->expects($this->once())
+                ->method('getDamage')
+                ->willReturn(58);
+        $o->receiveAttack($attacker);
+        $this->assertTrue($o->isDead());
+    }
+
+    // providers
     public function getFighter() {
         return [[new Character("yolo")]];
     }
