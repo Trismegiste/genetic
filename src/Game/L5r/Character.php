@@ -101,7 +101,7 @@ class Character implements CharInt, Fighter {
         $this->usedVoidPoint++;
     }
 
-    protected function getWoundPenalty() {
+    public function getWoundPenalty() {
         if ($this->wounds <= (5 * $this->earthRing)) {
             return 0;
         }
