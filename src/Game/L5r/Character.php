@@ -68,7 +68,18 @@ class Character implements CharInt, Fighter {
     }
 
     public function getAttack() {
-        
+        $roll = $this->attack[0] + $this->attack[1];
+        $keep = $this->attack[0];
+
+        if ($this->voidStrategy === 'attack') {
+            if ($this->hasVoidPoint()) {
+                $this->usedVoidPoint();
+                $roll++;
+                $keep++;
+            }
+        }
+
+        return DiceRoller::rollAndKeep($roll, $keep) - $this->getWoundPenalty();
     }
 
     public function getDamage() {
