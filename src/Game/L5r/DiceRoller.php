@@ -20,7 +20,7 @@ class DiceRoller {
     static public function rollAndKeep($r, $k) {
         $pool = [];
         for ($idx = 0; $idx < $r; $idx++) {
-            $pool[idx] = $this->rollD10();
+            $pool[$idx] = DiceRoller::rollD10();
         }
 
         rsort($pool);

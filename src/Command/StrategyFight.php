@@ -16,6 +16,11 @@ class StrategyFight extends Command {
 
     public function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln("test");
+        $s = 0;
+        for ($k = 0; $k < 1000000; $k++) {
+            $s += \Trismegiste\Genetic\Game\L5r\DiceRoller::rollAndKeep(6, 3);
+        }
+        $output->writeln($s / 1000000);
     }
 
 }
