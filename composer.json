@@ -1,0 +1,20 @@
+{
+    "name": "trismegiste/genetic",
+    "description": "Pet project",
+    "type": "project",
+    "require": {
+        "symfony/console": "^3.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Trismegiste",
+            "email": "flo@trismegiste.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Trismegiste\\Genetic\\": "src"
+        }
+    }
+}
