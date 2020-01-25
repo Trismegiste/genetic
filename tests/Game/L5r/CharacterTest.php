@@ -5,21 +5,27 @@ use Trismegiste\Genetic\Game\L5r\Character;
 
 class CharacterTest extends TestCase {
 
-    public function testCreation() {
-        $o = new Character("yolo");
+    /**
+     * @dataProvider getFighter
+     */
+    public function testCreation($o) {
         $this->assertEquals("yolo", $o->getName());
         $this->assertEquals('attack', $o->getVoidStrat());
     }
 
-    public function testWinningCount() {
-        $o = new Character("yolo");
+    /**
+     * @dataProvider getFighter
+     */
+    public function testWinningCount($o) {
         $this->assertEquals(0, $o->getWinningCount());
         $o->incVictory();
         $this->assertEquals(1, $o->getWinningCount());
     }
 
-    public function testWounds() {
-        $o = new Character("yolo");
+    /**
+     * @dataProvider getFighter
+     */
+    public function testWounds($o) {
         $this->assertEquals(0, $o->getWoundPenalty());
         $o->addWounds(15);
         $this->assertEquals(0, $o->getWoundPenalty());
@@ -27,14 +33,76 @@ class CharacterTest extends TestCase {
         $this->assertEquals(3, $o->getWoundPenalty());
     }
 
-    public function testDead() {
-        $o = new Character("yolo");
+    /**
+     * @dataProvider getFighter
+     */
+    public function testDead($o) {
         $this->assertFalse($o->isDead());
         $o->addWounds(57);
         $this->assertEquals(1000, $o->getWoundPenalty());
         $this->assertFalse($o->isDead());
         $o->addWounds(1);
         $this->assertTrue($o->isDead());
+    }
+
+    /**
+     * @dataProvider getFighter
+     */
+    public function testFailedAttack($o) {
+        $attacker = $this->createMock(Character::class);
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(1);
+        $attacker->expects($this->never())
+                ->method('getDamage');
+        $o->receiveAttack($attacker);
+    }
+
+    /**
+     * @dataProvider getFighter
+     */
+    public function testSuccedAttack($o) {
+        $attacker = $this->createMock(Character::class);
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(20);
+        $attacker->expects($this->once())
+                ->method('getDamage');
+        $o->receiveAttack($attacker);
+    }
+
+    public function testFailedAttackWithArmorStrat() {
+        $o = new Character("yolo", 'armor');
+        $this->assertEquals('armor', $o->getVoidStrat());
+
+        $attacker = $this->createMock(Character::class);
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(20);
+
+        $attacker->expects($this->never())
+                ->method('getDamage');
+
+        $o->receiveAttack($attacker);
+    }
+
+    public function testSuccedAttackWithArmorStrat() {
+        $o = new Character("yolo", 'armor');
+        $this->assertEquals('armor', $o->getVoidStrat());
+
+        $attacker = $this->createMock(Character::class);
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(30);
+
+        $attacker->expects($this->once())
+                ->method('getDamage');
+
+        $o->receiveAttack($attacker);
+    }
+
+    public function getFighter() {
+        return [[new Character("yolo")]];
     }
 
 }
