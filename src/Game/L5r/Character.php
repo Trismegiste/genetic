@@ -29,6 +29,10 @@ class Character implements CharInt, Fighter {
         $this->voidStrategy = $voidStrat;
     }
 
+    public function getVoidStrat() {
+        return $this->voidStrategy;
+    }
+
     public function addWounds($val) {
         if ($this->voidStrategy === 'soak') {
             if ($this->hasVoidPoint()) {
