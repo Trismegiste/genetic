@@ -83,7 +83,7 @@ class Character implements CharInt, Fighter {
     }
 
     public function getDamage() {
-        
+        return DiceRoller::rollAndKeep($this->damage[0] + $this->damage[1], $this->damage[0]);
     }
 
     protected function hasVoidPoint() {
@@ -92,6 +92,15 @@ class Character implements CharInt, Fighter {
 
     protected function useVoidPoint() {
         $this->usedVoidPoint++;
+    }
+
+    protected function getWoundPenalty() {
+        if ($this->wounds <= (5 * $this->earthRing)) {
+            return 0;
+        }
+        $levelAfterFirst = floor(($this->wounds - 5 * $this->earthRing) / 2);
+
+        return $this->levelPenalty[$levelAfterFirst];
     }
 
 }
