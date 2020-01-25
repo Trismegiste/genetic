@@ -105,6 +105,8 @@ class CharacterTest extends TestCase {
      * @dataProvider getFighter
      */
     public function testAttackWounds(Character $o) {
+        $this->assertFalse($o->isDead());
+
         $attacker = $this->createMock(Character::class);
         $attacker->expects($this->once())
                 ->method('getAttack')
@@ -112,8 +114,54 @@ class CharacterTest extends TestCase {
         $attacker->expects($this->once())
                 ->method('getDamage')
                 ->willReturn(58);
+
         $o->receiveAttack($attacker);
         $this->assertTrue($o->isDead());
+    }
+
+    public function testAttackWoundsWithSoak() {
+        $o = new Character('yolo', 'soak');
+        $this->assertFalse($o->isDead());
+
+        $attacker = $this->createMock(Character::class);
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(20);
+        $attacker->expects($this->once())
+                ->method('getDamage')
+                ->willReturn(58);
+
+        $o->receiveAttack($attacker);
+        $this->assertFalse($o->isDead());
+    }
+
+    public function testAttackWoundsWithSoakButDeadAnyway() {
+        $o = new Character('yolo', 'soak');
+        $this->assertFalse($o->isDead());
+
+        $attacker = $this->createMock(Character::class);
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(20);
+        $attacker->expects($this->once())
+                ->method('getDamage')
+                ->willReturn(68);
+
+        $o->receiveAttack($attacker);
+        $this->assertTrue($o->isDead());
+    }
+
+    /**
+     * @dataProvider getFighter
+     */
+    public function testVoidPoint(Character $o) {
+        $this->assertTrue($o->hasVoidPoint());
+        $o->useVoidPoint();
+        $this->assertTrue($o->hasVoidPoint());
+        $o->useVoidPoint();
+        $this->assertTrue($o->hasVoidPoint());
+        $o->useVoidPoint();
+        $this->assertFalse($o->hasVoidPoint());
     }
 
     // providers

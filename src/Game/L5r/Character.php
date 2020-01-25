@@ -93,11 +93,11 @@ class Character implements CharInt, Fighter {
         return DiceRoller::rollAndKeep($this->damage[0] + $this->damage[1], $this->damage[0]);
     }
 
-    protected function hasVoidPoint() {
+    public function hasVoidPoint() {
         return $this->usedVoidPoint < $this->voidRing;
     }
 
-    protected function useVoidPoint() {
+    public function useVoidPoint() {
         $this->usedVoidPoint++;
     }
 
