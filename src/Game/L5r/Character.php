@@ -18,7 +18,7 @@ class Character implements CharInt, Fighter {
     protected $wounds = 0;
     protected $usedVoidPoint = 0;
     protected $reflexeTrait = 3;
-    protected $levelPenalty = [3, 5, 10, 15, 20, 40, 1000];
+    protected $levelPenalty = [3, 5, 10, 15, 20, 40];
     protected $voidStrategy; // attack, armor, soak
     protected $insightRank = 1;
     protected $winningCount = 0;
@@ -32,7 +32,7 @@ class Character implements CharInt, Fighter {
     public function addWounds($val) {
         if ($this->voidStrategy === 'soak') {
             if ($this->hasVoidPoint()) {
-                $this->usedVoidPoint();
+                $this->useVoidPoint();
                 $val -= 10;
             }
         }
@@ -54,12 +54,15 @@ class Character implements CharInt, Fighter {
 
         if ($this->voidStrategy === 'armor') {
             if ($this->hasVoidPoint()) {
-                $this->usedVoidPoint();
+                $this->useVoidPoint();
                 $tn += 10;
             }
         }
 
-        return $att >= $tn;
+        if ($att >= $tn) {
+            $dam = $f->getDamage();
+            $this->addWounds($dam);
+        }
     }
 
     public function restart() {
@@ -73,7 +76,7 @@ class Character implements CharInt, Fighter {
 
         if ($this->voidStrategy === 'attack') {
             if ($this->hasVoidPoint()) {
-                $this->usedVoidPoint();
+                $this->useVoidPoint();
                 $roll++;
                 $keep++;
             }
@@ -100,7 +103,23 @@ class Character implements CharInt, Fighter {
         }
         $levelAfterFirst = floor(($this->wounds - 5 * $this->earthRing) / 2);
 
-        return $this->levelPenalty[$levelAfterFirst];
+        if ($levelAfterFirst < count($this->levelPenalty)) {
+            return $this->levelPenalty[$levelAfterFirst];
+        } else {
+            return 1000;
+        }
+    }
+
+    public function rollInit() {
+        return DiceRoller::rollAndKeep($this->reflexeTrait + $this->insightRank, $this->reflexeTrait);
+    }
+
+    public function incVictory() {
+        $this->winningCount++;
+    }
+
+    public function getWinningCount() {
+        return $this->winningCount;
     }
 
 }
