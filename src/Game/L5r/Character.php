@@ -11,30 +11,33 @@ use Trismegiste\Genetic\Game\Fighter;
 class Character implements CharInt, Fighter {
 
     protected $name;
-    protected $attack = [3, 3]; // [trait, competence]
-    protected $earthRing = 3;
+    protected $genome = [];
     protected $damage = [2, 4];  // 6g2
-    protected $voidRing = 3;
     protected $wounds = 0;
     protected $usedVoidPoint = 0;
-    protected $reflexeTrait = 3;
     protected $levelPenalty = [3, 5, 10, 15, 20, 40];
-    protected $voidStrategy; // attack, armor, soak
     protected $insightRank = 1;
     protected $winningCount = 0;
     protected $generation = 0;
 
     public function __construct($n, $voidStrat = 'attack') {
         $this->name = $n;
-        $this->voidStrategy = $voidStrat;
+        $this->genome = [
+            'agility' => new Property\RingTrait(3),
+            'kenjutsu' => new Property\Skill(3),
+            'void' => new Property\VoidRing(3),
+            'reflexe' => new Property\RingTrait(3),
+            'earth' => new Property\Ring(3),
+            'voidStrat' => new Property\VoidStrategy($voidStrat)
+        ];
     }
 
     public function getVoidStrat() {
-        return $this->voidStrategy;
+        return $this->genome['voidStrat']->get();
     }
 
     public function addWounds($val) {
-        if ($this->voidStrategy === 'soak') {
+        if ($this->getVoidStrat() === 'soak') {
             if ($this->hasVoidPoint()) {
                 $this->useVoidPoint();
                 $val -= 10;
@@ -49,14 +52,14 @@ class Character implements CharInt, Fighter {
     }
 
     public function isDead() {
-        return $this->wounds > (19 * $this->earthRing);
+        return $this->wounds > (19 * $this->genome['earth']->get());
     }
 
     public function receiveAttack(Fighter $f) {
         $att = $f->getAttack();
-        $tn = 5 * ($this->reflexeTrait + 1);
+        $tn = 5 * ($this->genome['reflexe']->get() + 1);
 
-        if ($this->voidStrategy === 'armor') {
+        if ($this->getVoidStrat() === 'armor') {
             if ($this->hasVoidPoint()) {
                 $this->useVoidPoint();
                 $tn += 10;
@@ -75,10 +78,10 @@ class Character implements CharInt, Fighter {
     }
 
     public function getAttack() {
-        $roll = $this->attack[0] + $this->attack[1];
-        $keep = $this->attack[0];
+        $roll = $this->genome['agility']->get() + $this->genome['kenjutsu']->get();
+        $keep = $this->genome['agility']->get();
 
-        if ($this->voidStrategy === 'attack') {
+        if ($this->getVoidStrat() === 'attack') {
             if ($this->hasVoidPoint()) {
                 $this->useVoidPoint();
                 $roll++;
@@ -94,7 +97,7 @@ class Character implements CharInt, Fighter {
     }
 
     public function hasVoidPoint() {
-        return $this->usedVoidPoint < $this->voidRing;
+        return $this->usedVoidPoint < $this->genome['void']->get();
     }
 
     public function useVoidPoint() {
@@ -102,10 +105,10 @@ class Character implements CharInt, Fighter {
     }
 
     public function getWoundPenalty() {
-        if ($this->wounds <= (5 * $this->earthRing)) {
+        if ($this->wounds <= (5 * $this->genome['earth']->get())) {
             return 0;
         }
-        $levelAfterFirst = floor(($this->wounds - 5 * $this->earthRing) / 2);
+        $levelAfterFirst = floor(($this->wounds - 5 * $this->genome['earth']->get()) / 2);
 
         if ($levelAfterFirst < count($this->levelPenalty)) {
             return $this->levelPenalty[$levelAfterFirst];
@@ -115,7 +118,7 @@ class Character implements CharInt, Fighter {
     }
 
     public function rollInit() {
-        return DiceRoller::rollAndKeep($this->reflexeTrait + $this->insightRank, $this->reflexeTrait);
+        return DiceRoller::rollAndKeep($this->genome['reflexe']->get() + $this->insightRank, $this->genome['reflexe']->get());
     }
 
     public function incVictory() {
