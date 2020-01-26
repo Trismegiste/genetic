@@ -42,15 +42,6 @@ class StrategyFight extends Command {
             $output->writeln('best = ' . $this->population[10]);
             $output->writeln('best = ' . $this->population[30]);
 
-            if (false) {
-                // write
-                $fch = fopen("generation-$generation.txt", "w");
-                foreach ($this->population as $pc) {
-                    fwrite($fch, $pc->getCost() . ";" . $pc->getWinningCount() . PHP_EOL);
-                }
-                fclose($fch);
-            }
-
             foreach ($this->population as $idx => $pc) {
                 $pc->newGeneration();
                 if ($idx > $this->popSize / 10) {
@@ -60,6 +51,14 @@ class StrategyFight extends Command {
                 }
             }
         }
+    }
+
+    protected function writePopulation($gen) {
+        $fch = fopen("generation-$gen.txt", "w");
+        foreach ($this->population as $pc) {
+            fwrite($fch, $pc->getCost() . ";" . $pc->getWinningCount() . PHP_EOL);
+        }
+        fclose($fch);
     }
 
     protected function bestFit() {
