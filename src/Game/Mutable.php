@@ -9,7 +9,7 @@ interface Mutable {
 
     public function mutate();
 
-    public function getFitness();
+    public function getFitness($env);
 
     public function newGeneration();
 }

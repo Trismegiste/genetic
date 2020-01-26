@@ -15,13 +15,13 @@ class StrategyFight extends Command {
     // the name of the command
     protected static $defaultName = 'search:strategy';
     protected $population = [];
-    protected $popSize = 200;
+    protected $popSize = 100;
     protected $maxGeneration = 300;
 
     public function initialize(InputInterface $input, OutputInterface $output) {
         // init pop
         for ($k = 0; $k < $this->popSize; $k++) {
-            $pc = new Character('pc' . $k);
+            $pc = new Character('L5R');
             $this->population[] = $pc;
         }
     }
@@ -32,14 +32,11 @@ class StrategyFight extends Command {
         for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
             $output->writeln("======== Generation $generation ========");
             $this->tournament();
-            $regression = $this->bestFit();
 
+            $env['maxwin'] = $this->popSize;
             usort($this->population, function($a, $b) {
-                global $regression;
-                $distanceA = ($regression['a'] + $regression['b'] * $a->getCost() - $a->getWinningCount()) / sqrt(1 + $regression['b']);
-                $distanceB = ($regression['a'] + $regression['b'] * $b->getCost() - $b->getWinningCount()) / sqrt(1 + $regression['b']);
-
-                return $distanceB - $distanceA;
+                global $env;
+                return $a->getFitness($env) - $b->getFitness($env);
             });
             $output->writeln('best = ' . $this->population[0]);
             $output->writeln('best = ' . $this->population[10]);
@@ -56,7 +53,7 @@ class StrategyFight extends Command {
 
             foreach ($this->population as $idx => $pc) {
                 $pc->newGeneration();
-                if ($idx > $this->popSize / 2) {
+                if ($idx > $this->popSize / 10) {
                     $obj = clone $this->population[rand(0, $this->popSize / 10)];
                     $obj->mutate();
                     $this->population[$idx] = $obj;
@@ -115,7 +112,7 @@ class StrategyFight extends Command {
             }
         }
 
-        return $pc1->isDead() ? $pc2->getName() : $pc1->getName();
+        return $pc1->isDead() ? $pc2 : $pc1;
     }
 
     protected function tournament() {
@@ -129,7 +126,7 @@ class StrategyFight extends Command {
                 $pc1->restart();
                 $pc2->restart();
                 $winner = $this->battle($pc1, $pc2);
-                if ($winner === $pc1->getName()) {
+                if ($winner === $pc1) {
                     $pc1->incVictory();
                 } else {
                     $pc2->incVictory();
