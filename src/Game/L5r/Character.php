@@ -8,7 +8,7 @@ use Trismegiste\Genetic\Game\Fighter;
 /**
  * A L5R character
  */
-class Character implements CharInt, Fighter {
+class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
 
     protected $name;
     protected $weaponRoll = 4; // + strength
@@ -132,6 +132,20 @@ class Character implements CharInt, Fighter {
 
     public function getWinningCount() {
         return $this->winningCount;
+    }
+
+    public function getFitness() {
+        $s = 0;
+        foreach ($this->genome as $gene) {
+            $s += $gene->getCost();
+        }
+        return $this->winningCount / $s;
+    }
+
+    public function mutate() {
+        $gene = $this->genome[rand(0, count($this->genome))];
+        $gene->mutate();
+        $this->winningCount = 0;
     }
 
 }
