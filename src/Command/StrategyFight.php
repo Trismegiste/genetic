@@ -15,7 +15,7 @@ class StrategyFight extends Command {
     // the name of the command
     protected static $defaultName = 'search:strategy';
     protected $population = [];
-    protected $popSize = 100;
+    protected $popSize = 300;
     protected $maxGeneration = 300;
 
     public function initialize(InputInterface $input, OutputInterface $output) {
@@ -32,12 +32,21 @@ class StrategyFight extends Command {
         for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
             $output->writeln("======== Generation $generation ========");
             $this->tournament();
-
+            $output->writeln($this->bestFit());
             usort($this->population, function($a, $b) {
                 return $b->getFitness() - $a->getFitness();
             });
 
             $output->writeln('best = ' . $this->population[0]);
+
+            if (true) {
+                // write
+                $fch = fopen("generation-$generation.txt", "w");
+                foreach ($this->population as $pc) {
+                    fwrite($fch, $pc->getCost() . ";" . $pc->getWinningCount() . PHP_EOL);
+                }
+                fclose($fch);
+            }
 
             foreach ($this->population as $idx => $pc) {
                 $pc->newGeneration();
@@ -46,6 +55,29 @@ class StrategyFight extends Command {
                 }
             }
         }
+    }
+
+    protected function bestFit() {
+        // ln(win) avg
+        $winAvg = 0;
+        $costAvg = 0;
+        foreach ($this->population as $pc) {
+            $winAvg += $pc->getWinningCount();
+            $costAvg += log($pc->getCost());
+        }
+        $winAvg /= $this->popSize;
+        $costAvg /= $this->popSize;
+
+        $covariance = 0;
+        $variance = 0;
+        foreach ($this->population as $pc) {
+            $covariance += (log($pc->getCost()) - $costAvg) * ($pc->getWinningCount() - $winAvg);
+            $variance += pow(log($pc->getCost()) - $costAvg, 2);
+        }
+        $slope = $covariance / $variance;
+        $a = $winAvg - $slope * $costAvg;
+
+        return [$a, $slope];
     }
 
     protected function battle(Character $pc1, Character $pc2) {
