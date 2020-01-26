@@ -14,7 +14,7 @@ class VoidRing implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function getCost() {
-        return 6 * $this->attribute * ($this->attribute + 1) / 2;
+        return 6 * $this->void * ($this->void + 1) / 2;
     }
 
     public function mutate() {

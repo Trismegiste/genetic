@@ -10,4 +10,6 @@ interface Mutable {
     public function mutate();
 
     public function getFitness();
+
+    public function newGeneration();
 }

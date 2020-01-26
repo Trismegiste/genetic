@@ -97,7 +97,7 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
 
     public function getDamage() {
         $keep = $this->weaponKeep;
-        $roll = $this->weaponRoll + $this->genome['strength'] + $keep;
+        $roll = $this->weaponRoll + $this->genome['strength']->get() + $keep;
         return DiceRoller::rollAndKeep($roll, $keep);
     }
 
@@ -143,9 +143,23 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
     }
 
     public function mutate() {
-        $gene = $this->genome[rand(0, count($this->genome))];
+        $pickAGene = rand(0, count($this->genome) - 1);
+        $geneName = array_keys($this->genome);
+        $gene = $this->genome[$geneName[$pickAGene]];
         $gene->mutate();
+    }
+
+    public function newGeneration() {
         $this->winningCount = 0;
+    }
+
+    public function __toString() {
+        $compil = '';
+        foreach ($this->genome as $key => $gene) {
+            $compil .= $key . ':' . $gene->get() . ' ';
+        }
+
+        return $this->getName() . ' ' . $compil . 'win:' . $this->winningCount . ' fit:' . $this->getFitness();
     }
 
 }

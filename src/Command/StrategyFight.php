@@ -15,51 +15,37 @@ class StrategyFight extends Command {
     // the name of the command
     protected static $defaultName = 'search:strategy';
     protected $population = [];
-    protected $popSize = 300;
+    protected $popSize = 50;
+    protected $maxGeneration = 300;
 
-    public function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln("test");
-
+    public function initialize(InputInterface $input, OutputInterface $output) {
         // init pop
-        $mode = ['soak', 'attack', 'armor'];
         for ($k = 0; $k < $this->popSize; $k++) {
-            $strat = $mode[$k % 3];
-            $pc = new Character('pc' . $k . ' ' . $strat, $strat);
+            $pc = new Character('pc' . $k);
             $this->population[] = $pc;
         }
+    }
 
-        for ($i = 0; $i < $this->popSize; $i++) {
-            $pc1 = $this->population[$i];
-            for ($j = 0; $j < $this->popSize; $j++) {
-                if ($i === $j) {
-                    continue;
-                }
-                $pc2 = $this->population[$j];
-                $pc1->restart();
-                $pc2->restart();
-                $winner = $this->battle($pc1, $pc2);
-                if ($winner === $pc1->getName()) {
-                    $pc1->incVictory();
-                } else {
-                    $pc2->incVictory();
+    public function execute(InputInterface $input, OutputInterface $output) {
+        $output->writeln("Darwin rules");
+
+        for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
+            $output->writeln("======== Generation $generation ========");
+            $this->tournament();
+
+            usort($this->population, function($a, $b) {
+                return $b->getFitness() - $a->getFitness();
+            });
+
+            $output->writeln('best = ' . $this->population[0]);
+
+            foreach ($this->population as $idx => $pc) {
+                $pc->newGeneration();
+                if ($idx > $this->popSize / 2) {
+                    $pc->mutate();
                 }
             }
         }
-
-        usort($this->population, function($a, $b) {
-            return $b->getWinningCount() - $a->getWinningCount();
-        });
-
-        $stratCounter = array_combine($mode, [0, 0, 0]);
-        $winCounter = array_combine($mode, [0, 0, 0]);
-        foreach ($this->population as $pc) {
-            $stratCounter[$pc->getVoidStrat()] ++;
-            $winCounter[$pc->getVoidStrat()] += $pc->getWinningCount();
-        }
-        foreach ($mode as $idx) {
-            $output->writeln($idx . ' ' . floor(($winCounter[$idx] / $stratCounter[$idx])));
-        }
-        var_dump($stratCounter, $winCounter);
     }
 
     protected function battle(Character $pc1, Character $pc2) {
@@ -90,6 +76,26 @@ class StrategyFight extends Command {
         }
 
         return $pc1->isDead() ? $pc2->getName() : $pc1->getName();
+    }
+
+    protected function tournament() {
+        for ($i = 0; $i < $this->popSize; $i++) {
+            $pc1 = $this->population[$i];
+            for ($j = 0; $j < $this->popSize; $j++) {
+                if ($i === $j) {
+                    continue;
+                }
+                $pc2 = $this->population[$j];
+                $pc1->restart();
+                $pc2->restart();
+                $winner = $this->battle($pc1, $pc2);
+                if ($winner === $pc1->getName()) {
+                    $pc1->incVictory();
+                } else {
+                    $pc2->incVictory();
+                }
+            }
+        }
     }
 
 }
