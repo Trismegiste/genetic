@@ -3,6 +3,7 @@
 namespace Trismegiste\Genetic\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\L5r\Character;
@@ -15,10 +16,18 @@ class StrategyFight extends Command {
     // the name of the command
     protected static $defaultName = 'search:strategy';
     protected $population = [];
-    protected $popSize = 100;
-    protected $maxGeneration = 300;
+    protected $popSize;
+    protected $maxGeneration;
+
+    protected function configure() {
+        $this->setDescription("Compute evolution")
+                ->addArgument('popSize', InputArgument::REQUIRED, "Population size")
+                ->addArgument('maxIter', InputArgument::REQUIRED, "Maximum iteration");
+    }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
+        $this->popSize = $input->getArgument('popSize');
+        $this->maxGeneration = $input->getArgument("maxIter");
         // init pop
         for ($k = 0; $k < $this->popSize; $k++) {
             $pc = new Character('L5R');
@@ -38,9 +47,9 @@ class StrategyFight extends Command {
                 global $env;
                 return $a->getFitness($env) - $b->getFitness($env);
             });
-            $output->writeln('best = ' . $this->population[0]);
-            $output->writeln('best = ' . $this->population[10]);
-            $output->writeln('best = ' . $this->population[30]);
+            foreach ([0, 10, 20] as $idx) {
+                $output->writeln('best = ' . $this->population[$idx]);
+            }
 
             foreach ($this->population as $idx => $pc) {
                 $pc->newGeneration();
