@@ -134,12 +134,17 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
         return $this->winningCount;
     }
 
-    public function getFitness() {
+    public function getCost() {
         $s = 0;
         foreach ($this->genome as $gene) {
             $s += $gene->getCost();
         }
-        return $this->winningCount / $s;
+
+        return $s;
+    }
+
+    public function getFitness() {
+        return $this->winningCount;
     }
 
     public function mutate() {

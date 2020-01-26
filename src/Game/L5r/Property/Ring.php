@@ -14,7 +14,7 @@ class Ring implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function getCost() {
-        return 8 * $this->ring * ($this->ring + 1) / 2;
+        return 8 * $this->ring * ($this->ring + 1) / 2 - 24;
     }
 
     public function mutate() {

@@ -15,7 +15,7 @@ class StrategyFight extends Command {
     // the name of the command
     protected static $defaultName = 'search:strategy';
     protected $population = [];
-    protected $popSize = 50;
+    protected $popSize = 100;
     protected $maxGeneration = 300;
 
     public function initialize(InputInterface $input, OutputInterface $output) {

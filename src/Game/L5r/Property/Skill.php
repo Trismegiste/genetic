@@ -14,7 +14,7 @@ class Skill implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function getCost() {
-        return $this->skill * ($this->skill + 1) / 2;
+        return $this->skill * ($this->skill + 1) / 2 - 1;
     }
 
     public function mutate() {

@@ -14,7 +14,7 @@ class RingTrait implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function getCost() {
-        return 4 * $this->attribute * ($this->attribute + 1) / 2;
+        return 4 * $this->attribute * ($this->attribute + 1) / 2 - 12;
     }
 
     public function mutate() {
