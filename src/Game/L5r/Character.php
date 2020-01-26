@@ -11,13 +11,15 @@ use Trismegiste\Genetic\Game\Fighter;
 class Character implements CharInt, Fighter {
 
     protected $name;
-    protected $genome = [];
-    protected $damage = [2, 4];  // 6g2
+    protected $weaponRoll = 4; // + strength
+    protected $weaponKeep = 2;
     protected $wounds = 0;
     protected $usedVoidPoint = 0;
     protected $levelPenalty = [3, 5, 10, 15, 20, 40];
     protected $insightRank = 1;
     protected $winningCount = 0;
+    // mutable
+    protected $genome = [];
     protected $generation = 0;
 
     public function __construct($n, $voidStrat = 'attack') {
@@ -28,7 +30,8 @@ class Character implements CharInt, Fighter {
             'void' => new Property\VoidRing(3),
             'reflexe' => new Property\RingTrait(3),
             'earth' => new Property\Ring(3),
-            'voidStrat' => new Property\VoidStrategy($voidStrat)
+            'voidStrat' => new Property\VoidStrategy($voidStrat),
+            'strength' => new Property\RingTrait(2)
         ];
     }
 
@@ -93,7 +96,9 @@ class Character implements CharInt, Fighter {
     }
 
     public function getDamage() {
-        return DiceRoller::rollAndKeep($this->damage[0] + $this->damage[1], $this->damage[0]);
+        $keep = $this->weaponKeep;
+        $roll = $this->weaponRoll + $this->genome['strength'] + $keep;
+        return DiceRoller::rollAndKeep($roll, $keep);
     }
 
     public function hasVoidPoint() {
