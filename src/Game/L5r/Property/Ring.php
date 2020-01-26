@@ -22,6 +22,9 @@ class Ring implements \Trismegiste\Genetic\Game\Property {
         if ($this->ring < 3) {
             $this->ring = 3;
         }
+        if ($this->ring > 10) {
+            $this->ring = 10;
+        }
     }
 
     public function __construct($v) {

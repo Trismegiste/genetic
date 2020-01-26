@@ -22,6 +22,9 @@ class Skill implements \Trismegiste\Genetic\Game\Property {
         if ($this->skill < 1) {
             $this->skill = 1;
         }
+        if ($this->skill > 10) {
+            $this->skill = 10;
+        }
     }
 
     public function __construct($v) {

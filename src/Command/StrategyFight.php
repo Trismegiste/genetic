@@ -15,7 +15,7 @@ class StrategyFight extends Command {
     // the name of the command
     protected static $defaultName = 'search:strategy';
     protected $population = [];
-    protected $popSize = 100;
+    protected $popSize = 200;
     protected $maxGeneration = 300;
 
     public function initialize(InputInterface $input, OutputInterface $output) {
@@ -42,6 +42,8 @@ class StrategyFight extends Command {
                 return $distanceB - $distanceA;
             });
             $output->writeln('best = ' . $this->population[0]);
+            $output->writeln('best = ' . $this->population[10]);
+            $output->writeln('best = ' . $this->population[30]);
 
             if (false) {
                 // write

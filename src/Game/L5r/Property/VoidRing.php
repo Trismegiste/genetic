@@ -22,6 +22,9 @@ class VoidRing implements \Trismegiste\Genetic\Game\Property {
         if ($this->void < 2) {
             $this->void = 2;
         }
+        if ($this->void > 10) {
+            $this->void = 10;
+        }
     }
 
     public function __construct($v) {

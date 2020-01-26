@@ -22,6 +22,9 @@ class RingTrait implements \Trismegiste\Genetic\Game\Property {
         if ($this->attribute < 3) {
             $this->attribute = 3;
         }
+        if ($this->attribute > 10) {
+            $this->attribute = 10;
+        }
     }
 
     public function __construct($v) {
