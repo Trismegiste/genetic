@@ -35,7 +35,11 @@ class StrategyFight extends Command {
             $regression = $this->bestFit();
 
             usort($this->population, function($a, $b) {
-                return $b->getWinningCount() - $a->getWinningCount();
+                global $regression;
+                $distanceA = ($regression['a'] + $regression['b'] * $a->getCost() - $a->getWinningCount()) / sqrt(1 + $regression['b']);
+                $distanceB = ($regression['a'] + $regression['b'] * $b->getCost() - $b->getWinningCount()) / sqrt(1 + $regression['b']);
+
+                return $distanceB - $distanceA;
             });
             $output->writeln('best = ' . $this->population[0]);
 
@@ -50,8 +54,10 @@ class StrategyFight extends Command {
 
             foreach ($this->population as $idx => $pc) {
                 $pc->newGeneration();
-                if ($pc->getWinningCount() < ($regression['a'] + $regression['b'] * log($pc->getCost()))) {
-                    $pc->mutate();
+                if ($idx > $this->popSize / 2) {
+                    $obj = clone $this->population[rand(0, $this->popSize / 10)];
+                    $obj->mutate();
+                    $this->population[$idx] = $obj;
                 }
             }
         }
@@ -63,7 +69,7 @@ class StrategyFight extends Command {
         $costAvg = 0;
         foreach ($this->population as $pc) {
             $winAvg += $pc->getWinningCount();
-            $costAvg += log($pc->getCost());
+            $costAvg += $pc->getCost();
         }
         $winAvg /= $this->popSize;
         $costAvg /= $this->popSize;
@@ -71,8 +77,8 @@ class StrategyFight extends Command {
         $covariance = 0;
         $variance = 0;
         foreach ($this->population as $pc) {
-            $covariance += (log($pc->getCost()) - $costAvg) * ($pc->getWinningCount() - $winAvg);
-            $variance += pow(log($pc->getCost()) - $costAvg, 2);
+            $covariance += ($pc->getCost() - $costAvg) * ($pc->getWinningCount() - $winAvg);
+            $variance += pow($pc->getCost() - $costAvg, 2);
         }
         $slope = $covariance / $variance;
         $a = $winAvg - $slope * $costAvg;

@@ -19,8 +19,8 @@ class Ring implements \Trismegiste\Genetic\Game\Property {
 
     public function mutate() {
         $this->ring += 2 * rand(0, 1) - 1;
-        if ($this->ring < 2) {
-            $this->ring = 2;
+        if ($this->ring < 3) {
+            $this->ring = 3;
         }
     }
 

@@ -98,6 +98,19 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
     public function getDamage() {
         $keep = $this->weaponKeep;
         $roll = $this->weaponRoll + $this->genome['strength']->get() + $keep;
+
+        if ($this->genome['kenjutsu']->get() >= 3) {
+            $roll++;
+        }
+
+        if ($this->getVoidStrat() === 'damage') {
+            if ($this->hasVoidPoint()) {
+                $this->useVoidPoint();
+                $roll++;
+                $keep++;
+            }
+        }
+
         return DiceRoller::rollAndKeep($roll, $keep);
     }
 
@@ -165,6 +178,14 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
         }
 
         return $this->getName() . ' ' . $compil . 'win:' . $this->winningCount . ' cost:' . $this->getCost();
+    }
+
+    public function __clone() {
+        $tmp = [];
+        foreach ($this->genome as $key => $gene) {
+            $tmp[$key] = clone $gene;
+        }
+        $this->genome = $tmp;
     }
 
 }
