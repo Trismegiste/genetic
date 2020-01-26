@@ -7,7 +7,8 @@ namespace Trismegiste\Genetic\Game\L5r\Property;
  */
 class VoidStrategy implements \Trismegiste\Genetic\Game\Property {
 
-    private $strat;  // attack, armor, soak
+    private $strat;
+    static private $choice = ['attack', 'armor', 'soak'];
 
     public function get() {
         return $this->strat;
@@ -18,10 +19,13 @@ class VoidStrategy implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function mutate() {
-        
+        $this->strat = self::$choice[rand(0, count(self::$choice)-1)];
     }
 
     public function __construct($v) {
+        if (!in_array($v, self::$choice)) {
+            throw new \OutOfBoundsException($v);
+        }
         $this->strat = $v;
     }
 

@@ -18,7 +18,10 @@ class VoidRing implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function mutate() {
-        
+        $this->void += 2 * rand(0, 1) - 1;
+        if ($this->void < 2) {
+            $this->void = 2;
+        }
     }
 
     public function __construct($v) {

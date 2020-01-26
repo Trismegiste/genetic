@@ -18,7 +18,10 @@ class Skill implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function mutate() {
-        
+        $this->skill += 2 * rand(0, 1) - 1;
+        if ($this->skill < 1) {
+            $this->skill = 1;
+        }
     }
 
     public function __construct($v) {
