@@ -164,7 +164,7 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
             $compil .= $key . ':' . $gene->get() . ' ';
         }
 
-        return $this->getName() . ' ' . $compil . 'win:' . $this->winningCount . ' fit:' . $this->getFitness();
+        return $this->getName() . ' ' . $compil . 'win:' . $this->winningCount . ' cost:' . $this->getCost();
     }
 
 }

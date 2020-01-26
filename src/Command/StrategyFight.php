@@ -15,7 +15,7 @@ class StrategyFight extends Command {
     // the name of the command
     protected static $defaultName = 'search:strategy';
     protected $population = [];
-    protected $popSize = 300;
+    protected $popSize = 100;
     protected $maxGeneration = 300;
 
     public function initialize(InputInterface $input, OutputInterface $output) {
@@ -32,14 +32,14 @@ class StrategyFight extends Command {
         for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
             $output->writeln("======== Generation $generation ========");
             $this->tournament();
-            $output->writeln($this->bestFit());
-            usort($this->population, function($a, $b) {
-                return $b->getFitness() - $a->getFitness();
-            });
+            $regression = $this->bestFit();
 
+            usort($this->population, function($a, $b) {
+                return $b->getWinningCount() - $a->getWinningCount();
+            });
             $output->writeln('best = ' . $this->population[0]);
 
-            if (true) {
+            if (false) {
                 // write
                 $fch = fopen("generation-$generation.txt", "w");
                 foreach ($this->population as $pc) {
@@ -50,7 +50,7 @@ class StrategyFight extends Command {
 
             foreach ($this->population as $idx => $pc) {
                 $pc->newGeneration();
-                if ($idx > $this->popSize / 2) {
+                if ($pc->getWinningCount() < ($regression['a'] + $regression['b'] * log($pc->getCost()))) {
                     $pc->mutate();
                 }
             }
@@ -77,7 +77,7 @@ class StrategyFight extends Command {
         $slope = $covariance / $variance;
         $a = $winAvg - $slope * $costAvg;
 
-        return [$a, $slope];
+        return ['a' => $a, 'b' => $slope];
     }
 
     protected function battle(Character $pc1, Character $pc2) {
