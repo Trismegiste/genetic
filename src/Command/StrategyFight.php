@@ -6,7 +6,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\L5r\Character;
-use Trismegiste\Genetic\Game\L5r\DiceRoller;
 
 /**
  * Search for best strategy
@@ -24,7 +23,7 @@ class StrategyFight extends Command {
         // init pop
         $mode = ['soak', 'attack', 'armor'];
         for ($k = 0; $k < $this->popSize; $k++) {
-            $strat = $mode[rand(0, 2)];
+            $strat = $mode[$k % 3];
             $pc = new Character('pc' . $k . ' ' . $strat, $strat);
             $this->population[] = $pc;
         }
@@ -52,10 +51,15 @@ class StrategyFight extends Command {
         });
 
         $stratCounter = array_combine($mode, [0, 0, 0]);
+        $winCounter = array_combine($mode, [0, 0, 0]);
         foreach ($this->population as $pc) {
             $stratCounter[$pc->getVoidStrat()] ++;
+            $winCounter[$pc->getVoidStrat()] += $pc->getWinningCount();
         }
-        var_dump($stratCounter);
+        foreach ($mode as $idx) {
+            $output->writeln($idx . ' ' . floor(($winCounter[$idx] / $stratCounter[$idx])));
+        }
+        var_dump($stratCounter, $winCounter);
     }
 
     protected function battle(Character $pc1, Character $pc2) {

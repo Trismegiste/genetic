@@ -169,4 +169,19 @@ class CharacterTest extends TestCase {
         return [[new Character("yolo")]];
     }
 
+    /**
+     * @dataProvider getFighter
+     */
+    public function testRestart(Character $o) {
+        $o->useVoidPoint();
+        $o->useVoidPoint();
+        $o->useVoidPoint();
+        $o->addWounds(58);
+        $this->assertTrue($o->isDead());
+        $this->assertFalse($o->hasVoidPoint());
+        $o->restart();
+        $this->assertFalse($o->isDead());
+        $this->assertTrue($o->hasVoidPoint());
+    }
+
 }
