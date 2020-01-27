@@ -42,22 +42,24 @@ class StrategyFight extends Command {
             $output->writeln("======== Generation $generation ========");
             $this->tournament();
 
-            $env['maxwin'] = $this->popSize;
+            $env = $this->bestFit();
             usort($this->population, function($a, $b) {
-                global $env;
-                return $a->getFitness($env) - $b->getFitness($env);
+                global $env; // @caca
+                return $b->getFitness($env) - $a->getFitness($env);
             });
             foreach ([0, 10, 20] as $idx) {
                 $output->writeln('best = ' . $this->population[$idx]);
             }
+            $output->writeln($env);
+        //    $this->writePopulation($generation);
 
             foreach ($this->population as $idx => $pc) {
-                $pc->newGeneration();
-                if ($idx > $this->popSize / 10) {
-                    $obj = clone $this->population[rand(0, $this->popSize / 10)];
-                    $obj->mutate();
-                    $this->population[$idx] = $obj;
+                if ($idx > $this->popSize / 2) {
+                    $pv = clone $this->population[rand(0, $this->popSize / 2)];
+                    $pc->mutate();
+                    $this->population[$idx] = $pc;
                 }
+                $pc->newGeneration();
             }
         }
     }

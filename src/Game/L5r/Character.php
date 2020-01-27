@@ -157,7 +157,7 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
     }
 
     public function getFitness($env) {
-        return sqrt(pow($this->winningCount - $env['maxwin'], 2) + pow($this->getCost(), 2));
+        return ($env['a'] + $env['b'] * $this->getCost() - $this->getWinningCount()) / sqrt(1 + $env['b'] * $env['b']);
     }
 
     public function mutate() {
