@@ -2,7 +2,6 @@
 
 namespace Trismegiste\Genetic\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,10 +12,10 @@ use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
 /**
  * Search for best strategy
  */
-class StrategyFight extends Command {
+class StrategyFight extends L5rEvolve {
 
     // the name of the command
-    protected static $defaultName = 'search:strategy';
+    protected static $defaultName = 'evolve:compare';
     protected $population = [];
     protected $popSize;
     protected $maxGeneration;
@@ -27,7 +26,7 @@ class StrategyFight extends Command {
 
     protected function configure() {
         $this->setDescription("Compute evolution")
-                ->addArgument('config', InputArgument::REQUIRED, "COnfig file");
+                ->addArgument('config', InputArgument::REQUIRED, "Config file");
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
@@ -98,59 +97,6 @@ class StrategyFight extends Command {
             fwrite($fch, $pc->getCost() . ";" . $pc->getWinningCount() . PHP_EOL);
         }
         fclose($fch);
-    }
-
-    protected function bestFit() {
-        // ln(win) avg
-        $winAvg = 0;
-        $costAvg = 0;
-        foreach ($this->population as $pc) {
-            $winAvg += $pc->getWinningCount();
-            $costAvg += $pc->getCost();
-        }
-        $winAvg /= $this->popSize;
-        $costAvg /= $this->popSize;
-
-        $covariance = 0;
-        $variance = 0;
-        foreach ($this->population as $pc) {
-            $covariance += ($pc->getCost() - $costAvg) * ($pc->getWinningCount() - $winAvg);
-            $variance += pow($pc->getCost() - $costAvg, 2);
-        }
-        $slope = $covariance / $variance;
-        $a = $winAvg - $slope * $costAvg;
-
-        return ['a' => $a, 'b' => $slope];
-    }
-
-    protected function battle(Character $pc1, Character $pc2) {
-        $player = [];
-
-        $init1 = $pc1->rollInit();
-        $init2 = $pc2->rollInit();
-
-        if ($init1 === $init2) {
-            if (rand(1, 2) === 1) {
-                $init1++;
-            }
-        }
-
-        if ($init1 >= $init2) {
-            $player = [$pc1, $pc2];
-        } else {
-            $player = [$pc2, $pc1];
-        }
-
-        while (!$pc1->isDead() && !$pc2->isDead()) {
-            if (!$player[0]->isDead()) {
-                $player[1]->receiveAttack($player[0]);
-            }
-            if (!$player[1]->isDead()) {
-                $player[0]->receiveAttack($player[1]);
-            }
-        }
-
-        return $pc1->isDead() ? $pc2 : $pc1;
     }
 
     protected function tournament() {
