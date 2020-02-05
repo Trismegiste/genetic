@@ -1,6 +1,10 @@
 {
-    "popSize": 200,
-    "maxIter": 200,
+    "popSize": 100,
+    "maxIter": 50,
     "opponents": [
+        {},
+        {
+            "reflexe": 5
+        }
     ]
 }

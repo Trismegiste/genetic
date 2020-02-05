@@ -31,53 +31,64 @@ class StrategyFight extends Command {
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
-        $config = json_decode(file_get_contents($input->getArgument('config')));
-        $this->popSize = $config->popSize;
-        $this->maxGeneration = $config->maxIter;
+        $config = json_decode(file_get_contents($input->getArgument('config')), true);
+        $this->popSize = $config['popSize'];
+        $this->maxGeneration = $config['maxIter'];
+        $this->opponent = $config['opponents'];
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln("Darwin rules");
 
-        // init population for evolution
-        for ($k = 0; $k < $this->popSize; $k++) {
-            $pc = new Character('L5R', ['voidStrat' => VoidStrategy::getRandomStrat(), 'stance' => Stance::getRandomStrat()]);
-            $this->population[] = $pc;
-        }
+        foreach ($this->opponent as $opponent) {
+            $output->writeln("================ NEW OPPONENT ===============");
 
-        // init population for reference
-        for ($k = 0; $k < $this->popSize * $this->refPopPercent / 100; $k++) {
-            $pc = new Character('L5R', ['voidStrat' => VoidStrategy::getRandomStrat(), 'stance' => Stance::getRandomStrat()]);
-            $this->referencePop[] = $pc;
-        }
-
-        for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
-            $output->writeln("======== Generation $generation ========");
-            $this->tournament();
-
-            usort($this->population, function($a, $b) {
-                if (($this->winMargin * $b->getWinningCount()) > $a->getWinningCount()) {
-                    return 1;
-                }
-                if ($b->getWinningCount() < ($this->winMargin * $a->getWinningCount())) {
-                    return -1;
-                }
-
-                return $a->getCost() - $b->getCost();
-            });
-            foreach ([0, 1, 2, 5, 9] as $idx) {
-                $output->writeln("$idx - " . $this->population[$idx]);
+            // init population for evolution
+            $this->population = [];
+            for ($k = 0; $k < $this->popSize; $k++) {
+                $pc = new Character('L5R', ['voidStrat' => VoidStrategy::getRandomStrat(), 'stance' => Stance::getRandomStrat()]);
+                $this->population[] = $pc;
             }
 
-            //   $this->writePopulation($generation);
-            foreach ($this->population as $idx => $pc) {
-                if ($idx > $this->popSize / 2) {
-                    $pc = clone $this->population[rand(0, $this->popSize / 10)];
-                    $pc->mutate();
-                    $this->population[$idx] = $pc;
-                }
-                $pc->newGeneration();
+            // init population for reference
+            $this->referencePop = [];
+            for ($k = 0; $k < $this->popSize * $this->refPopPercent / 100; $k++) {
+                $opponent['voidStrat'] = VoidStrategy::getRandomStrat();
+                $opponent['stance'] = Stance::getRandomStrat();
+                $pc = new Character('L5R', $opponent);
+                $this->referencePop[] = $pc;
             }
+            $output->writeln("Ref: " . $this->referencePop[0]);
+
+            for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
+                $output->writeln("======== Generation $generation ========");
+                $this->tournament();
+
+                usort($this->population, function($a, $b) {
+                    if (($this->winMargin * $b->getWinningCount()) > $a->getWinningCount()) {
+                        return 1;
+                    }
+                    if ($b->getWinningCount() < ($this->winMargin * $a->getWinningCount())) {
+                        return -1;
+                    }
+
+                    return $a->getCost() - $b->getCost();
+                });
+                foreach ([0, 1, 2, 5, 9] as $idx) {
+                    $output->writeln("$idx - " . $this->population[$idx]);
+                }
+
+                //   $this->writePopulation($generation);
+                foreach ($this->population as $idx => $pc) {
+                    if ($idx > $this->popSize / 2) {
+                        $pc = clone $this->population[rand(0, $this->popSize / 10)];
+                        $pc->mutate();
+                        $this->population[$idx] = $pc;
+                    }
+                    $pc->newGeneration();
+                }
+            }
+            $output->writeln("-");
         }
     }
 
