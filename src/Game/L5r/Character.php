@@ -28,7 +28,7 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
             'agility' => new Property\RingTrait(3),
             'kenjutsu' => new Property\Skill(3),
             'void' => new Property\VoidRing(3),
-            'reflexe' => new Property\RingTrait(3),
+            'reflexe' => new Property\RingTrait(4),
             'earth' => new Property\Ring(3),
             'voidStrat' => new Property\VoidStrategy($voidStrat),
             'strength' => new Property\RingTrait(2)

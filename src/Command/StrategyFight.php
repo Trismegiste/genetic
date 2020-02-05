@@ -76,7 +76,6 @@ class StrategyFight extends Command {
                     $this->population[$idx] = $pc;
                 }
                 $pc->newGeneration();
-                $pc->mutate();
             }
         }
     }
