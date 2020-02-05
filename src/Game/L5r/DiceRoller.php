@@ -18,6 +18,28 @@ class DiceRoller {
     }
 
     static public function rollAndKeep($r, $k) {
+        $delta = 0;
+        // cap r&k > 10
+        if (($r >= 10) && ($k >= 10)) {
+            $delta = 2 * ($r - 10) + 2 * ($k - 10);
+            $r = 10;
+            $k = 10;
+        }
+        // cap for roll
+        if ($r > 11) {
+            $k += floor(($r - 10) / 2);
+            $r = 10;
+            if ($k > 10) {
+                $delta = 2 * ($k - 10);
+                $k = 10;
+            }
+        }
+
+        // cap for keep
+        if ($k > $r) {
+            $k = $r;
+        }
+
         $pool = [];
         for ($idx = 0; $idx < $r; $idx++) {
             $pool[$idx] = DiceRoller::rollD10();

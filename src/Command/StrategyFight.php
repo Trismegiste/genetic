@@ -22,6 +22,7 @@ class StrategyFight extends Command {
     protected $referencePop = [];
     protected $refPopPercent = 10;
     protected $round = 5;
+    protected $winMargin = 0.97;
 
     protected function configure() {
         $this->setDescription("Compute evolution")
@@ -54,13 +55,20 @@ class StrategyFight extends Command {
             $this->tournament();
 
             usort($this->population, function($a, $b) {
-                return $b->getFitness() - $a->getFitness();
+                if (($this->winMargin * $b->getWinningCount()) > $a->getWinningCount()) {
+                    return 1;
+                }
+                if ($b->getWinningCount() < ($this->winMargin * $a->getWinningCount())) {
+                    return -1;
+                }
+
+                return $a->getCost() - $b->getCost();
             });
-            foreach ([0, 10, 20] as $idx) {
+            foreach ([0, 2, 4] as $idx) {
                 $output->writeln('best = ' . $this->population[$idx]);
             }
 
-            $this->writePopulation($generation);
+            //   $this->writePopulation($generation);
             foreach ($this->population as $idx => $pc) {
                 if ($idx > $this->popSize / 2) {
                     $pc = clone $this->population[rand(0, $this->popSize / 10)];
