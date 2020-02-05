@@ -27,27 +27,29 @@ class StrategyFight extends Command {
 
     protected function configure() {
         $this->setDescription("Compute evolution")
-                ->addArgument('popSize', InputArgument::REQUIRED, "Population size")
-                ->addArgument('maxIter', InputArgument::REQUIRED, "Maximum iteration");
+                ->addArgument('config', InputArgument::REQUIRED, "COnfig file");
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
-        $this->popSize = $input->getArgument('popSize');
-        $this->maxGeneration = $input->getArgument("maxIter");
+        $config = json_decode(file_get_contents($input->getArgument('config')));
+        $this->popSize = $config->popSize;
+        $this->maxGeneration = $config->maxIter;
+    }
+
+    public function execute(InputInterface $input, OutputInterface $output) {
+        $output->writeln("Darwin rules");
+
         // init population for evolution
         for ($k = 0; $k < $this->popSize; $k++) {
             $pc = new Character('L5R', ['voidStrat' => VoidStrategy::getRandomStrat(), 'stance' => Stance::getRandomStrat()]);
             $this->population[] = $pc;
         }
+
         // init population for reference
         for ($k = 0; $k < $this->popSize * $this->refPopPercent / 100; $k++) {
             $pc = new Character('L5R', ['voidStrat' => VoidStrategy::getRandomStrat(), 'stance' => Stance::getRandomStrat()]);
             $this->referencePop[] = $pc;
         }
-    }
-
-    public function execute(InputInterface $input, OutputInterface $output) {
-        $output->writeln("Darwin rules");
 
         for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
             $output->writeln("======== Generation $generation ========");
@@ -63,8 +65,8 @@ class StrategyFight extends Command {
 
                 return $a->getCost() - $b->getCost();
             });
-            foreach ([0, 1, 2, 5] as $idx) {
-                $output->writeln('best = ' . $this->population[$idx]);
+            foreach ([0, 1, 2, 5, 9] as $idx) {
+                $output->writeln("$idx - " . $this->population[$idx]);
             }
 
             //   $this->writePopulation($generation);
