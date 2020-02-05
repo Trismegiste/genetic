@@ -1,10 +1,19 @@
 {
-    "popSize": 100,
-    "maxIter": 50,
+    "popSize": 300,
+    "maxIter": 200,
     "opponents": [
         {},
         {
             "reflexe": 5
+        },
+        {
+            "earth": 5
+        },
+        {
+            "agility": 5
+        },
+        {
+            "void": 5
         }
     ]
 }
