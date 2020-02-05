@@ -36,20 +36,18 @@ class StrategyFight extends Command {
         $this->maxGeneration = $input->getArgument("maxIter");
         // init population for evolution
         for ($k = 0; $k < $this->popSize; $k++) {
-            $pc = new Character('L5R', VoidStrategy::getRandomStrat(), Stance::getRandomStrat());
+            $pc = new Character('L5R', ['voidStrat' => VoidStrategy::getRandomStrat(), 'stance' => Stance::getRandomStrat()]);
             $this->population[] = $pc;
         }
         // init population for reference
         for ($k = 0; $k < $this->popSize * $this->refPopPercent / 100; $k++) {
-            $pc = new Character('L5R', VoidStrategy::getRandomStrat(), Stance::getRandomStrat());
+            $pc = new Character('L5R', ['voidStrat' => VoidStrategy::getRandomStrat(), 'stance' => Stance::getRandomStrat()]);
             $this->referencePop[] = $pc;
         }
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln("Darwin rules");
-        $output->writeln(json_encode($this->referencePop[0]));
-        var_dump($this->referencePop[0]);
 
         for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
             $output->writeln("======== Generation $generation ========");
