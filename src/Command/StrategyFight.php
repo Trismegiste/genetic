@@ -40,8 +40,8 @@ class StrategyFight extends Command {
     public function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln("Darwin rules");
 
-        foreach ($this->opponent as $opponent) {
-            $output->writeln("================ NEW OPPONENT ===============");
+        foreach ($this->opponent as $opponentIdx => $opponent) {
+            $output->writeln("================ OPPONENT #$opponentIdx ===============");
 
             // init population for evolution
             $this->population = [];
