@@ -19,7 +19,7 @@ class VoidStrategy implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function mutate() {
-        $this->strat = self::$choice[rand(0, count(self::$choice) - 1)];
+        $this->strat = self::getRandomStrat();
     }
 
     public function __construct($v) {
@@ -27,6 +27,10 @@ class VoidStrategy implements \Trismegiste\Genetic\Game\Property {
             throw new \OutOfBoundsException($v);
         }
         $this->strat = $v;
+    }
+
+    static public function getRandomStrat() {
+        return self::$choice[rand(0, count(self::$choice) - 1)];
     }
 
 }

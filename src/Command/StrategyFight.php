@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\L5r\Character;
+use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
 
 /**
  * Search for best strategy
@@ -18,6 +19,9 @@ class StrategyFight extends Command {
     protected $population = [];
     protected $popSize;
     protected $maxGeneration;
+    protected $referencePop = [];
+    protected $refPopPercent = 10;
+    protected $round = 5;
 
     protected function configure() {
         $this->setDescription("Compute evolution")
@@ -28,10 +32,17 @@ class StrategyFight extends Command {
     public function initialize(InputInterface $input, OutputInterface $output) {
         $this->popSize = $input->getArgument('popSize');
         $this->maxGeneration = $input->getArgument("maxIter");
-        // init pop
+        // init population for evolution
         for ($k = 0; $k < $this->popSize; $k++) {
             $pc = new Character('L5R');
+            $pc->mutate();
             $this->population[] = $pc;
+        }
+        // init population for reference
+        for ($k = 0; $k < $this->popSize * $this->refPopPercent / 100; $k++) {
+            $pc = new Character('L5R', VoidStrategy::getRandomStrat());
+            $pc->mutate();
+            $this->referencePop[] = $pc;
         }
     }
 
@@ -42,24 +53,22 @@ class StrategyFight extends Command {
             $output->writeln("======== Generation $generation ========");
             $this->tournament();
 
-            $env = $this->bestFit();
             usort($this->population, function($a, $b) {
-                global $env; // @caca
-                return $b->getFitness($env) - $a->getFitness($env);
+                return $b->getFitness() - $a->getFitness();
             });
             foreach ([0, 10, 20] as $idx) {
                 $output->writeln('best = ' . $this->population[$idx]);
             }
-            $output->writeln($env);
-        //    $this->writePopulation($generation);
 
+            $this->writePopulation($generation);
             foreach ($this->population as $idx => $pc) {
                 if ($idx > $this->popSize / 2) {
-                    $pv = clone $this->population[rand(0, $this->popSize / 2)];
+                    $pc = clone $this->population[rand(0, $this->popSize / 10)];
                     $pc->mutate();
                     $this->population[$idx] = $pc;
                 }
                 $pc->newGeneration();
+                $pc->mutate();
             }
         }
     }
@@ -126,20 +135,13 @@ class StrategyFight extends Command {
     }
 
     protected function tournament() {
-        for ($i = 0; $i < $this->popSize; $i++) {
-            $pc1 = $this->population[$i];
-            for ($j = 0; $j < $this->popSize; $j++) {
-                if ($i === $j) {
-                    continue;
-                }
-                $pc2 = $this->population[$j];
-                $pc1->restart();
-                $pc2->restart();
-                $winner = $this->battle($pc1, $pc2);
-                if ($winner === $pc1) {
-                    $pc1->incVictory();
-                } else {
-                    $pc2->incVictory();
+        foreach ($this->population as $pc1) {
+            foreach ($this->referencePop as $pc2) {
+                for ($k = 0; $k < $this->round; $k++) {
+                    $pc1->restart();
+                    $pc2->restart();
+                    $winner = $this->battle($pc1, $pc2);
+                    $winner->incVictory();
                 }
             }
         }
