@@ -10,6 +10,10 @@ use Trismegiste\Genetic\Game\L5r\Character;
  */
 class L5rEvolve extends Command {
 
+    protected $population = [];
+    protected $popSize;
+    protected $maxGeneration;
+
     /**
      * Battle between 2 PC
      * 

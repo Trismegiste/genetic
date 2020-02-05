@@ -10,15 +10,12 @@ use Trismegiste\Genetic\Game\L5r\Property\Stance;
 use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
 
 /**
- * Search for best strategy
+ * Search for best opponent with PC reference
  */
-class StrategyFight extends L5rEvolve {
+class L5rCompare extends L5rEvolve {
 
     // the name of the command
     protected static $defaultName = 'evolve:compare';
-    protected $population = [];
-    protected $popSize;
-    protected $maxGeneration;
     protected $referencePop = [];
     protected $refPopPercent = 10;
     protected $round = 10;
