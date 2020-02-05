@@ -22,7 +22,7 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
     protected $genome = [];
     protected $generation = 0;
 
-    public function __construct($n, $voidStrat = 'attack') {
+    public function __construct($n, $voidStrat = 'attack', $stance = 'standard') {
         $this->name = $n;
         $this->genome = [
             'agility' => new Property\RingTrait(3),
@@ -31,6 +31,7 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
             'reflexe' => new Property\RingTrait(3),
             'earth' => new Property\Ring(3),
             'voidStrat' => new Property\VoidStrategy($voidStrat),
+            'stance' => new Property\Stance($stance),
             'strength' => new Property\RingTrait(2)
         ];
     }
@@ -58,9 +59,19 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
         return $this->wounds > (19 * $this->genome['earth']->get());
     }
 
+    public function getArmorTN() {
+        $tn = 5 * ($this->genome['reflexe']->get() + 1);
+
+        if ($this->genome['stance']->get() === 'full') {
+            $tn -= 10;
+        }
+
+        return $tn;
+    }
+
     public function receiveAttack(Fighter $f) {
         $att = $f->getAttack();
-        $tn = 5 * ($this->genome['reflexe']->get() + 1);
+        $tn = $this->getArmorTN();
 
         if ($this->getVoidStrat() === 'armor') {
             if ($this->hasVoidPoint()) {
@@ -90,6 +101,11 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
                 $roll++;
                 $keep++;
             }
+        }
+
+        if ($this->genome['stance']->get() === 'full') {
+            $roll += 2;
+            $keep++;
         }
 
         return DiceRoller::rollAndKeep($roll, $keep) - $this->getWoundPenalty();

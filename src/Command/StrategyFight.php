@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\L5r\Character;
+use Trismegiste\Genetic\Game\L5r\Property\Stance;
 use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
 
 /**
@@ -21,7 +22,7 @@ class StrategyFight extends Command {
     protected $maxGeneration;
     protected $referencePop = [];
     protected $refPopPercent = 10;
-    protected $round = 5;
+    protected $round = 10;
     protected $winMargin = 0.97;
 
     protected function configure() {
@@ -35,14 +36,12 @@ class StrategyFight extends Command {
         $this->maxGeneration = $input->getArgument("maxIter");
         // init population for evolution
         for ($k = 0; $k < $this->popSize; $k++) {
-            $pc = new Character('L5R');
-            $pc->mutate();
+            $pc = new Character('L5R', VoidStrategy::getRandomStrat(), Stance::getRandomStrat());
             $this->population[] = $pc;
         }
         // init population for reference
         for ($k = 0; $k < $this->popSize * $this->refPopPercent / 100; $k++) {
-            $pc = new Character('L5R', VoidStrategy::getRandomStrat());
-            $pc->mutate();
+            $pc = new Character('L5R', VoidStrategy::getRandomStrat(), Stance::getRandomStrat());
             $this->referencePop[] = $pc;
         }
     }
@@ -64,7 +63,7 @@ class StrategyFight extends Command {
 
                 return $a->getCost() - $b->getCost();
             });
-            foreach ([0, 2, 4] as $idx) {
+            foreach ([0, 1, 2, 5] as $idx) {
                 $output->writeln('best = ' . $this->population[$idx]);
             }
 
