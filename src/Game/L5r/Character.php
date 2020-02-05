@@ -8,7 +8,7 @@ use Trismegiste\Genetic\Game\Fighter;
 /**
  * A L5R character
  */
-class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
+class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable, \JsonSerializable {
 
     protected $name;
     protected $weaponRoll = 4; // + strength
@@ -22,17 +22,38 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
     protected $genome = [];
     protected $generation = 0;
 
-    public function __construct($n, $voidStrat = 'attack', $stance = 'standard') {
+    public function __construct($n, $json = []) {
         $this->name = $n;
+
+        // default values
+        $default = [
+            "agility" => 3,
+            "kenjutsu" => 3,
+            "void" => 3,
+            "reflexe" => 3,
+            "earth" => 3,
+            "voidStrat" => "attack",
+            "stance" => "standard",
+            "strength" => 2
+        ];
+
+        // override
+        foreach ($json as $key => $val) {
+            if (array_key_exists($key, $default)) {
+                $default[$key] = $val;
+            }
+        }
+
+        // initialise
         $this->genome = [
-            'agility' => new Property\RingTrait(3),
-            'kenjutsu' => new Property\Skill(3),
-            'void' => new Property\VoidRing(3),
-            'reflexe' => new Property\RingTrait(3),
-            'earth' => new Property\Ring(3),
-            'voidStrat' => new Property\VoidStrategy($voidStrat),
-            'stance' => new Property\Stance($stance),
-            'strength' => new Property\RingTrait(2)
+            'agility' => new Property\RingTrait($default['agility']),
+            'kenjutsu' => new Property\Skill($default['kenjutsu']),
+            'void' => new Property\VoidRing($default['void']),
+            'reflexe' => new Property\RingTrait($default['reflexe']),
+            'earth' => new Property\Ring($default['earth']),
+            'voidStrat' => new Property\VoidStrategy($default['voidStrat']),
+            'stance' => new Property\Stance($default['stance']),
+            'strength' => new Property\RingTrait($default['strength'])
         ];
     }
 
@@ -202,6 +223,15 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable {
             $tmp[$key] = clone $gene;
         }
         $this->genome = $tmp;
+    }
+
+    public function jsonSerialize() {
+        $compil = [];
+        foreach ($this->genome as $key => $gene) {
+            $compil[$key] = $gene->get();
+        }
+
+        return $compil;
     }
 
 }

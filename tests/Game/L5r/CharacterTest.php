@@ -72,7 +72,7 @@ class CharacterTest extends TestCase {
     }
 
     public function testFailedAttackWithArmorStrat() {
-        $o = new Character("yolo", 'armor');
+        $o = new Character("yolo", ['voidStrat' => 'armor']);
         $this->assertEquals('armor', $o->getVoidStrat());
 
         $attacker = $this->createMock(Character::class);
@@ -87,7 +87,7 @@ class CharacterTest extends TestCase {
     }
 
     public function testSuccedAttackWithArmorStrat() {
-        $o = new Character("yolo", 'armor');
+        $o = new Character("yolo", ['voidStrat' => 'armor']);
         $this->assertEquals('armor', $o->getVoidStrat());
 
         $attacker = $this->createMock(Character::class);
@@ -120,7 +120,7 @@ class CharacterTest extends TestCase {
     }
 
     public function testAttackWoundsWithSoak() {
-        $o = new Character('yolo', 'soak');
+        $o = new Character('yolo', ['voidStrat' => 'soak']);
         $this->assertFalse($o->isDead());
 
         $attacker = $this->createMock(Character::class);
@@ -136,7 +136,7 @@ class CharacterTest extends TestCase {
     }
 
     public function testAttackWoundsWithSoakButDeadAnyway() {
-        $o = new Character('yolo', 'soak');
+        $o = new Character('yolo', ['voidStrat' => 'soak']);
         $this->assertFalse($o->isDead());
 
         $attacker = $this->createMock(Character::class);

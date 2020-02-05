@@ -48,6 +48,8 @@ class StrategyFight extends Command {
 
     public function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln("Darwin rules");
+        $output->writeln(json_encode($this->referencePop[0]));
+        var_dump($this->referencePop[0]);
 
         for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
             $output->writeln("======== Generation $generation ========");
