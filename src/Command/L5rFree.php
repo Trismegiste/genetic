@@ -80,9 +80,9 @@ class L5rFree extends L5rEvolve {
     }
 
     protected function tournament() {
-        foreach ($this->population as $pc1) {
-            foreach ($this->population as $pc2) {
-                if ($pc1 === $pc2) {
+        foreach ($this->population as $idx1 => $pc1) {
+            foreach ($this->population as $idx2 => $pc2) {
+                if ($idx2 <= $idx1) {
                     continue;
                 }
                 $delta = $pc1->getCost() - $pc2->getCost();
