@@ -176,8 +176,8 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable, 
         return DiceRoller::rollAndKeep($this->genome['reflexe']->get() + $this->insightRank, $this->genome['reflexe']->get());
     }
 
-    public function incVictory($v = 1) {
-        $this->winningCount += $v;
+    public function incVictory() {
+        $this->winningCount ++;
     }
 
     public function getWinningCount() {

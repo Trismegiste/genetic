@@ -60,20 +60,18 @@ class L5rFree extends L5rEvolve {
                 $output->writeln("$idx - " . $this->population[$idx]);
             }
 
+            // re-initialise pop
+            foreach ($this->population as $pc) {
+                $pc->newGeneration();
+            }
+
+            // select & mutate
             foreach ($this->population as $idx => $pc) {
-                if ($idx <= ($this->popSize / 10)) {
-                    // we keep the best fit unchanged
-                    $pc->newGeneration();
-                } else if ($idx > (9 * $this->popSize / 10)) {
+                if ($idx > (9 * $this->popSize / 10)) {
                     // we clone & mutate the best fit to replace the worst fit
-                    $npc = clone $this->population[rand(0, $this->popSize / 10)];
+                    $npc = clone $this->population[0];
                     $npc->mutate();
-                    $npc->newGeneration();
                     $this->population[$idx] = $npc;
-                } else {
-                    // we mutate others
-                    $pc->mutate();
-                    $pc->newGeneration();
                 }
             }
         }
