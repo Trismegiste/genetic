@@ -72,9 +72,9 @@ class L5rFree extends L5rEvolve {
 
             // select & mutate
             foreach ($this->population as $idx => $pc) {
-                if ($idx > ($this->extinctRatio * $this->popSize)) {
+                if ($idx >= ($this->extinctRatio * $this->popSize)) {
                     // we clone & mutate the best fit to replace the worst fit
-                    $npc = clone $this->population[0];
+                    $npc = clone $this->population[$idx - $this->extinctRatio * $this->popSize];
                     $npc->mutate();
                     $this->population[$idx] = $npc;
                 }
