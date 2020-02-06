@@ -16,6 +16,7 @@ class L5rFree extends L5rEvolve {
 
     // the name of the command
     protected static $defaultName = 'evolve:free';
+    protected $round = 3;
 
     protected function configure() {
         $this->setDescription("Compute free evolution")
@@ -55,7 +56,7 @@ class L5rFree extends L5rEvolve {
                 return $b->getWinningCount() - $a->getWinningCount();
             });
 
-            foreach ([0, 1, 2, 3, 4, 5, 9, 19, 49] as $idx) {
+            foreach ([0, 1, 2, 5, 9] as $idx) {
                 $output->writeln("$idx - " . $this->population[$idx]);
             }
 
@@ -79,16 +80,18 @@ class L5rFree extends L5rEvolve {
                 if ($pc1 === $pc2) {
                     continue;
                 }
-                $pc1->restart();
-                $pc2->restart();
-                $winner = $this->battle($pc1, $pc2);
-                $delta = $pc1->getCost() - $pc2->getCost();
+                for ($k = 0; $k < $this->round; $k++) {
+                    $pc1->restart();
+                    $pc2->restart();
+                    $winner = $this->battle($pc1, $pc2);
+                    $delta = $pc1->getCost() - $pc2->getCost();
 
-                if (($winner === $pc1) && ($delta < 0)) {
-                    $pc1->incVictory();
-                }
-                if (($winner === $pc2) && ($delta > 0)) {
-                    $pc2->incVictory();
+                    if (($winner === $pc1) && ($delta < 0)) {
+                        $pc1->incVictory();
+                    }
+                    if (($winner === $pc2) && ($delta > 0)) {
+                        $pc2->incVictory();
+                    }
                 }
             }
         }
