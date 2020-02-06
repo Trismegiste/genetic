@@ -17,18 +17,21 @@ class L5rFree extends L5rEvolve {
     // the name of the command
     protected static $defaultName = 'evolve:free';
     protected $round;
+    protected $extinctRatio;
 
     protected function configure() {
         $this->setDescription("Compute free evolution")
                 ->addArgument('popSize', InputArgument::REQUIRED, "Population size")
                 ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration")
-                ->addOption('round', NULL, InputArgument::OPTIONAL, 'How many round between 2 PC', 5);
+                ->addOption('round', NULL, InputArgument::OPTIONAL, 'How many round between 2 PC', 5)
+                ->addOption('extinct', NULL, InputArgument::OPTIONAL, 'Percentage of how many population are extinct between generation', 10);
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
         $this->popSize = $input->getArgument('popSize');
         $this->maxGeneration = $input->getArgument('maxIter');
         $this->round = $input->getOption('round');
+        $this->extinctRatio = 1 - $input->getOption('extinct') / 100.0;
 
         // init population for evolution
         $this->population = [];
@@ -69,7 +72,7 @@ class L5rFree extends L5rEvolve {
 
             // select & mutate
             foreach ($this->population as $idx => $pc) {
-                if ($idx > (9 * $this->popSize / 10)) {
+                if ($idx > ($this->extinctRatio * $this->popSize)) {
                     // we clone & mutate the best fit to replace the worst fit
                     $npc = clone $this->population[0];
                     $npc->mutate();
