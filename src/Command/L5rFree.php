@@ -16,17 +16,19 @@ class L5rFree extends L5rEvolve {
 
     // the name of the command
     protected static $defaultName = 'evolve:free';
-    protected $round = 5;
+    protected $round;
 
     protected function configure() {
         $this->setDescription("Compute free evolution")
                 ->addArgument('popSize', InputArgument::REQUIRED, "Population size")
-                ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration");
+                ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration")
+                ->addOption('round', NULL, InputArgument::OPTIONAL, 'How many round between 2 PC', 5);
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
         $this->popSize = $input->getArgument('popSize');
         $this->maxGeneration = $input->getArgument('maxIter');
+        $this->round = $input->getOption('round');
 
         // init population for evolution
         $this->population = [];
