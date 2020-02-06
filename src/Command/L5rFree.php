@@ -55,17 +55,20 @@ class L5rFree extends L5rEvolve {
                 return $b->getWinningCount() - $a->getWinningCount();
             });
 
-            foreach ([0, 1, 2, 5, 9] as $idx) {
+            foreach ([0, 1, 2, 3, 4, 5, 9, 19, 49] as $idx) {
                 $output->writeln("$idx - " . $this->population[$idx]);
             }
 
             foreach ($this->population as $idx => $pc) {
-                if ($idx > (9 * $this->popSize / 10)) {
-                    $pc = clone $this->population[rand(0, $this->popSize / 10)];
+                if ($idx > (7 * $this->popSize / 10)) {
+                    $npc = clone $this->population[rand(0, $this->popSize / 10)];
+                    $npc->mutate();
+                    $this->population[$idx] = $npc;
+                    $pc->newGeneration();
+                } else {
                     $pc->mutate();
-                    $this->population[$idx] = $pc;
+                    $pc->newGeneration();
                 }
-                $pc->newGeneration();
             }
         }
     }
@@ -79,11 +82,12 @@ class L5rFree extends L5rEvolve {
                 $pc1->restart();
                 $pc2->restart();
                 $winner = $this->battle($pc1, $pc2);
+                $delta = $pc1->getCost() - $pc2->getCost();
 
-                if (($winner === $pc1) && ( $pc1->getCost() < $pc2->getCost())) {
+                if (($winner === $pc1) && ($delta < 0)) {
                     $pc1->incVictory();
                 }
-                if (($winner === $pc2) && ( $pc2->getCost() < $pc1->getCost())) {
+                if (($winner === $pc2) && ($delta > 0)) {
                     $pc2->incVictory();
                 }
             }
