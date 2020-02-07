@@ -26,7 +26,6 @@ class Character implements Mutable, JsonSerializable {
     protected $winningCount = 0;
     // mutable
     protected $genome = [];
-    protected $generation = 0;
 
     public function __construct($n, $json = []) {
         $this->name = $n;
