@@ -13,6 +13,8 @@ abstract class Ecosystem {
         return count($this->population);
     }
 
+    abstract protected function tournament($round);
+
     /**
      * Battle between 2 PC
      * 
@@ -48,6 +50,40 @@ abstract class Ecosystem {
         }
 
         return $pc1->isDead() ? $pc2 : $pc1;
+    }
+
+    protected function createPc($name, $param = []) {
+        return new Character($name, $param);
+    }
+
+    public function evolve($round, $extinctRatio) {
+        // re-initialise pop
+        foreach ($this->population as $pc) {
+            $pc->newGeneration();
+        }
+
+        $this->tournament($round);
+
+        usort($this->population, function($a, $b) {
+            return $b->getFitness() - $a->getFitness();
+        });
+
+        $report = [];
+        foreach ([0, 1, 2, 5, 9] as $idx) {
+            $report[] = "$idx - " . $this->population[$idx];
+        }
+
+        // select & mutate
+        foreach ($this->population as $idx => $pc) {
+            if ($idx >= ($extinctRatio * $this->getSize())) {
+                // we clone & mutate the best fit to replace the worst fit
+                $npc = clone $this->population[$idx - $extinctRatio * $this->getSize()];
+                $npc->mutate();
+                $this->population[$idx] = $npc;
+            }
+        }
+
+        return $report;
     }
 
 }
