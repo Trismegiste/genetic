@@ -166,7 +166,7 @@ class CharacterTest extends TestCase {
 
     // providers
     public function getFighter() {
-        return [[new Character("yolo", ['strength' => 3])]];
+        return [[new Character("yolo")]];
     }
 
     /**
