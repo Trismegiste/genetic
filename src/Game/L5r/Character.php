@@ -10,6 +10,7 @@ use Trismegiste\Genetic\Game\L5r\Property\Stance;
 use Trismegiste\Genetic\Game\L5r\Property\VoidRing;
 use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
 use Trismegiste\Genetic\Game\Mutable;
+use Trismegiste\Genetic\Game\Property;
 
 /**
  * A L5R character
@@ -24,7 +25,8 @@ class Character implements Mutable, JsonSerializable {
     protected $levelPenalty = [3, 5, 10, 15, 20, 40];
     protected $insightRank = 1;
     protected $winningCount = 0;
-    // mutable
+
+    /** @var Property */
     protected $genome = [];
 
     public function __construct($n, $json = []) {
@@ -95,6 +97,11 @@ class Character implements Mutable, JsonSerializable {
         return $tn;
     }
 
+    /**
+     * Receive an attack from an opponent
+     * WARNING : this object is modified if Void Point is used
+     * @return int
+     */
     public function receiveAttack(Character $f) {
         $att = $f->getAttack();
         $tn = $this->getArmorTN();
@@ -117,6 +124,11 @@ class Character implements Mutable, JsonSerializable {
         $this->usedVoidPoint = 0;
     }
 
+    /**
+     * Gets an attack roll
+     * WARNING : this object is modified if Void Point is used
+     * @return int
+     */
     public function getAttack() {
         $roll = $this->genome['agility']->get() + $this->genome['kenjutsu']->get();
         $keep = $this->genome['agility']->get();
@@ -137,6 +149,11 @@ class Character implements Mutable, JsonSerializable {
         return DiceRoller::rollAndKeep($roll, $keep) - $this->getWoundPenalty();
     }
 
+    /**
+     * Gets a damage roll
+     * WARNING : this object is modified if Void Point is used
+     * @return int
+     */
     public function getDamage() {
         $keep = $this->weaponKeep;
         $roll = $this->weaponRoll + $this->genome['strength']->get() + $keep;
