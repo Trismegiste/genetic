@@ -16,7 +16,7 @@ class L5rCompare extends Command {
     // the name of the command
     protected static $defaultName = 'evolve:compare';
     protected $refPopPercent = 10;
-    protected $round = 7;
+    protected $round;
     protected $popSize;
     protected $maxGeneration;
 
@@ -30,6 +30,7 @@ class L5rCompare extends Command {
         $this->popSize = $config['popSize'];
         $this->maxGeneration = $config['maxIter'];
         $this->opponent = $config['opponents'];
+        $this->round = $config['round'];
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
@@ -38,7 +39,6 @@ class L5rCompare extends Command {
         foreach ($this->opponent as $opponentIdx => $opponent) {
             $output->writeln("================ OPPONENT #$opponentIdx ===============");
             $univers = new ComparedEcosystem($this->popSize, $opponent, $this->refPopPercent * $this->popSize / 100);
-            $output->writeln("Ref: " . $univers->getFirstReference());
 
             for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
                 $output->writeln("======== Generation $generation ========");

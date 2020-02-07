@@ -1,6 +1,7 @@
 {
     "popSize": 300,
     "maxIter": 10,
+    "round": 3,
     "opponents": [
         {},
         {

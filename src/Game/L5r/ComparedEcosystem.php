@@ -29,8 +29,24 @@ class ComparedEcosystem extends Ecosystem {
         }
     }
 
-    public function getFirstReference() {
-        return $this->referencePop[0];
+    public function evolve($round, $extinctRatio) {
+        foreach ($this->referencePop as $pc) {
+            $pc->newGeneration();
+        }
+
+        return parent::evolve($round, $extinctRatio);
+    }
+
+    protected function getReport() {
+        $report = parent::getReport();
+
+        usort($this->referencePop, function($a, $b) {
+            return $b->getWinningCount() - $a->getWinningCount();
+        });
+
+        array_unshift($report, "Ref: " . $this->referencePop[0]);
+
+        return $report;
     }
 
 }
