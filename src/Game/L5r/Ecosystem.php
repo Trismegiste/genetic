@@ -10,6 +10,30 @@ use Trismegiste\Genetic\Game\DarwinWorld;
 abstract class Ecosystem extends DarwinWorld {
 
     /**
+     * Factory
+     * 
+     * @param array $popSize an array of Character
+     */
+    protected function createRandomPopulation($popSize) {
+        $population = [];
+        for ($k = 0; $k < $popSize; $k++) {
+            $pc = $this->createPc("L5R", [
+                'voidStrat' => Property\VoidStrategy::getRandomStrat(),
+                'stance' => Property\Stance::getRandomStrat(),
+                'agility' => rand(2, 6),
+                'reflexe' => rand(2, 6),
+                'earth' => rand(2, 6),
+                'kenjutsu' => rand(1, 5),
+                'void' => rand(2, 5),
+                'strength' => rand(2, 6)
+            ]);
+            $population[] = $pc;
+        }
+
+        return $population;
+    }
+
+    /**
      * Battle between 2 PC
      * 
      * @param Character $pc1

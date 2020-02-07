@@ -8,19 +8,7 @@ namespace Trismegiste\Genetic\Game\L5r;
 class FreeEcosystem extends Ecosystem {
 
     public function __construct($popSize) {
-        for ($k = 0; $k < $popSize; $k++) {
-            $pc = $this->createPc("L5R", [
-                'voidStrat' => Property\VoidStrategy::getRandomStrat(),
-                'stance' => Property\Stance::getRandomStrat(),
-                'agility' => rand(2, 6),
-                'reflexe' => rand(2, 6),
-                'earth' => rand(2, 6),
-                'kenjutsu' => rand(1, 5),
-                'void' => rand(2, 5),
-                'strength' => rand(2, 6)
-            ]);
-            $this->population[] = $pc;
-        }
+        $this->population = $this->createRandomPopulation($popSize);
     }
 
     protected function tournament($round) {

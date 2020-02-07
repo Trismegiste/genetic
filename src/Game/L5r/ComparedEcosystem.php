@@ -10,19 +10,7 @@ class ComparedEcosystem extends Ecosystem {
     protected $referencePop = [];
 
     public function __construct($popSize, $opponent, $refSize) {
-        for ($k = 0; $k < $popSize; $k++) {
-            $pc = $this->createPc("L5R", [
-                'voidStrat' => Property\VoidStrategy::getRandomStrat(),
-                'stance' => Property\Stance::getRandomStrat(),
-                'agility' => rand(2, 6),
-                'reflexe' => rand(2, 6),
-                'earth' => rand(2, 6),
-                'kenjutsu' => rand(1, 5),
-                'void' => rand(2, 5),
-                'strength' => rand(2, 6)
-            ]);
-            $this->population[] = $pc;
-        }
+        $this->population = $this->createRandomPopulation($popSize);
 
         // init population for reference
         for ($k = 0; $k < $refSize; $k++) {
