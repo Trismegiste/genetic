@@ -59,4 +59,8 @@ class ComparedEcosystem extends Ecosystem {
         }
     }
 
+    public function getFirstReference() {
+        return $this->referencePop[0];
+    }
+
 }

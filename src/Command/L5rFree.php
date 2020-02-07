@@ -32,7 +32,7 @@ class L5rFree extends Command {
         $popSize = $input->getArgument('popSize');
         $this->maxGeneration = $input->getArgument('maxIter');
         $this->round = $input->getOption('round');
-        $this->extinctRatio = 1 - $input->getOption('extinct') / 100.0;
+        $this->extinctRatio = $input->getOption('extinct') / 100.0;
 
         $this->univers = new FreeEcosystem($popSize);
     }

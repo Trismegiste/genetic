@@ -1,6 +1,6 @@
 {
     "popSize": 300,
-    "maxIter": 200,
+    "maxIter": 10,
     "opponents": [
         {},
         {

@@ -93,11 +93,12 @@ abstract class Ecosystem {
     }
 
     protected function applyDarwinism($extinctRatio) {
+        $extinctIdx = (1 - $extinctRatio) * $this->getSize();
         // select & mutate
         foreach ($this->population as $idx => $pc) {
-            if ($idx >= ($extinctRatio * $this->getSize())) {
+            if ($idx >= $extinctIdx) {
                 // we clone & mutate the best fit to replace the worst fit
-                $npc = clone $this->population[$idx - $extinctRatio * $this->getSize()];
+                $npc = clone $this->population[$idx - $extinctIdx];
                 $npc->mutate();
                 $this->population[$idx] = $npc;
             }
