@@ -14,6 +14,9 @@ abstract class CappedProperty implements Property {
     protected $maxValue;
 
     public function __construct($v, $inf, $sup) {
+        if (($v < $inf) || ($v > $sup)) {
+            throw new \OutOfBoundsException("$inf < $v < $sup");
+        }
         $this->attribute = $v;
         $this->minValue = $inf;
         $this->maxValue = $sup;
