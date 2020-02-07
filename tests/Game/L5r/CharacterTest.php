@@ -212,9 +212,11 @@ class CharacterTest extends TestCase {
      * @dataProvider getFighter
      */
     public function testMutable(Character $o) {
-        $old = json_encode($o);
-        $o->mutate();
-        $this->assertNotEquals($old, json_encode($o));
+        for ($k = 0; $k < 10; $k++) {
+            $old = json_encode($o);
+            $o->mutate();
+            $this->assertNotEquals($old, json_encode($o));
+        }
     }
 
 }
