@@ -2,24 +2,21 @@
 
 namespace Trismegiste\Genetic\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Trismegiste\Genetic\Game\L5r\Character;
-use Trismegiste\Genetic\Game\L5r\Property\Stance;
-use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
+use Trismegiste\Genetic\Game\L5r\ComparedEcosystem;
 
 /**
  * Search for best opponent with PC reference
  */
-class L5rCompare extends \Symfony\Component\Console\Command\Command {
+class L5rCompare extends Command {
 
     // the name of the command
     protected static $defaultName = 'evolve:compare';
-    protected $referencePop = [];
     protected $refPopPercent = 10;
-    protected $round = 10;
-    protected $winMargin = 0.97;
+    protected $round = 7;
     protected $popSize;
     protected $maxGeneration;
 
@@ -40,7 +37,7 @@ class L5rCompare extends \Symfony\Component\Console\Command\Command {
 
         foreach ($this->opponent as $opponentIdx => $opponent) {
             $output->writeln("================ OPPONENT #$opponentIdx ===============");
-            $univers = new \Trismegiste\Genetic\Game\L5r\ComparedEcosystem($this->popSize, $opponent, $this->refPopPercent * $this->popSize / 100);
+            $univers = new ComparedEcosystem($this->popSize, $opponent, $this->refPopPercent * $this->popSize / 100);
             $output->writeln("Ref: " . $univers->getFirstReference());
 
             for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
