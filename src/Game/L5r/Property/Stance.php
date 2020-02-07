@@ -26,7 +26,7 @@ class Stance implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function mutate() {
-        $this->strat = self::getRandomStrat();
+        $this->strat = ($this->strat === self::$choice[0]) ? self::$choice[1] : self::$choice[0];
     }
 
     static public function getRandomStrat() {

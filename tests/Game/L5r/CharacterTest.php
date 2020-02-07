@@ -166,7 +166,7 @@ class CharacterTest extends TestCase {
 
     // providers
     public function getFighter() {
-        return [[new Character("yolo")]];
+        return [[new Character("yolo", ['strength' => 3])]];
     }
 
     /**
@@ -182,6 +182,39 @@ class CharacterTest extends TestCase {
         $o->restart();
         $this->assertFalse($o->isDead());
         $this->assertTrue($o->hasVoidPoint());
+    }
+
+    /**
+     * @dataProvider getFighter
+     */
+    public function testStringable(Character $o) {
+        $this->assertStringStartsWith("yolo", (string) $o);
+    }
+
+    /**
+     * @dataProvider getFighter
+     */
+    public function testJsonable(Character $o) {
+        $this->assertStringStartsWith("{", json_encode($o));
+    }
+
+    /**
+     * @dataProvider getFighter
+     */
+    public function testClonable(Character $o) {
+        $c = clone $o;
+        $this->assertEquals($c, $o);
+        $o->incVictory();
+        $this->assertNotEquals($c, $o);
+    }
+
+    /**
+     * @dataProvider getFighter
+     */
+    public function testMutable(Character $o) {
+        $old = json_encode($o);
+        $o->mutate();
+        $this->assertNotEquals($old, json_encode($o));
     }
 
 }

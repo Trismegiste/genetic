@@ -19,8 +19,8 @@ class RingTrait implements \Trismegiste\Genetic\Game\Property {
 
     public function mutate() {
         $this->attribute += 2 * rand(0, 1) - 1;
-        if ($this->attribute < 3) {
-            $this->attribute = 3;
+        if ($this->attribute < 2) {
+            $this->attribute = 2;
         }
         if ($this->attribute > 10) {
             $this->attribute = 10;

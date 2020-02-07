@@ -11,14 +11,23 @@ class DarwinWorldTest extends TestCase {
 
     public function create() {
         $sut = $this->getMockForAbstractClass(DarwinWorldMock::class, [$this]);
+        $sut->expects($this->once())->method('tournament');
+        $sut->expects($this->once())
+                ->method('getReport')
+                ->willReturn(['dummy']);
 
         return [[$sut]];
     }
 
     /** @dataProvider create */
-    public function testEvolve($sut) {
+    public function testPopulation($sut) {
         $this->assertEquals(10, $sut->getSize());
         $sut->evolve(3, 0.05);
+    }
+
+    /** @dataProvider create */
+    public function testEvolve($sut) {
+        $this->assertEquals(['dummy'], $sut->evolve(3, 0.05));
     }
 
 }

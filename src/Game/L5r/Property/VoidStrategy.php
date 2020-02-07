@@ -19,7 +19,10 @@ class VoidStrategy implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function mutate() {
-        $this->strat = self::getRandomStrat();
+        $old = $this->strat;
+        do {
+            $this->strat = self::getRandomStrat();
+        } while ($this->strat === $old);
     }
 
     public function __construct($v) {
