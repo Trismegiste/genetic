@@ -204,6 +204,16 @@ class CharacterTest extends TestCase {
     /**
      * @dataProvider getFighter
      */
+    public function testDeepClonable(Character $o) {
+        $c = clone $o;
+        $this->assertEquals($c, $o);
+        $o->mutate();
+        $this->assertNotEquals($c, $o);
+    }
+
+    /**
+     * @dataProvider getFighter
+     */
     public function testMutable(Character $o) {
         for ($k = 0; $k < 10; $k++) {
             $old = (string) $o;
