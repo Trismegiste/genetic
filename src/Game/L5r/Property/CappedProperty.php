@@ -5,7 +5,7 @@ namespace Trismegiste\Genetic\Game\L5r\Property;
 use Trismegiste\Genetic\Game\Property;
 
 /**
- * A generic property with bounderies
+ * A generic property with boundaries
  */
 abstract class CappedProperty implements Property {
 

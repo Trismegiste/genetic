@@ -3,7 +3,7 @@
 namespace Trismegiste\Genetic\Game\L5r;
 
 /**
- * FreeEcosystem is a free competition between PC
+ * FreeEcosystem is a free competition between a random population of L5R PC
  */
 class FreeEcosystem extends Ecosystem {
 

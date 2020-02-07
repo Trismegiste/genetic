@@ -5,7 +5,7 @@ namespace Trismegiste\Genetic\Game\L5r;
 use Trismegiste\Genetic\Game\DarwinWorld;
 
 /**
- * Generic Ecosystem 
+ * Generic Ecosystem for L5R
  */
 abstract class Ecosystem extends DarwinWorld {
 
@@ -33,7 +33,7 @@ abstract class Ecosystem extends DarwinWorld {
      * 
      * @param Character $pc1
      * @param Character $pc2
-     * @return Character
+     * @return Character the winner
      */
     protected function battle(Character $pc1, Character $pc2) {
         $player = [];

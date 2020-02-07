@@ -7,11 +7,23 @@ namespace Trismegiste\Genetic\Game;
  */
 interface Mutable {
 
+    /**
+     * Mutates this object
+     */
     public function mutate();
 
+    /**
+     * Gets the fitness of this object
+     */
     public function getFitness();
 
+    /**
+     * Re-initialise ths object for the next generation
+     */
     public function newGeneration();
 
+    /**
+     * A Mutable object must be clonable
+     */
     public function __clone();
 }

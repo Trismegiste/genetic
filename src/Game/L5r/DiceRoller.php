@@ -7,6 +7,11 @@ namespace Trismegiste\Genetic\Game\L5r;
  */
 class DiceRoller {
 
+    /**
+     * Rolls one exploding d10
+     * 
+     * @return int
+     */
     static public function rollD10() {
         $s = 0;
         do {
@@ -17,6 +22,13 @@ class DiceRoller {
         return $s;
     }
 
+    /**
+     * Rolls & Keeps multiple dice
+     * 
+     * @param int $r
+     * @param int $k
+     * @return int the sum
+     */
     static public function rollAndKeep($r, $k) {
         $delta = 0;
         // cap r&k > 10

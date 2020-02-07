@@ -13,6 +13,11 @@ abstract class DarwinWorld {
     /** @var Mutable */
     protected $population = [];
 
+    /**
+     * Ctor
+     * 
+     * @param int $popSize population size
+     */
     public function __construct($popSize) {
         $this->population = $this->createPopulation($popSize);
     }
