@@ -12,4 +12,6 @@ interface Mutable {
     public function getFitness();
 
     public function newGeneration();
+
+    public function __clone();
 }
