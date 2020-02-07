@@ -19,6 +19,10 @@ class DiceRollerTest extends TestCase {
         $this->assertLessThan(7, $s);
     }
 
+    public function testLimitZeroKeep() {
+        $this->assertEquals(0, DiceRoller::rollAndKeep(5, 0));
+    }
+
     /**
      * @dataProvider getRolling
      */
@@ -37,7 +41,8 @@ class DiceRollerTest extends TestCase {
             [6, 3, 27],
             [8, 4, 36],
             [10, 5, 45],
-            [20, 10, 100]
+            [20, 10, 100],
+            [2, 4, 12]
         ];
     }
 
