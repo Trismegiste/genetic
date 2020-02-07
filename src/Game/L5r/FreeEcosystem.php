@@ -5,9 +5,7 @@ namespace Trismegiste\Genetic\Game\L5r;
 /**
  * FreeEcosystem of tournament for genetic algorithm
  */
-class FreeEcosystem {
-
-    protected $population = [];
+class FreeEcosystem extends Ecosystem {
 
     public function __construct($popSize) {
         for ($k = 0; $k < $popSize; $k++) {
@@ -27,10 +25,6 @@ class FreeEcosystem {
 
     protected function createPc($name, $param = []) {
         return new Character($name, $param);
-    }
-
-    public function getSize() {
-        return count($this->population);
     }
 
     public function evolve($round, $extinctRatio) {
@@ -90,43 +84,6 @@ class FreeEcosystem {
                 // many cases are missed : equality. We don't care, we want a threshold effect
             }
         }
-    }
-
-    /**
-     * Battle between 2 PC
-     * 
-     * @param Character $pc1
-     * @param Character $pc2
-     * @return Character
-     */
-    protected function battle(Character $pc1, Character $pc2) {
-        $player = [];
-
-        $init1 = $pc1->rollInit();
-        $init2 = $pc2->rollInit();
-
-        if ($init1 === $init2) {
-            if (rand(1, 2) === 1) {
-                $init1++;
-            }
-        }
-
-        if ($init1 >= $init2) {
-            $player = [$pc1, $pc2];
-        } else {
-            $player = [$pc2, $pc1];
-        }
-
-        while (!$pc1->isDead() && !$pc2->isDead()) {
-            if (!$player[0]->isDead()) {
-                $player[1]->receiveAttack($player[0]);
-            }
-            if (!$player[1]->isDead()) {
-                $player[0]->receiveAttack($player[1]);
-            }
-        }
-
-        return $pc1->isDead() ? $pc2 : $pc1;
     }
 
 }
