@@ -2,7 +2,6 @@
 
 namespace Trismegiste\Genetic\Game\L5r;
 
-use JsonSerializable;
 use Trismegiste\Genetic\Game\L5r\Property\Ring;
 use Trismegiste\Genetic\Game\L5r\Property\RingTrait;
 use Trismegiste\Genetic\Game\L5r\Property\Skill;
@@ -15,7 +14,7 @@ use Trismegiste\Genetic\Game\Property;
 /**
  * A L5R character
  */
-class Character implements Mutable, JsonSerializable {
+class Character implements Mutable {
 
     protected $name;
     protected $weaponRoll = 4; // + strength
@@ -29,7 +28,7 @@ class Character implements Mutable, JsonSerializable {
     /** @var Property */
     protected $genome = [];
 
-    public function __construct($n, $json = []) {
+    public function __construct($n, $genomeValues = []) {
         $this->name = $n;
 
         // default values
@@ -45,7 +44,7 @@ class Character implements Mutable, JsonSerializable {
         ];
 
         // override
-        foreach ($json as $key => $val) {
+        foreach ($genomeValues as $key => $val) {
             if (array_key_exists($key, $default)) {
                 $default[$key] = $val;
             }
@@ -245,15 +244,6 @@ class Character implements Mutable, JsonSerializable {
             $tmp[$key] = clone $gene;
         }
         $this->genome = $tmp;
-    }
-
-    public function jsonSerialize() {
-        $compil = [];
-        foreach ($this->genome as $key => $gene) {
-            $compil[$key] = $gene->get();
-        }
-
-        return $compil;
     }
 
 }

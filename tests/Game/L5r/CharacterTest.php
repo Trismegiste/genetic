@@ -194,13 +194,6 @@ class CharacterTest extends TestCase {
     /**
      * @dataProvider getFighter
      */
-    public function testJsonable(Character $o) {
-        $this->assertStringStartsWith("{", json_encode($o));
-    }
-
-    /**
-     * @dataProvider getFighter
-     */
     public function testClonable(Character $o) {
         $c = clone $o;
         $this->assertEquals($c, $o);
@@ -213,7 +206,7 @@ class CharacterTest extends TestCase {
      */
     public function testMutable(Character $o) {
         for ($k = 0; $k < 10; $k++) {
-            $old = json_encode($o);
+            $old = (string) $o;
             $o->mutate();
             $this->assertNotEquals($old, json_encode($o));
         }
