@@ -7,10 +7,6 @@ namespace Trismegiste\Genetic\Game\L5r;
  */
 class FreeEcosystem extends Ecosystem {
 
-    public function __construct($popSize) {
-        $this->population = $this->createRandomPopulation($popSize);
-    }
-
     protected function tournament($round) {
         foreach ($this->population as $idx1 => $pc1) {
             foreach ($this->population as $idx2 => $pc2) {

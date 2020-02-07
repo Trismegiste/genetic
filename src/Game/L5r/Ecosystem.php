@@ -9,12 +9,7 @@ use Trismegiste\Genetic\Game\DarwinWorld;
  */
 abstract class Ecosystem extends DarwinWorld {
 
-    /**
-     * Factory
-     * 
-     * @param array $popSize an array of Character
-     */
-    protected function createRandomPopulation($popSize) {
+    protected function createPopulation($popSize) {
         $population = [];
         for ($k = 0; $k < $popSize; $k++) {
             $pc = $this->createPc("L5R", [
@@ -73,8 +68,8 @@ abstract class Ecosystem extends DarwinWorld {
     /**
      * Factory
      * 
-     * @param type $name
-     * @param type $param
+     * @param string $name
+     * @param array $param
      * @return Character
      */
     protected function createPc($name, $param = []) {

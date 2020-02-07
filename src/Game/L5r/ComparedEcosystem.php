@@ -10,7 +10,7 @@ class ComparedEcosystem extends Ecosystem {
     protected $referencePop = [];
 
     public function __construct($popSize, $opponent, $refSize) {
-        $this->population = $this->createRandomPopulation($popSize);
+        parent::__construct($popSize);
 
         // init population for reference
         for ($k = 0; $k < $refSize; $k++) {

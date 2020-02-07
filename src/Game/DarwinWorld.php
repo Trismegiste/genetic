@@ -13,6 +13,20 @@ abstract class DarwinWorld {
     /** @var Mutable */
     protected $population = [];
 
+    public function __construct($popSize) {
+        $this->population = $this->createPopulation($popSize);
+    }
+
+    /**
+     * Factory for population
+     */
+    abstract protected function createPopulation($popSize);
+
+    /**
+     * Getter for population size
+     * 
+     * @return int
+     */
     public function getSize() {
         return count($this->population);
     }
