@@ -7,6 +7,7 @@ namespace Trismegiste\Genetic\Game\L5r;
  */
 abstract class Ecosystem {
 
+    /** @var \Trismegiste\Genetic\Game\Mutable */
     protected $population = [];
 
     public function getSize() {
@@ -52,6 +53,13 @@ abstract class Ecosystem {
         return $pc1->isDead() ? $pc2 : $pc1;
     }
 
+    /**
+     * Factory
+     * 
+     * @param type $name
+     * @param type $param
+     * @return \Trismegiste\Genetic\Game\L5r\Character
+     */
     protected function createPc($name, $param = []) {
         return new Character($name, $param);
     }
@@ -68,11 +76,23 @@ abstract class Ecosystem {
             return $b->getFitness() - $a->getFitness();
         });
 
+        $this->applyDarwinism($extinctRatio);
+
+        $report = $this->getReport();
+
+        return $report;
+    }
+
+    protected function getReport() {
         $report = [];
         foreach ([0, 1, 2, 5, 9] as $idx) {
             $report[] = "$idx - " . $this->population[$idx];
         }
 
+        return $report;
+    }
+
+    protected function applyDarwinism($extinctRatio) {
         // select & mutate
         foreach ($this->population as $idx => $pc) {
             if ($idx >= ($extinctRatio * $this->getSize())) {
@@ -82,8 +102,6 @@ abstract class Ecosystem {
                 $this->population[$idx] = $npc;
             }
         }
-
-        return $report;
     }
 
 }
