@@ -3,11 +3,13 @@
 namespace Trismegiste\Genetic\Game\L5r;
 
 /**
- * FreeEcosystem is a free competition between PC
+ * ComparedEcosystem is a competition with reference population
  */
-class FreeEcosystem extends Ecosystem {
+class ComparedEcosystem extends Ecosystem {
 
-    public function __construct($popSize) {
+    protected $referencePop = [];
+
+    public function __construct($popSize, $opponent, $refSize) {
         for ($k = 0; $k < $popSize; $k++) {
             $pc = $this->createPc("L5R", [
                 'voidStrat' => Property\VoidStrategy::getRandomStrat(),
@@ -21,14 +23,19 @@ class FreeEcosystem extends Ecosystem {
             ]);
             $this->population[] = $pc;
         }
+
+        // init population for reference
+        for ($k = 0; $k < $refSize; $k++) {
+            $opponent['voidStrat'] = Property\VoidStrategy::getRandomStrat();
+            $opponent['stance'] = Property\Stance::getRandomStrat();
+            $pc = new Character('L5R', $opponent);
+            $this->referencePop[] = $pc;
+        }
     }
 
     protected function tournament($round) {
-        foreach ($this->population as $idx1 => $pc1) {
-            foreach ($this->population as $idx2 => $pc2) {
-                if ($idx2 <= $idx1) {
-                    continue;
-                }
+        foreach ($this->referencePop as $pc1) {
+            foreach ($this->population as $pc2) {
                 $delta = $pc1->getCost() - $pc2->getCost();
 
                 $key1 = spl_object_hash($pc1);
