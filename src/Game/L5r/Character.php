@@ -2,10 +2,19 @@
 
 namespace Trismegiste\Genetic\Game\L5r;
 
+use JsonSerializable;
+use Trismegiste\Genetic\Game\L5r\Property\Ring;
+use Trismegiste\Genetic\Game\L5r\Property\RingTrait;
+use Trismegiste\Genetic\Game\L5r\Property\Skill;
+use Trismegiste\Genetic\Game\L5r\Property\Stance;
+use Trismegiste\Genetic\Game\L5r\Property\VoidRing;
+use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
+use Trismegiste\Genetic\Game\Mutable;
+
 /**
  * A L5R character
  */
-class Character implements \Trismegiste\Genetic\Game\Mutable, \JsonSerializable {
+class Character implements Mutable, JsonSerializable {
 
     protected $name;
     protected $weaponRoll = 4; // + strength
@@ -43,14 +52,14 @@ class Character implements \Trismegiste\Genetic\Game\Mutable, \JsonSerializable 
 
         // initialise
         $this->genome = [
-            'agility' => new Property\RingTrait($default['agility']),
-            'kenjutsu' => new Property\Skill($default['kenjutsu']),
-            'void' => new Property\VoidRing($default['void']),
-            'reflexe' => new Property\RingTrait($default['reflexe']),
-            'earth' => new Property\Ring($default['earth']),
-            'voidStrat' => new Property\VoidStrategy($default['voidStrat']),
-            'stance' => new Property\Stance($default['stance']),
-            'strength' => new Property\RingTrait($default['strength'])
+            'agility' => new RingTrait($default['agility']),
+            'kenjutsu' => new Skill($default['kenjutsu']),
+            'void' => new VoidRing($default['void']),
+            'reflexe' => new RingTrait($default['reflexe']),
+            'earth' => new Ring($default['earth']),
+            'voidStrat' => new VoidStrategy($default['voidStrat']),
+            'stance' => new Stance($default['stance']),
+            'strength' => new RingTrait($default['strength'])
         ];
     }
 
