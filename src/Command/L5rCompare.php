@@ -19,6 +19,7 @@ class L5rCompare extends Command {
     protected $round;
     protected $popSize;
     protected $maxGeneration;
+    protected $extinctRatio;
 
     protected function configure() {
         $this->setDescription("Compute evolution")
@@ -31,6 +32,7 @@ class L5rCompare extends Command {
         $this->maxGeneration = $config['maxIter'];
         $this->opponent = $config['opponents'];
         $this->round = $config['round'];
+        $this->extinctRatio = $config['extinct'];
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
@@ -42,10 +44,9 @@ class L5rCompare extends Command {
 
             for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
                 $output->writeln("======== Generation $generation ========");
-                $report = $univers->evolve($this->round, 0.1);
-
-                $output->writeln($report);
+                $report = $univers->evolve($this->round, $this->extinctRatio);
             }
+            $output->writeln($report);
             $output->writeln("-");
         }
     }

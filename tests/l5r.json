@@ -1,7 +1,8 @@
 {
     "popSize": 300,
-    "maxIter": 10,
+    "maxIter": 20,
     "round": 3,
+    "extinct": 0.05,
     "opponents": [
         {},
         {
