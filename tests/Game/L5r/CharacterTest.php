@@ -208,7 +208,7 @@ class CharacterTest extends TestCase {
         for ($k = 0; $k < 10; $k++) {
             $old = (string) $o;
             $o->mutate();
-            $this->assertNotEquals($old, json_encode($o));
+            $this->assertNotEquals($old, (string) $o);
         }
     }
 
