@@ -2,13 +2,10 @@
 
 namespace Trismegiste\Genetic\Game\L5r;
 
-use Trismegiste\Genetic\Game\Character as CharInt;
-use Trismegiste\Genetic\Game\Fighter;
-
 /**
  * A L5R character
  */
-class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable, \JsonSerializable {
+class Character implements \Trismegiste\Genetic\Game\Mutable, \JsonSerializable {
 
     protected $name;
     protected $weaponRoll = 4; // + strength
@@ -90,7 +87,7 @@ class Character implements CharInt, Fighter, \Trismegiste\Genetic\Game\Mutable, 
         return $tn;
     }
 
-    public function receiveAttack(Fighter $f) {
+    public function receiveAttack(Character $f) {
         $att = $f->getAttack();
         $tn = $this->getArmorTN();
 
