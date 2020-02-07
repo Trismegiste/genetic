@@ -42,7 +42,7 @@ class Ecosystem {
         $this->tournament($round);
 
         usort($this->population, function($a, $b) {
-            return $b->getWinningCount() - $a->getWinningCount();
+            return $b->getFitness() - $a->getFitness();
         });
 
         $report = [];
