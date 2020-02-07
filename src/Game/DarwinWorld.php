@@ -15,7 +15,6 @@ abstract class DarwinWorld {
 
     /**
      * Ctor
-     * 
      * @param int $popSize population size
      */
     public function __construct($popSize) {
@@ -23,7 +22,8 @@ abstract class DarwinWorld {
     }
 
     /**
-     * Factory for population
+     * Factory : creates a population
+     * @return array an array of Mutable
      */
     abstract protected function createPopulation($popSize);
 
@@ -34,14 +34,12 @@ abstract class DarwinWorld {
 
     /**
      * Returns a report
-     * 
      * @return array an array of string
      */
     abstract protected function getReport();
 
     /**
      * Getter for population size
-     * 
      * @return int
      */
     public function getSize() {
@@ -50,7 +48,6 @@ abstract class DarwinWorld {
 
     /**
      * Runs one generation
-     * 
      * @param int $round how many rounds to determine the winner between 2 fighter
      * @param float $extinctRatio A ratio between [0,1] of how many PC gets extinct by the natural selection. Ex: 0.05 means 5% of PC will be replaced by the best fitted with mutation
      * @return array an array of string containing a selection of PC for printing
@@ -74,6 +71,11 @@ abstract class DarwinWorld {
         return $report;
     }
 
+    /**
+     * Kills the worst fitted PC and replaces them with best fitted PC with mutation
+     * @param float $extinctRatio A ratio between [0,1]
+     * @see class::evolve()
+     */
     protected function selectAndMutate($extinctRatio) {
         $extinctIdx = (1 - $extinctRatio) * $this->getSize();
         // select & mutate
