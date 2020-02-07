@@ -36,7 +36,8 @@ class DiceRollerTest extends TestCase {
             [4, 2, 17],
             [6, 3, 27],
             [8, 4, 36],
-            [10, 5, 45]
+            [10, 5, 45],
+            [20, 10, 100]
         ];
     }
 
