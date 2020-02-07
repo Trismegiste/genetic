@@ -6,7 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Trismegiste\Genetic\Game\L5r\Ecosystem;
+use Trismegiste\Genetic\Game\L5r\FreeEcosystem;
 
 /**
  * Free evolution
@@ -34,7 +34,7 @@ class L5rFree extends Command {
         $this->round = $input->getOption('round');
         $this->extinctRatio = 1 - $input->getOption('extinct') / 100.0;
 
-        $this->univers = new Ecosystem($popSize);
+        $this->univers = new FreeEcosystem($popSize);
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {

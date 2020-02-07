@@ -3,9 +3,9 @@
 namespace Trismegiste\Genetic\Game\L5r;
 
 /**
- * Ecosystem of tournament for genetic algorithm
+ * FreeEcosystem of tournament for genetic algorithm
  */
-class Ecosystem {
+class FreeEcosystem {
 
     protected $population = [];
 
@@ -25,7 +25,7 @@ class Ecosystem {
         }
     }
 
-    public function createPc($name, $param = []) {
+    protected function createPc($name, $param = []) {
         return new Character($name, $param);
     }
 
