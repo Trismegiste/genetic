@@ -2,17 +2,16 @@
 
 namespace Trismegiste\Genetic\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Trismegiste\Genetic\Game\L5r\Character;
-use Trismegiste\Genetic\Game\L5r\Property\Stance;
-use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
+use Trismegiste\Genetic\Game\L5r\Ecosystem;
 
 /**
  * Free evolution
  */
-class L5rFree extends \Symfony\Component\Console\Command\Command {
+class L5rFree extends Command {
 
     // the name of the command
     protected static $defaultName = 'evolve:free';
@@ -35,7 +34,7 @@ class L5rFree extends \Symfony\Component\Console\Command\Command {
         $this->round = $input->getOption('round');
         $this->extinctRatio = 1 - $input->getOption('extinct') / 100.0;
 
-        $this->univers = new \Trismegiste\Genetic\Game\L5r\Ecosystem($popSize);
+        $this->univers = new Ecosystem($popSize);
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
