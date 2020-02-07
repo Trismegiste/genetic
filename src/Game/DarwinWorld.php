@@ -23,6 +23,18 @@ abstract class DarwinWorld {
     abstract protected function createPopulation($popSize);
 
     /**
+     * Tournament between population to evalute a Fitness
+     */
+    abstract protected function tournament($round);
+
+    /**
+     * Returns a report
+     * 
+     * @return array an array of string
+     */
+    abstract protected function getReport();
+
+    /**
      * Getter for population size
      * 
      * @return int
@@ -30,11 +42,6 @@ abstract class DarwinWorld {
     public function getSize() {
         return count($this->population);
     }
-
-    /**
-     * Tournament between population to evalute a Fitness
-     */
-    abstract protected function tournament($round);
 
     /**
      * Runs one generation
@@ -75,5 +82,4 @@ abstract class DarwinWorld {
         }
     }
 
-    abstract protected function getReport();
 }
