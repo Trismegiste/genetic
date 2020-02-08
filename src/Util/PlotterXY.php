@@ -48,14 +48,22 @@ class PlotterXY {
         $scaleY = ($maxVert - $minVert) / ($this->height * 0.9);
 
         $curvesCount = count($data);
+        $lastStep = -1;
         foreach ($data as $idx => $generation) {
             $hue = 270.0 * $idx / $curvesCount;
             $rgb = $this->hsv2rgb($hue, 1.0, 1.0);
             $plotColor = imagecolorallocate($this->handle, $rgb[0], $rgb[1], $rgb[2]);
+            // legend
+            $step = floor($idx / $curvesCount * 10) / 10;
+            if ($lastStep !== $step) {
+                imagefttext($this->handle, 24, 0, $this->width * 0.92, 50 + $this->height * $step, $plotColor, './bin/akukamu.otf', "Curve $idx");
+                $lastStep = $step;
+            }
+            // plotting
             foreach ($generation as $plot) {
                 $x = $this->width * 0.05 + ($plot['x'] - $deltaX) / $scaleX;
                 $y = $this->height - ($this->height * 0.05 + ($plot['y'] - $deltaY) / $scaleY);
-                imagefilledellipse($this->handle, $x, $y, 6, 6, $plotColor);
+                imagefilledellipse($this->handle, $x, $y, 4, 4, $plotColor);
             }
             imagecolordeallocate($this->handle, $plotColor);
         }
