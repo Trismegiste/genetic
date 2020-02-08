@@ -90,7 +90,7 @@ class L5rFree extends Command {
         $scaleY = ($maxWin - $minWin) / ($height * 0.9);
 
         foreach ($data as $generation) {
-            $plotColor = imagecolorallocate($h, rand(127, 255), rand(127, 255), rand(127, 255));
+            $plotColor = imagecolorallocate($h, mt_rand(127, 255), mt_rand(127, 255), mt_rand(127, 255));
             foreach ($generation as $plot) {
                 $x = $width * 0.05 + ($plot['c'] - $deltaX) / $scaleX;
                 $y = $height - ($height * 0.05 + ($plot['w'] - $deltaY) / $scaleY);

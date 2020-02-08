@@ -28,7 +28,7 @@ abstract class CappedProperty implements Property {
         } else if ($this->attribute === $this->maxValue) {
             $this->attribute--;
         } else {
-            $this->attribute += 2 * rand(0, 1) - 1;
+            $this->attribute += 2 * mt_rand(0, 1) - 1;
         }
     }
 

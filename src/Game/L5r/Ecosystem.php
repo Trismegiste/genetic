@@ -15,12 +15,12 @@ abstract class Ecosystem extends DarwinWorld {
             $pc = $this->createPc("L5R", [
                 'voidStrat' => Property\VoidStrategy::getRandomStrat(),
                 'stance' => Property\Stance::getRandomStrat(),
-                'agility' => rand(2, 6),
-                'reflexe' => rand(2, 6),
-                'earth' => rand(2, 6),
-                'kenjutsu' => rand(1, 5),
-                'void' => rand(2, 5),
-                'strength' => rand(2, 6)
+                'agility' => mt_rand(2, 6),
+                'reflexe' => mt_rand(2, 6),
+                'earth' => mt_rand(2, 6),
+                'kenjutsu' => mt_rand(1, 5),
+                'void' => mt_rand(2, 5),
+                'strength' => mt_rand(2, 6)
             ]);
             $population[] = $pc;
         }
@@ -42,7 +42,7 @@ abstract class Ecosystem extends DarwinWorld {
         $init2 = $pc2->rollInit();
 
         if ($init1 === $init2) {
-            if (rand(1, 2) === 1) {
+            if (mt_rand(1, 2) === 1) {
                 $init1++;
             }
         }

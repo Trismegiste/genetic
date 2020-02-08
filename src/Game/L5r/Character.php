@@ -219,7 +219,7 @@ class Character implements Mutable {
     }
 
     public function mutate() {
-        $pickAGene = rand(0, count($this->genome) - 1);
+        $pickAGene = mt_rand(0, count($this->genome) - 1);
         $geneName = array_keys($this->genome);
         $gene = $this->genome[$geneName[$pickAGene]];
         $gene->mutate();

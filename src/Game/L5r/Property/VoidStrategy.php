@@ -33,7 +33,7 @@ class VoidStrategy implements \Trismegiste\Genetic\Game\Property {
     }
 
     static public function getRandomStrat() {
-        return self::$choice[rand(0, count(self::$choice) - 1)];
+        return self::$choice[mt_rand(0, count(self::$choice) - 1)];
     }
 
 }

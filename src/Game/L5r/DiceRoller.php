@@ -15,7 +15,7 @@ class DiceRoller {
     static public function rollD10() {
         $s = 0;
         do {
-            $d = rand(1, 10);
+            $d = mt_rand(1, 10);
             $s += $d;
         } while ($d === 10);
 
