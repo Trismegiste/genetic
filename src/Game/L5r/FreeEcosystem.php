@@ -21,7 +21,7 @@ class FreeEcosystem extends Ecosystem {
     public function getReport() {
         return [
             'grafx' => array_map(function($pc) {
-                        return ['c' => $pc->getCost(), 'w' => $pc->getWinningCount()];
+                        return ['x' => $pc->getCost(), 'y' => $pc->getWinningCount()];
                     }, $this->population),
             'text' => parent::getReport()
         ];

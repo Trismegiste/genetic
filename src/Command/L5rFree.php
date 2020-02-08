@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\L5r\FreeEcosystem;
+use Trismegiste\Genetic\Util\PlotterXY;
 
 /**
  * Free evolution
@@ -52,55 +53,10 @@ class L5rFree extends Command {
         }
 
         if (!is_null($this->plotFile)) {
-            $this->writeImage($grafx);
+            $im = new PlotterXY(1920, 1080);
+            $im->draw($grafx);
+            $im->writePng($this->plotFile);
         }
-    }
-
-    protected function writeImage($data) {
-        $width = 1920;
-        $height = 1080;
-        $h = imagecreatetruecolor($width, $height);
-        $background = imagecolorallocate($h, 0, 0, 0);
-        imagefill($h, 0, 0, $background);
-
-        $minWin = $minCost = 99999;
-        $maxWin = $maxCost = 0;
-        foreach ($data as $generation) {
-            foreach ($generation as $plot) {
-                $c = $plot['c'];
-                $w = $plot['w'];
-                if ($c < $minCost) {
-                    $minCost = $c;
-                }
-                if ($c > $maxCost) {
-                    $maxCost = $c;
-                }
-                if ($w < $minWin) {
-                    $minWin = $w;
-                }
-                if ($w > $maxWin) {
-                    $maxWin = $w;
-                }
-            }
-        }
-
-        $deltaX = $minCost;
-        $deltaY = $minWin;
-        $scaleX = ($maxCost - $minCost) / ($width * 0.9);
-        $scaleY = ($maxWin - $minWin) / ($height * 0.9);
-
-        foreach ($data as $generation) {
-            $plotColor = imagecolorallocate($h, mt_rand(127, 255), mt_rand(127, 255), mt_rand(127, 255));
-            foreach ($generation as $plot) {
-                $x = $width * 0.05 + ($plot['c'] - $deltaX) / $scaleX;
-                $y = $height - ($height * 0.05 + ($plot['w'] - $deltaY) / $scaleY);
-                imagefilledellipse($h, $x, $y, 4, 4, $plotColor);
-            }
-            imagecolordeallocate($h, $plotColor);
-        }
-
-        imagepng($h, "population.png");
-        imagedestroy($h);
     }
 
 }
