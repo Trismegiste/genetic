@@ -10,9 +10,9 @@ abstract class DarwinWorldMock extends DarwinWorld {
 
     protected $build;
 
-    public function __construct(TestCase $build) {
+    public function __construct(TestCase $build, $size) {
         $this->build = $build;
-        parent::__construct(10);
+        parent::__construct($size);
     }
 
     protected function createPopulation($popSize) {

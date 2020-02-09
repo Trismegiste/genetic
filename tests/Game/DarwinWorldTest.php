@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 class DarwinWorldTest extends TestCase {
 
     public function create() {
-        $sut = $this->getMockForAbstractClass(DarwinWorldMock::class, [$this]);
+        $sut = $this->getMockForAbstractClass(DarwinWorldMock::class, [$this, 10]);
         $sut->expects($this->once())->method('tournament');
         $sut->expects($this->once())
                 ->method('getReport')
