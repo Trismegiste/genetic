@@ -28,7 +28,7 @@ class L5rFree extends Command {
                 ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration")
                 ->addOption('round', NULL, InputArgument::OPTIONAL, 'How many round between 2 PC', 5)
                 ->addOption('extinct', NULL, InputArgument::OPTIONAL, 'Percentage of how many population are extinct between generation', 10)
-                ->addOption('plot', NULL, InputArgument::OPTIONAL, 'Percentage of how many population are extinct between generation', 'generation.png');
+                ->addOption('plot', NULL, InputArgument::OPTIONAL, 'File name of plotting PNG picture', 'generation.png');
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
