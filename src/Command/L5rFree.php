@@ -15,7 +15,7 @@ use Trismegiste\Genetic\Util\PlotterXY;
 class L5rFree extends Command {
 
     // the name of the command
-    protected static $defaultName = 'evolve:free';
+    protected static $defaultName = 'l5r:free';
     protected $round;
     protected $extinctRatio;
     protected $univers;

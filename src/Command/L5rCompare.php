@@ -14,7 +14,7 @@ use Trismegiste\Genetic\Game\L5r\ComparedEcosystem;
 class L5rCompare extends Command {
 
     // the name of the command
-    protected static $defaultName = 'evolve:compare';
+    protected static $defaultName = 'l5r:compare';
     protected $refPopPercent = 10;
     protected $round;
     protected $popSize;
