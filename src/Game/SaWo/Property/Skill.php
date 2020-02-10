@@ -9,20 +9,17 @@ class Skill extends SaWoTrait {
 
     protected $attribute;
 
-    public function __construct(Attribute $attr, $dice, $bonus = 0) {
+    public function __construct(Attribute $attr, $dice) {
         $this->attribute = $attr;
-        parent::__construct($dice, $bonus);
+        parent::__construct($dice);
     }
 
     public function getCost() {
         $attr = $this->attribute->get();
-        if ($this->dice <= $attr[0]) {
+        if ($this->dice <= $attr) {
             $cost = $this->dice / 2 - 2;
         } else {
-            $cost = $attr[0] / 2 - 2 + ($this->dice - $attr[0]);
-        }
-        if ($this->bonus > $attr[1]) {
-            $cost += $this->bonus * 2;
+            $cost = $attr / 2 - 2 + ($this->dice - $attr);
         }
 
         return $cost;

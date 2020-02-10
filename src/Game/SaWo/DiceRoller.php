@@ -18,15 +18,11 @@ class DiceRoller {
     }
 
     public static function roll(Property\SaWoTrait $aTrait) {
-        $dice = $aTrait->get();
-
-        return self::rollExplodingDie($dice[0]) + $dice[1];
+        return self::rollExplodingDie($aTrait->get());
     }
 
     public static function rollJoker(Property\SaWoTrait $aTrait, $joker = 6) {
-        $dice = $aTrait->get();
-
-        return $dice[1] + max([self::rollExplodingDie($dice[0]), self::rollExplodingDie($joker)]);
+        return max([self::rollExplodingDie($aTrait->get()), self::rollExplodingDie($joker)]);
     }
 
 }

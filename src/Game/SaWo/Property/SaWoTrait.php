@@ -14,54 +14,34 @@ abstract class SaWoTrait implements Property {
     const diceChoice = ['4', '6', '8', '10', '12'];
 
     protected $dice;
-    protected $bonus;
 
-    public function __construct($dice, $bonus = 0) {
+    public function __construct($dice) {
         if (!in_array($dice, self::diceChoice)) {
             throw new \DomainException("The die d$dice is invalid");
         }
-        if ($bonus < 0) {
-            throw new \OutOfBoundsException($bonus);
-        }
-        if (($bonus > 0) && ($dice !== 12)) {
-            throw new \OutOfBoundsException("Non-zero bonus is only valid with d12");
-        }
         $this->dice = $dice;
-        $this->bonus = $bonus;
     }
 
     public function get() {
-        return [$this->dice, $this->bonus];
+        return $this->dice;
     }
 
     public function mutate() {
         if ($this->dice === 4) {
             $this->dice += 2;
+        } else if ($this->dice === 12) {
+            $this->dice -= 2;
         } else {
-            $direction = 2 * mt_rand(0, 1) - 1;
-            if ($this->dice !== 12) {
-                $this->dice += 2 * $direction;
-            } else { // d12
-                if (($this->bonus === 0) && ($direction < 0)) {
-                    $this->dice = 10;
-                } else {
-                    $this->bonus += $direction;
-                }
-            }
+            $this->dice += 4 * mt_rand(0, 1) - 2;
         }
     }
 
     public function getDifficulty() {
-        return (int) ($this->dice / 2 + 2 + floor($this->bonus / 2));
+        return (int) ($this->dice / 2 + 2);
     }
 
     public function __toString() {
-        $str = 'd' . $this->dice;
-        if ($this->bonus > 0) {
-            $str .= '+' . $this->bonus;
-        }
-
-        return $str;
+        return 'd' . $this->dice;
     }
 
 }

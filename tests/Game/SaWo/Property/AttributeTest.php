@@ -11,9 +11,7 @@ class AttributeTest extends TestCase {
         return [
             [new Attribute(4), 0],
             [new Attribute(8), 4],
-            [new Attribute(12), 8],
-            [new Attribute(12, 1), 10],
-            [new Attribute(12, 2), 12]
+            [new Attribute(12), 8]
         ];
     }
 

@@ -109,7 +109,7 @@ class Character implements Mutable, Fighter {
     }
 
     public function getDamage() {
-        $dice = min([$this->genome['strength']->get()[0], $this->weapon]);
+        $dice = min([$this->genome['strength']->get(), $this->weapon]);
         return DiceRoller::roll($this->genome['strength']) + DiceRoller::rollExplodingDie($dice);
     }
 

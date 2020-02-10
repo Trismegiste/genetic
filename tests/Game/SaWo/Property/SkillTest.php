@@ -16,9 +16,7 @@ class SkillTest extends TestCase {
             [new Skill($attr, 6), 1],
             [new Skill($attr, 8), 2],
             [new Skill($attr, 10), 4],
-            [new Skill($attr, 12), 6],
-            [new Skill($attr, 12, 1), 8],
-            [new Skill($attrLeg, 12, 2), 8]
+            [new Skill($attr, 12), 6]
         ];
     }
 
