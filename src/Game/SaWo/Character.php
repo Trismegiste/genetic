@@ -161,4 +161,8 @@ class Character implements Mutable, Fighter {
         return DiceRoller::rollJoker($this->genome['fighting']);
     }
 
+    public function getWoundsPenalty() {
+        return -$this->wound;
+    }
+
 }

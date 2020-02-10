@@ -7,14 +7,24 @@ use Trismegiste\Genetic\Game\SaWo\Character;
 
 class CharacterTest extends TestCase {
 
-    public function testParry() {
-        $sut = new Character(['fighting' => 8]);
-        $this->assertEquals(6, $sut->getParry());
+    public function factory() {
+        return [
+            [4, 4],
+            [8, 6],
+            [12, 8]
+        ];
     }
 
-    public function testToughness() {
-        $sut = new Character(['vigor' => 8]);
-        $this->assertEquals(6, $sut->getToughness());
+    /** @dataProvider factory */
+    public function testParry($face, $diff) {
+        $sut = new Character(['fighting' => $face]);
+        $this->assertEquals($diff, $sut->getParry());
+    }
+
+    /** @dataProvider factory */
+    public function testToughness($face, $diff) {
+        $sut = new Character(['vigor' => $face]);
+        $this->assertEquals($diff, $sut->getToughness());
     }
 
 }
