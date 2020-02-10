@@ -5,6 +5,7 @@ namespace Trismegiste\Genetic\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\SaWo\FreeEcosystem;
 use Trismegiste\Genetic\Util\PlotterXY;
@@ -25,9 +26,9 @@ class SaWoFree extends Command {
         $this->setDescription("Compute free evolution for SaWo")
                 ->addArgument('popSize', InputArgument::REQUIRED, "Population size")
                 ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration")
-                ->addOption('round', NULL, InputArgument::OPTIONAL, 'How many round between 2 PC', 5)
-                ->addOption('extinct', NULL, InputArgument::OPTIONAL, 'Percentage of how many population are extinct between generation', 10)
-                ->addOption('plot', NULL, InputArgument::OPTIONAL, 'File name of plotting PNG picture', 'generation.png');
+                ->addOption('round', NULL, InputOption::VALUE_REQUIRED, 'How many round between 2 PC', 5)
+                ->addOption('extinct', NULL, InputOption::VALUE_REQUIRED, 'Percentage of how many population are extinct between generation', 10)
+                ->addOption('plot', NULL, InputOption::VALUE_OPTIONAL, 'File name of plotting PNG picture', 'generation.png');
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
@@ -35,7 +36,9 @@ class SaWoFree extends Command {
         $this->maxGeneration = $input->getArgument('maxIter');
         $this->round = $input->getOption('round');
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
-        $this->plotFile = $input->getOption('plot');
+        if ($input->hasParameterOption('plot')) {
+            $this->plotFile = $input->getOption('plot');
+        }
 
         $this->univers = new FreeEcosystem($popSize);
     }

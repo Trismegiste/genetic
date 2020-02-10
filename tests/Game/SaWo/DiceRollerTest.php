@@ -8,7 +8,7 @@ use Trismegiste\Genetic\Game\SaWo\Property\SaWoTrait;
 
 class DiceRollerTest extends TestCase {
 
-    const iter = 1000;
+    const iter = 10000;
 
     public function getStat() {
         return [

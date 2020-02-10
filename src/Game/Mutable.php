@@ -26,4 +26,9 @@ interface Mutable {
      * A Mutable object must be clonable
      */
     public function __clone();
+
+    /**
+     * Returns the cost of genome
+     */
+    public function getCost();
 }
