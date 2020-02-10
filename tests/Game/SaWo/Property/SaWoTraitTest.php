@@ -1,5 +1,7 @@
 <?php
 
+namespace test\SaWo\Property;
+
 use PHPUnit\Framework\TestCase;
 use Trismegiste\Genetic\Game\SaWo\Property\SaWoTrait;
 

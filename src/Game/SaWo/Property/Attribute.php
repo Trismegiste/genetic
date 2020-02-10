@@ -8,7 +8,7 @@ namespace Trismegiste\Genetic\Game\SaWo\Property;
 class Attribute extends SaWoTrait {
 
     public function getCost() {
-        return ($this->dice - 4) / 2 + $this->bonus;
+        return ($this->dice - 4) + 2 * $this->bonus;
     }
 
 }

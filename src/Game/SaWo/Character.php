@@ -19,6 +19,7 @@ class Character implements Mutable, Fighter {
 
     public function __construct($param = []) {
         $default = [
+            'agility' => 6,
             'fighting' => 6,
             'vigor' => 6,
             'strength' => 6,
@@ -32,8 +33,10 @@ class Character implements Mutable, Fighter {
             }
         }
 
+        $agility = new Property\Attribute($default['agility']);
         $this->genome = [
-            'fighting' => new Property\Skill($default['fighting']),
+            'agility' => $agility,
+            'fighting' => new Property\Skill($agility, $default['fighting']),
             'vigor' => new Property\Attribute($default['vigor']),
             'strength' => new Property\Attribute($default['strength']),
             'spirit' => new Property\Attribute($default['spirit'])
@@ -141,6 +144,20 @@ class Character implements Mutable, Fighter {
     }
 
     public function getAttack() {
+        if ($this->shaken) {
+            $unshake = DiceRoller::rollJoker($this->genome['spirit']);
+            if ($unshake >= 8) {
+                $this->shaken = false;
+            } else if ($unshake >= 4) {
+                $this->shaken = false;
+
+                return 0;
+            }
+        }
+        if ($this->shaken) {
+            return 0;
+        }
+
         return DiceRoller::rollJoker($this->genome['fighting']);
     }
 
