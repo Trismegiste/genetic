@@ -24,7 +24,8 @@ class Character implements Mutable, Fighter {
             'fighting' => 6,
             'vigor' => 6,
             'strength' => 6,
-            'spirit' => 6
+            'spirit' => 6,
+            'benny' => 'attack'
         ];
 
         // override
@@ -40,7 +41,8 @@ class Character implements Mutable, Fighter {
             'fighting' => new Property\Skill($agility, $default['fighting']),
             'vigor' => new Property\Attribute($default['vigor']),
             'strength' => new Property\Attribute($default['strength']),
-            'spirit' => new Property\Attribute($default['spirit'])
+            'spirit' => new Property\Attribute($default['spirit']),
+            'benny' => new Property\BennyStrat($default['benny'])
         ];
     }
 
@@ -90,22 +92,56 @@ class Character implements Mutable, Fighter {
             if (($attack - $parry) >= 4) {
                 $damage += DiceRoller::rollExplodingDie(6);
             }
-            // compare damage and toughness
-            if ($damage >= $this->getToughness()) {
-                $delta = floor(($damage - $this->getToughness()) / 4);
+            $this->receiveDamage($damage);
+        }
+    }
 
-                if ($delta === 0) {
-                    if ($this->shaken) {
-                        $this->wound++;
-                    } else {
-                        $this->shaken = true;
-                    }
+    protected function receiveDamage($damage) {
+        // compare damage and toughness
+        if ($damage >= $this->getToughness()) {
+            $delta = floor(($damage - $this->getToughness()) / 4);
+            $this->addWounds($delta);
+        }
+    }
+
+    protected function addWounds(int $w) {
+        if ($w === 0) {
+            // new shaken condition :
+            if ($this->shaken) {
+                if (($this->genome['benny'] === 'shaken') && $this->hasBenny()) {
+                    $this->useBenny();
                 } else {
-                    $this->wound += $delta;
-                    $this->shaken = true;
+                    $this->wound++;
                 }
+            } else {
+                $this->shaken = true;
+            }
+        } else {
+            if (($this->genome['benny'] === 'soak') && $this->hasBenny()) {
+                $this->useBenny();
+                $soak = floor($this->roll('vigor') / 4);
+                $w -= $soak;
+            }
+            if ($w > 0) {
+                $this->wound += $w;
+                $this->shaken = true;
             }
         }
+    }
+
+    protected function roll($trait) {
+        return DiceRoller::rollJoker($this->genome[$trait]) + $this->getWoundsPenalty();
+    }
+
+    protected function useBenny() {
+        if (!$this->hasBenny()) {
+            throw new \RuntimeException("No more benny to use");
+        }
+        $this->usedBenny++;
+    }
+
+    protected function hasBenny() {
+        return $this->usedBenny < $this->benniesCount;
     }
 
     public function getDamage() {
@@ -151,7 +187,7 @@ class Character implements Mutable, Fighter {
 
     public function getAttack() {
         if ($this->shaken) {
-            $unshake = DiceRoller::rollJoker($this->genome['spirit']);
+            $unshake = $this->roll('spirit');
             if ($unshake >= 8) {
                 $this->shaken = false;
             } else if ($unshake >= 4) {
@@ -164,7 +200,7 @@ class Character implements Mutable, Fighter {
             return 0;
         }
 
-        return DiceRoller::rollJoker($this->genome['fighting']) + $this->getWoundsPenalty();
+        return $this->roll('fighting');
     }
 
     public function getWoundsPenalty() {

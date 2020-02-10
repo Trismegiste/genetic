@@ -39,4 +39,8 @@ class BennyStrat implements Property {
         return self::choice[mt_rand(0, count(self::choice) - 1)];
     }
 
+    public function __toString() {
+        return $this->strat;
+    }
+
 }
