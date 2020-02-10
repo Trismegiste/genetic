@@ -16,6 +16,7 @@ class Character implements Mutable, Fighter {
     protected $benniesCount = 3;
     protected $genome;
     protected $shaken = false;
+    protected $weapon = 8;
 
     public function __construct($param = []) {
         $default = [
@@ -105,7 +106,8 @@ class Character implements Mutable, Fighter {
     }
 
     public function getDamage() {
-        return DiceRoller::roll($this->genome['strength']) + DiceRoller::rollExplodingDie(6);
+        $dice = min([$this->genome['strength']->get()[0], $this->weapon]);
+        return DiceRoller::roll($this->genome['strength']) + DiceRoller::rollExplodingDie($dice);
     }
 
     public function restart() {
@@ -158,7 +160,7 @@ class Character implements Mutable, Fighter {
             return 0;
         }
 
-        return DiceRoller::rollJoker($this->genome['fighting']);
+        return DiceRoller::rollJoker($this->genome['fighting']) + $this->getWoundsPenalty();
     }
 
     public function getWoundsPenalty() {
