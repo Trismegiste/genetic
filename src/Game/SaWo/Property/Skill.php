@@ -22,7 +22,7 @@ class Skill extends SaWoTrait {
             $cost = $attr[0] / 2 - 2 + ($this->dice - $attr[0]);
         }
         if ($this->bonus > $attr[1]) {
-            $cost += ($this->bonus - $attr[1]) * 2;
+            $cost += $this->bonus * 2;
         }
 
         return $cost;
