@@ -165,4 +165,8 @@ class Character implements Mutable, Fighter {
         return -$this->wound;
     }
 
+    public function isShaken() {
+        return $this->shaken;
+    }
+
 }
