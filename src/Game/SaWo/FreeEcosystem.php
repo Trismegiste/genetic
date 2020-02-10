@@ -14,7 +14,12 @@ class FreeEcosystem extends DarwinWorld {
     protected function createPopulation($popSize): array {
         $pop = [];
         for ($k = 0; $k < $popSize; $k++) {
-            $pc = new Character();
+            $pc = new Character([
+                'strength' => 2 * mt_rand(2, 6),
+                'vigor' => 2 * mt_rand(2, 6),
+                'spirit' => 2 * mt_rand(2, 6),
+                'fighting' => 2 * mt_rand(2, 6)
+            ]);
             $pop[] = $pc;
         }
 
