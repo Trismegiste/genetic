@@ -160,4 +160,14 @@ class CharacterTest extends TestCase {
         $this->assertStringStartsWith('agility', (string) $sut);
     }
 
+    /** @dataProvider factoryFight */
+    public function testDamage(Character $sut) {
+        $this->assertGreaterThanOrEqual(2, $sut->getDamage());
+    }
+
+    /** @dataProvider factoryFight */
+    public function testAttack(Character $sut) {
+        $this->assertGreaterThan(1, $sut->getAttack());
+    }
+
 }
