@@ -41,7 +41,11 @@ class Character implements Mutable, Fighter {
     }
 
     public function __clone() {
-        
+        $tmp = [];
+        foreach ($this->genome as $key => $gene) {
+            $tmp[$key] = clone $gene;
+        }
+        $this->genome = $tmp;
     }
 
     public function getFitness() {
@@ -49,7 +53,12 @@ class Character implements Mutable, Fighter {
     }
 
     public function mutate() {
-        
+        $card = count($this->genome);
+        foreach ($this->genome as $key => $gene) {
+            if (0 === mt_rand(0, $card - 1)) {
+                $gene->mutate();
+            }
+        }
     }
 
     public function newGeneration() {
@@ -93,7 +102,7 @@ class Character implements Mutable, Fighter {
     }
 
     public function getDamage() {
-        return DiceRoller::rollExplodingDie(6) + DiceRoller::rollExplodingDie(6);
+        return DiceRoller::roll($this->genome['strength']) + DiceRoller::rollExplodingDie(6);
     }
 
     public function restart() {
@@ -118,7 +127,12 @@ class Character implements Mutable, Fighter {
     }
 
     public function __toString() {
-        return "SaWo";
+        $compil = '';
+        foreach ($this->genome as $key => $gene) {
+            $compil .= $key . ':' . $gene . ' ';
+        }
+
+        return $compil . 'win:' . $this->victory . ' cost:' . $this->getCost();
     }
 
     public function getAttack() {

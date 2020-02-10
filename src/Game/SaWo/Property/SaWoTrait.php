@@ -59,4 +59,13 @@ class SaWoTrait implements Property {
         return $this->dice / 2 + 2 + floor($this->bonus / 2);
     }
 
+    public function __toString() {
+        $str = 'd' . $this->dice;
+        if ($this->bonus > 0) {
+            $str .= '+' . $this->bonus;
+        }
+
+        return $str;
+    }
+
 }
