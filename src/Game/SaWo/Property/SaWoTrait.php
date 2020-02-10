@@ -55,4 +55,8 @@ class SaWoTrait implements Property {
         }
     }
 
+    public function getDifficulty() {
+        return $this->dice / 2 + 2 + floor($this->bonus / 2);
+    }
+
 }

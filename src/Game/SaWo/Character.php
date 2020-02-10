@@ -14,6 +14,31 @@ class Character implements Mutable, Fighter {
     protected $victory = 0;
     protected $usedBenny = 0;
     protected $benniesCount = 3;
+    protected $genome;
+    protected $shaken = false;
+
+    public function __construct($param = []) {
+        $default = [
+            'fighting' => 6,
+            'vigor' => 6,
+            'strength' => 6,
+            'spirit' => 6
+        ];
+
+        // override
+        foreach ($param as $key => $val) {
+            if (array_key_exists($key, $default)) {
+                $default[$key] = $val;
+            }
+        }
+
+        $this->genome = [
+            'fighting' => new Property\SaWoTrait($default['fighting']),
+            'vigor' => new Property\SaWoTrait($default['vigor']),
+            'strength' => new Property\SaWoTrait($default['strength']),
+            'spirit' => new Property\SaWoTrait($default['spirit'])
+        ];
+    }
 
     public function __clone() {
         
@@ -40,7 +65,35 @@ class Character implements Mutable, Fighter {
     }
 
     public function receiveAttack(Fighter $pc) {
-        $this->wound++;
+        $parry = $this->getParry();
+        $attack = $pc->getAttack();
+
+        if ($attack >= $parry) {
+            $damage = $pc->getDamage();
+            // Raise ?
+            if (($attack - $parry) >= 4) {
+                $damage += DiceRoller::rollExplodingDie(6);
+            }
+            // compare damage and toughness
+            if ($damage >= $this->getToughness()) {
+                $delta = floor(($damage - $this->getToughness()) / 4);
+
+                if ($delta === 0) {
+                    if ($this->shaken) {
+                        $this->wound++;
+                    } else {
+                        $this->shaken = true;
+                    }
+                } else {
+                    $this->wound += $delta;
+                    $this->shaken = true;
+                }
+            }
+        }
+    }
+
+    public function getDamage() {
+        return DiceRoller::rollExplodingDie(6) + DiceRoller::rollExplodingDie(6);
     }
 
     public function restart() {
@@ -57,7 +110,7 @@ class Character implements Mutable, Fighter {
     }
 
     public function getToughness() {
-        return 8;
+        return $this->genome['vigor']->getDifficulty();
     }
 
     public function getCost() {
@@ -66,6 +119,10 @@ class Character implements Mutable, Fighter {
 
     public function __toString() {
         return "SaWo";
+    }
+
+    public function getAttack() {
+        return DiceRoller::rollJoker($this->genome['fighting']);
     }
 
 }

@@ -7,7 +7,7 @@ namespace Trismegiste\Genetic\Game\SaWo;
  */
 class DiceRoller {
 
-    protected static function rollExplodingDie($face) {
+    public static function rollExplodingDie($face) {
         $s = 0;
         do {
             $d = mt_rand(1, $face);
