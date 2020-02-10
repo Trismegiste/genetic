@@ -28,7 +28,7 @@ class SaWoFree extends Command {
                 ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration")
                 ->addOption('round', NULL, InputOption::VALUE_REQUIRED, 'How many round between 2 PC', 5)
                 ->addOption('extinct', NULL, InputOption::VALUE_REQUIRED, 'Percentage of how many population are extinct between generation', 10)
-                ->addOption('plot', NULL, InputOption::VALUE_OPTIONAL, 'File name of plotting PNG picture', 'generation.png');
+                ->addOption('plot', NULL, InputOption::VALUE_REQUIRED, 'File name of plotting PNG picture');
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
@@ -36,9 +36,7 @@ class SaWoFree extends Command {
         $this->maxGeneration = $input->getArgument('maxIter');
         $this->round = $input->getOption('round');
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
-        if ($input->hasParameterOption('plot')) {
-            $this->plotFile = $input->getOption('plot');
-        }
+        $this->plotFile = $input->getOption('plot');
 
         $this->univers = new FreeEcosystem($popSize);
     }
