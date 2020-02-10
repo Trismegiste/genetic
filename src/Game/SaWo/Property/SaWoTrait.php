@@ -9,7 +9,7 @@ use Trismegiste\Genetic\Game\Property;
  * 
  * Note : yeah I know it's "die" not "dice", but die is reserved keyword
  */
-class SaWoTrait implements Property {
+abstract class SaWoTrait implements Property {
 
     const diceChoice = ['4', '6', '8', '10', '12'];
 
@@ -32,10 +32,6 @@ class SaWoTrait implements Property {
 
     public function get() {
         return [$this->dice, $this->bonus];
-    }
-
-    public function getCost() {
-        return 0;
     }
 
     public function mutate() {

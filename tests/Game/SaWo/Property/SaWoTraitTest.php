@@ -5,11 +5,15 @@ use Trismegiste\Genetic\Game\SaWo\Property\SaWoTrait;
 
 class SaWoTraitTest extends TestCase {
 
+    protected function buildMock($d, $b = 0) {
+        return $this->getMockForAbstractClass(SaWoTrait::class, [$d, $b]);
+    }
+
     public function factory() {
         return [
-            [6, 0, new SaWoTrait(6)],
-            [12, 0, new SaWoTrait(12)],
-            [12, 2, new SaWoTrait(12, 2)]
+            [6, 0, $this->buildMock(6)],
+            [12, 0, $this->buildMock(12)],
+            [12, 2, $this->buildMock(12, 2)]
         ];
     }
 
@@ -20,37 +24,37 @@ class SaWoTraitTest extends TestCase {
 
     /** @expectedException \DomainException */
     public function testInvalidDice5() {
-        new SaWoTrait(5);
+        $this->buildMock(5);
     }
 
     /** @expectedException \DomainException */
     public function testInvalidDice3() {
-        new SaWoTrait(3);
+        $this->buildMock(3);
     }
 
     /** @expectedException \DomainException */
     public function testInvalidDice13() {
-        new SaWoTrait(13);
+        $this->buildMock(13);
     }
 
     /** @expectedException \OutOfBoundsException */
     public function testInvalidBonus() {
-        new SaWoTrait(10, 1);
+        $this->buildMock(10, 1);
     }
 
     /** @expectedException \OutOfBoundsException */
     public function testNegativeBonus() {
-        new SaWoTrait(12, -1);
+        $this->buildMock(12, -1);
     }
 
     public function testMutation4() {
-        $sut = new SaWoTrait(4);
+        $sut = $this->buildMock(4);
         $sut->mutate();
         $this->assertEquals([6, 0], $sut->get());
     }
 
     public function testMutation8() {
-        $sut = new SaWoTrait(8);
+        $sut = $this->buildMock(8);
         $sut->mutate();
         $this->assertNotEquals([8, 0], $sut->get());
         $this->assertTrue(in_array($sut->get()[0], [6, 10]));
@@ -58,7 +62,7 @@ class SaWoTraitTest extends TestCase {
 
     public function testMutation12() {
         for ($k = 0; $k < 5; $k++) {
-            $sut = new SaWoTrait(12);
+            $sut = $this->buildMock(12);
             $sut->mutate();
             $this->assertNotEquals([12, 0], $sut->get());
             $this->assertTrue(in_array($sut->get(), [[10, 0], [12, 1]]));
@@ -67,7 +71,7 @@ class SaWoTraitTest extends TestCase {
 
     public function testMutation12Plus() {
         for ($k = 0; $k < 5; $k++) {
-            $sut = new SaWoTrait(12, 2);
+            $sut = $this->buildMock(12, 2);
             $sut->mutate();
             $this->assertNotEquals([12, 2], $sut->get());
             $this->assertTrue(in_array($sut->get(), [[12, 1], [12, 3]]));

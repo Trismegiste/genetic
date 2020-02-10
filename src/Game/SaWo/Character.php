@@ -33,10 +33,10 @@ class Character implements Mutable, Fighter {
         }
 
         $this->genome = [
-            'fighting' => new Property\SaWoTrait($default['fighting']),
-            'vigor' => new Property\SaWoTrait($default['vigor']),
-            'strength' => new Property\SaWoTrait($default['strength']),
-            'spirit' => new Property\SaWoTrait($default['spirit'])
+            'fighting' => new Property\Skill($default['fighting']),
+            'vigor' => new Property\Attribute($default['vigor']),
+            'strength' => new Property\Attribute($default['strength']),
+            'spirit' => new Property\Attribute($default['spirit'])
         ];
     }
 
@@ -123,7 +123,12 @@ class Character implements Mutable, Fighter {
     }
 
     public function getCost() {
-        return 10;
+        $cost = 0;
+        foreach ($this->genome as $gene) {
+            $cost += $gene->getCost();
+        }
+
+        return $cost;
     }
 
     public function __toString() {

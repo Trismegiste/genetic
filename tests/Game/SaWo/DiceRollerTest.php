@@ -30,7 +30,7 @@ class DiceRollerTest extends TestCase {
     /** @dataProvider getStat */
     public function testAverage($face, $average) {
         $sum = 0;
-        $dice = new SaWoTrait($face);
+        $dice = $this->getMockForAbstractClass(SaWoTrait::class, [$face]);
         for ($k = 0; $k < self::iter; $k++) {
             $sum += DiceRoller::roll($dice);
         }
@@ -41,7 +41,7 @@ class DiceRollerTest extends TestCase {
     /** @dataProvider getStatJoker */
     public function testSuccessJoker($face, $fd, $percent) {
         $sum = 0;
-        $dice = new SaWoTrait($face);
+        $dice = $this->getMockForAbstractClass(SaWoTrait::class, [$face]);
         for ($k = 0; $k < self::iter; $k++) {
             $sum += (DiceRoller::rollJoker($dice) >= $fd) ? 1 : 0;
         }
