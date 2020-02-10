@@ -167,7 +167,7 @@ class CharacterTest extends TestCase {
 
     /** @dataProvider factoryFight */
     public function testAttack(Character $sut) {
-        $this->assertGreaterThan(1, $sut->getAttack());
+        $this->assertGreaterThanOrEqual(1, $sut->getAttack());
     }
 
 }
