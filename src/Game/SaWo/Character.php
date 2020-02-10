@@ -115,7 +115,7 @@ class Character implements Mutable, Fighter {
     }
 
     public function getParry() {
-        return 8;
+        return $this->genome['fighting']->getDifficulty();
     }
 
     public function getToughness() {
