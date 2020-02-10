@@ -57,11 +57,14 @@ class Character implements Mutable, Fighter {
     }
 
     public function mutate() {
-        $card = count($this->genome);
-        foreach ($this->genome as $key => $gene) {
-            if (0 === mt_rand(0, $card - 1)) {
+        $search = mt_rand(0, count($this->genome) - 1);
+        $idx = 0;
+        foreach ($this->genome as $gene) {
+            if ($idx === $search) {
                 $gene->mutate();
+                break;
             }
+            $idx++;
         }
     }
 
@@ -113,6 +116,7 @@ class Character implements Mutable, Fighter {
     public function restart() {
         $this->wound = 0;
         $this->usedBenny = 0;
+        $this->shaken = false;
     }
 
     public function getVictory() {

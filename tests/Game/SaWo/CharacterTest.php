@@ -27,8 +27,8 @@ class CharacterTest extends TestCase {
         $this->assertEquals($diff, $sut->getToughness());
     }
 
-    public function testFailedAttack() {
-        $sut = new Character(['fighting' => 8]);
+    /** @dataProvider factoryFight */
+    public function testFailedAttack($sut) {
         $attacker = $this->getMockBuilder(Character::class)->getMock();
         $attacker->expects($this->once())
                 ->method('getAttack')
@@ -101,6 +101,63 @@ class CharacterTest extends TestCase {
         $sut->receiveAttack($attacker);
         $this->assertTrue($sut->isShaken());
         $this->assertEquals(-3, $sut->getWoundsPenalty());
+    }
+
+    /** @dataProvider factoryFight */
+    public function testClonable(Character $sut) {
+        $clone = clone $sut;
+        $sut->incVictory();
+        $this->assertNotEquals($clone, $sut);
+    }
+
+    /** @dataProvider factoryFight */
+    public function testDeepClonable(Character $sut) {
+        $clone = clone $sut;
+        $sut->mutate();
+        $this->assertNotEquals($clone, $sut);
+    }
+
+    /** @dataProvider factoryFight */
+    public function testVictory(Character $sut) {
+        $sut->incVictory();
+        $this->assertEquals(1, $sut->getVictory());
+    }
+
+    /** @dataProvider factoryFight */
+    public function testNewGeneration(Character $sut) {
+        $sut->incVictory();
+        $this->assertEquals(1, $sut->getVictory());
+        $sut->newGeneration();
+        $this->assertEquals(0, $sut->getVictory());
+    }
+
+    /** @dataProvider factoryFight */
+    public function testRestart(Character $sut) {
+        $attacker = $this->getMockBuilder(Character::class)->getMock();
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(12);
+        $attacker->expects($this->once())
+                ->method('getDamage')
+                ->willReturn(21);
+
+        $sut->receiveAttack($attacker);
+        $this->assertTrue($sut->isDead());
+        $this->assertTrue($sut->isShaken());
+        $sut->restart();
+        $this->assertEquals(0, $sut->getWoundsPenalty());
+        $this->assertFalse($sut->isDead());
+        $this->assertFalse($sut->isShaken());
+    }
+
+    public function testCost() {
+        $sut = new Character();
+        $this->assertEquals(9, $sut->getCost());
+    }
+
+    /** @dataProvider factoryFight */
+    public function testToString($sut) {
+        $this->assertStringStartsWith('agility', (string) $sut);
     }
 
 }
