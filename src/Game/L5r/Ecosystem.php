@@ -12,25 +12,6 @@ use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
  */
 abstract class Ecosystem extends DarwinWorld {
 
-    protected function createPopulation(int $popSize) {
-        $population = [];
-        for ($k = 0; $k < $popSize; $k++) {
-            $pc = $this->createPc("L5R", [
-                'voidStrat' => VoidStrategy::getRandomStrat(),
-                'stance' => Stance::getRandomStrat(),
-                'agility' => mt_rand(2, 6),
-                'reflexe' => mt_rand(2, 6),
-                'earth' => mt_rand(2, 6),
-                'kenjutsu' => mt_rand(1, 5),
-                'void' => mt_rand(2, 5),
-                'strength' => mt_rand(2, 6)
-            ]);
-            $population[] = $pc;
-        }
-
-        return $population;
-    }
-
     protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2) {
         $player = [];
 
@@ -50,17 +31,6 @@ abstract class Ecosystem extends DarwinWorld {
         }
 
         return $player;
-    }
-
-    /**
-     * Factory
-     * 
-     * @param string $name
-     * @param array $param
-     * @return Character
-     */
-    protected function createPc($name, $param = []) {
-        return new Character($name, $param);
     }
 
     protected function getReport() {

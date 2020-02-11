@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Trismegiste\Genetic\Game\L5r\Factory;
 use Trismegiste\Genetic\Game\L5r\FreeEcosystem;
 
 /**
@@ -20,7 +21,7 @@ class FreeEcosystemTest extends TestCase {
     }
 
     public function create() {
-        return [[new FreeEcosystem(10)]];
+        return [[new FreeEcosystem(new Factory(10))]];
     }
 
 }

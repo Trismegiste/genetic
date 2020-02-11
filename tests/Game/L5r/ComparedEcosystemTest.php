@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Trismegiste\Genetic\Game\L5r\ComparedEcosystem;
+use Trismegiste\Genetic\Game\L5r\Factory;
 
 /**
  * Test for ComparedEcosystem
@@ -20,7 +21,7 @@ class ComparedEcosystemTest extends TestCase {
     }
 
     public function create() {
-        return [[new ComparedEcosystem(10, [], 0.5)]];
+        return [[new ComparedEcosystem(new Factory(10), [], 0.5)]];
     }
 
 }
