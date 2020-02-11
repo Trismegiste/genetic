@@ -7,6 +7,9 @@ namespace Trismegiste\Genetic\Game\L5r;
  */
 class FreeEcosystem extends Ecosystem {
 
+    /**
+     * Overload for adding graphics data
+     */
     public function getReport() {
         return [
             'grafx' => array_map(function($pc) {

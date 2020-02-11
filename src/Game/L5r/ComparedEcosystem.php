@@ -25,6 +25,9 @@ class ComparedEcosystem extends Ecosystem {
         }
     }
 
+    /**
+     * Override because new tournament
+     */
     protected function tournament(int $round) {
         foreach ($this->referencePop as $pc1) {
             foreach ($this->population as $pc2) {
@@ -33,6 +36,9 @@ class ComparedEcosystem extends Ecosystem {
         }
     }
 
+    /**
+     * Overload for reinitialising referencePop
+     */
     public function evolve(int $round, $extinctRatio) {
         foreach ($this->referencePop as $pc) {
             $pc->newGeneration();
@@ -41,6 +47,9 @@ class ComparedEcosystem extends Ecosystem {
         return parent::evolve($round, $extinctRatio);
     }
 
+    /**
+     * Overload for adding referencePop
+     */
     protected function getReport() {
         $report = parent::getReport();
 
