@@ -3,22 +3,19 @@
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Trismegiste\Genetic\Command\SaWoFree;
+use Trismegiste\Genetic\Command\L5rCompare;
 
-class SaWoFreeTest extends TestCase {
+class L5rCompareTest extends TestCase {
 
     public function testExecute() {
         $application = new Application();
         $application->setAutoExit(false);
-        $command = new SaWoFree();
+        $command = new L5rCompare();
         $application->add($command);
-        $tester = new CommandTester($application->find('sawo:free'));
+        $tester = new CommandTester($application->find('l5r:compare'));
 
         $this->assertEquals(0, $tester->execute([
-                    'popSize' => 10,
-                    'maxIter' => 5,
-                    '--round' => 3,
-                    '--extinct' => 0.5
+                    'config' => __DIR__ . '/../testcmd.json'
         ]));
 
         $this->assertRegExp("/Generation 0/", $tester->getDisplay());

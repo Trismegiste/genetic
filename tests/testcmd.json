@@ -1,0 +1,9 @@
+{
+    "popSize": 10,
+    "maxIter": 5,
+    "round": 3,
+    "extinct": 0.5,
+    "opponents": [
+        {}
+    ]
+}
