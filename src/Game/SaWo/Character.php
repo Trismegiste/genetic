@@ -26,7 +26,8 @@ class Character implements Mutable, Fighter {
             'strength' => 6,
             'spirit' => 6,
             'benny' => 'attack',
-            'block' => 0
+            'block' => 0,
+            'trademark' => 0
         ];
 
         // override
@@ -44,7 +45,8 @@ class Character implements Mutable, Fighter {
             'strength' => new Property\Attribute($default['strength']),
             'spirit' => new Property\Attribute($default['spirit']),
             'benny' => new Property\BennyStrat($default['benny']),
-            'block' => new Property\BlockEdge($default['block'])
+            'block' => new Property\BlockEdge($default['block']),
+            'trademark' => new Property\TradeWeaponEdge($default['trademark'])
         ];
     }
 
@@ -206,7 +208,7 @@ class Character implements Mutable, Fighter {
             return 0;
         }
 
-        $roll = $this->roll('fighting');
+        $roll = $this->roll('fighting') + $this->genome['trademark']->get();
         if (($roll < 4) && ($this->genome['benny']->get() === 'attack') && $this->hasBenny()) {
             $roll = $this->roll('fighting');
             $this->useBenny();
