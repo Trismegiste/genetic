@@ -37,10 +37,11 @@ class L5rCompare extends Command {
 
     public function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln("Darwin rules");
+        $factory = new \Trismegiste\Genetic\Game\L5r\Factory($this->popSize);
 
         foreach ($this->opponent as $opponentIdx => $opponent) {
             $output->writeln("================ OPPONENT #$opponentIdx ===============");
-            $univers = new ComparedEcosystem($this->popSize, $opponent, $this->refPopPercent * $this->popSize / 100);
+            $univers = new ComparedEcosystem($factory, $opponent, $this->refPopPercent * $this->popSize / 100);
 
             for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
                 $output->writeln("======== Generation $generation ========");

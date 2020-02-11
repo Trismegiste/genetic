@@ -39,7 +39,7 @@ class L5rFree extends Command {
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
         $this->plotFile = $input->getOption('plot');
 
-        $this->univers = new FreeEcosystem($popSize);
+        $this->univers = new FreeEcosystem(new \Trismegiste\Genetic\Game\L5r\Factory($popSize));
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {

@@ -2,6 +2,10 @@
 
 namespace Trismegiste\Genetic\Game\L5r;
 
+use Trismegiste\Genetic\Game\L5r\Property\Stance;
+use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
+use Trismegiste\Genetic\Game\PopulationFactory;
+
 /**
  * ComparedEcosystem is a competition with reference population
  */
@@ -9,13 +13,13 @@ class ComparedEcosystem extends Ecosystem {
 
     protected $referencePop = [];
 
-    public function __construct($popSize, $opponent, $refSize) {
-        parent::__construct($popSize);
+    public function __construct(PopulationFactory $fac, $opponent, $refSize) {
+        parent::__construct($fac);
 
         // init population for reference
         for ($k = 0; $k < $refSize; $k++) {
-            $opponent['voidStrat'] = Property\VoidStrategy::getRandomStrat();
-            $opponent['stance'] = Property\Stance::getRandomStrat();
+            $opponent['voidStrat'] = VoidStrategy::getRandomStrat();
+            $opponent['stance'] = Stance::getRandomStrat();
             $pc = new Character('L5R', $opponent);
             $this->referencePop[] = $pc;
         }
