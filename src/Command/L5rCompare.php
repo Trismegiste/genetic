@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\L5r\ComparedEcosystem;
+use Trismegiste\Genetic\Game\L5r\Factory;
 
 /**
  * Search for best opponent with PC reference
@@ -37,7 +38,7 @@ class L5rCompare extends Command {
 
     public function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln("Darwin rules");
-        $factory = new \Trismegiste\Genetic\Game\L5r\Factory($this->popSize);
+        $factory = new Factory($this->popSize);
 
         foreach ($this->opponent as $opponentIdx => $opponent) {
             $output->writeln("================ OPPONENT #$opponentIdx ===============");

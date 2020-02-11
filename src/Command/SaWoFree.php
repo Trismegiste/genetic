@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Trismegiste\Genetic\Game\SaWo\Factory;
 use Trismegiste\Genetic\Game\SaWo\FreeEcosystem;
 use Trismegiste\Genetic\Util\PlotterXY;
 
@@ -38,7 +39,7 @@ class SaWoFree extends Command {
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
         $this->plotFile = $input->getOption('plot');
 
-        $this->univers = new FreeEcosystem(new \Trismegiste\Genetic\Game\SaWo\Factory($popSize));
+        $this->univers = new FreeEcosystem(new Factory($popSize));
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
