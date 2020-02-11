@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Trismegiste\Genetic\Game\L5r\Property\CappedProperty;
+use Trismegiste\Genetic\Game\CappedProperty;
 
 class CappedPropertyTest extends TestCase {
 

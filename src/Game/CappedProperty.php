@@ -1,11 +1,11 @@
 <?php
 
-namespace Trismegiste\Genetic\Game\L5r\Property;
+namespace Trismegiste\Genetic\Game;
 
-use Trismegiste\Genetic\Game\Property;
+use OutOfBoundsException;
 
 /**
- * A generic property with boundaries
+ * A property with boundaries
  */
 abstract class CappedProperty implements Property {
 
@@ -15,11 +15,15 @@ abstract class CappedProperty implements Property {
 
     public function __construct(int $v, int $inf, int $sup) {
         if (($v < $inf) || ($v > $sup)) {
-            throw new \OutOfBoundsException("$inf < $v < $sup");
+            throw new OutOfBoundsException("$inf < $v < $sup");
         }
         $this->attribute = $v;
         $this->minValue = $inf;
         $this->maxValue = $sup;
+    }
+
+    public function get() {
+        return $this->attribute;
     }
 
     public function mutate() {
@@ -32,8 +36,8 @@ abstract class CappedProperty implements Property {
         }
     }
 
-    public function get() {
-        return $this->attribute;
+    public function __toString() {
+        return (string) $this->attribute;
     }
 
 }

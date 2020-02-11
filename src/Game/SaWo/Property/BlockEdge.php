@@ -2,6 +2,8 @@
 
 namespace Trismegiste\Genetic\Game\SaWo\Property;
 
+use Trismegiste\Genetic\Game\CappedProperty;
+
 /**
  * Block Edges
  */

@@ -5,7 +5,7 @@ namespace Trismegiste\Genetic\Game\L5r\Property;
 /**
  * A L5R Trait
  */
-class RingTrait extends CappedProperty {
+class RingTrait extends \Trismegiste\Genetic\Game\CappedProperty {
 
     public function getCost() {
         return 4 * $this->attribute * ($this->attribute + 1) / 2 - 12;
