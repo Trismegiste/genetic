@@ -14,7 +14,7 @@ class BennyStrat implements Property {
     protected $strat;
 
     public function __construct($s) {
-        if (!in_array($s, self::choice)) {
+        if (!in_array($s, self::choice, true)) {
             throw new \DomainException($s);
         }
         $this->strat = $s;

@@ -12,6 +12,11 @@ class BennyStratTest extends TestCase {
         return [[new BennyStrat('soak')]];
     }
 
+    /** @expectedException \DomainException */
+    public function testInvalidStrat() {
+        new BennyStrat(0);
+    }
+
     /** @dataProvider factory */
     public function testGetter(Property $sut) {
         $this->assertEquals('soak', $sut->get());

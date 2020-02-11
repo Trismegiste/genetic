@@ -25,7 +25,8 @@ class Character implements Mutable, Fighter {
             'vigor' => 6,
             'strength' => 6,
             'spirit' => 6,
-            'benny' => 'attack'
+            'benny' => 'attack',
+            'block' => 0
         ];
 
         // override
@@ -42,7 +43,8 @@ class Character implements Mutable, Fighter {
             'vigor' => new Property\Attribute($default['vigor']),
             'strength' => new Property\Attribute($default['strength']),
             'spirit' => new Property\Attribute($default['spirit']),
-            'benny' => new Property\BennyStrat($default['benny'])
+            'benny' => new Property\BennyStrat($default['benny']),
+            'block' => new Property\BlockEdge($default['block'])
         ];
     }
 
@@ -160,7 +162,7 @@ class Character implements Mutable, Fighter {
     }
 
     public function getParry() {
-        return $this->genome['fighting']->getDifficulty();
+        return $this->genome['fighting']->getDifficulty() + $this->genome['block']->get();
     }
 
     public function getToughness() {
