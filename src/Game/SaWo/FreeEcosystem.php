@@ -18,7 +18,9 @@ class FreeEcosystem extends DarwinWorld {
                 'strength' => 2 * mt_rand(2, 6),
                 'vigor' => 2 * mt_rand(2, 6),
                 'spirit' => 2 * mt_rand(2, 6),
-                'fighting' => 2 * mt_rand(2, 6)
+                'fighting' => 2 * mt_rand(2, 6),
+                'agility' => 2 * mt_rand(2, 6),
+                'benny' => Property\BennyStrat::getRandomStrat()
             ]);
             $pop[] = $pc;
         }

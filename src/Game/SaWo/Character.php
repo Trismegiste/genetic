@@ -108,7 +108,7 @@ class Character implements Mutable, Fighter {
         if ($w === 0) {
             // new shaken condition :
             if ($this->shaken) {
-                if (($this->genome['benny'] === 'shaken') && $this->hasBenny()) {
+                if (($this->genome['benny']->get() === 'shaken') && $this->hasBenny()) {
                     $this->useBenny();
                 } else {
                     $this->wound++;
@@ -117,7 +117,7 @@ class Character implements Mutable, Fighter {
                 $this->shaken = true;
             }
         } else {
-            if (($this->genome['benny'] === 'soak') && $this->hasBenny()) {
+            if (($this->genome['benny']->get() === 'soak') && $this->hasBenny()) {
                 $this->useBenny();
                 $soak = floor($this->roll('vigor') / 4);
                 $w -= $soak;
@@ -195,6 +195,10 @@ class Character implements Mutable, Fighter {
 
                 return 0;
             }
+        }
+        if (($this->genome['benny']->get() === 'shaken') && ($this->hasBenny())) {
+            $this->shaken = false;
+            $this->useBenny();
         }
         if ($this->shaken) {
             return 0;
