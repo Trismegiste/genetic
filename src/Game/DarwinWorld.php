@@ -2,8 +2,6 @@
 
 namespace Trismegiste\Genetic\Game;
 
-use Trismegiste\Genetic\Game\Mutable;
-
 /**
  * An abstract class for genetic algorithm
  * Works with Mutable object
@@ -15,22 +13,24 @@ abstract class DarwinWorld {
 
     /**
      * Ctor
-     * @param int $popSize population size
      */
-    public function __construct($popSize) {
-        $this->population = $this->createPopulation($popSize);
+    public function __construct(PopulationFactory $fac) {
+        $this->population = $fac->create();
     }
-
-    /**
-     * Factory : creates a population
-     * @return array an array of Mutable
-     */
-    abstract protected function createPopulation(int $popSize);
 
     /**
      * Tournament between population to evalute a Fitness
      */
-    abstract protected function tournament(int $round);
+    protected function tournament(int $round) {
+        foreach ($this->population as $idx1 => $pc1) {
+            foreach ($this->population as $idx2 => $pc2) {
+                if ($idx2 <= $idx1) {
+                    continue;
+                }
+                $this->evaluateBestFighter($round, $pc1, $pc2);
+            }
+        }
+    }
 
     /**
      * Returns a report
@@ -87,6 +87,52 @@ abstract class DarwinWorld {
                 $this->population[$idx] = $npc;
             }
         }
+    }
+
+    protected function evaluateBestFighter($round, Mutable $pc1, Mutable $pc2) {
+        $delta = $pc1->getCost() - $pc2->getCost();
+
+        $key1 = spl_object_hash($pc1);
+        $key2 = spl_object_hash($pc2);
+        $win = [$key1 => 0, $key2 => 0];
+        for ($k = 0; $k < $round; $k++) {
+            $pc1->restart();
+            $pc2->restart();
+            $winner = $this->battle($pc1, $pc2);
+            $win[spl_object_hash($winner)] ++;
+        }
+
+        if (($win[$key1] > $win[$key2]) && ($delta <= 0)) {
+            $pc1->incVictory();
+        }
+        if (($win[$key1] < $win[$key2]) && ($delta >= 0)) {
+            $pc2->incVictory();
+        }
+        // many cases are missed : equality. We don't care, we want a threshold effect
+    }
+
+    abstract protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2);
+
+    /**
+     * Battle between 2 PC
+     * 
+     * @param Character $pc1
+     * @param Character $pc2
+     * @return Character the winner
+     */
+    protected function battle(Fighter $pc1, Fighter $pc2) {
+        $player = $this->getInitiativeTurn($pc1, $pc2);
+
+        while (!$pc1->isDead() && !$pc2->isDead()) {
+            if (!$player[0]->isDead()) {
+                $player[1]->receiveAttack($player[0]);
+            }
+            if (!$player[1]->isDead()) {
+                $player[0]->receiveAttack($player[1]);
+            }
+        }
+
+        return $pc1->isDead() ? $pc2 : $pc1;
     }
 
 }

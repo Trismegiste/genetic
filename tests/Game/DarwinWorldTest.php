@@ -1,33 +1,36 @@
 <?php
 
-require_once __DIR__ . '/DarwinWorldMock.php';
-
 use PHPUnit\Framework\TestCase;
+use Trismegiste\Genetic\Game\DarwinWorld;
+use Trismegiste\Genetic\Game\Mutable;
+use Trismegiste\Genetic\Game\PopulationFactory;
 
 /**
  * Test for DarwinWorld
  */
 class DarwinWorldTest extends TestCase {
 
-    public function create() {
-        $sut = $this->getMockForAbstractClass(DarwinWorldMock::class, [$this, 10]);
-        $sut->expects($this->once())->method('tournament');
-        $sut->expects($this->once())
-                ->method('getReport')
-                ->willReturn(['dummy']);
+    protected function getFactoryMock() {
+        $factory = $this->getMockForAbstractClass(PopulationFactory::class);
+        $factory->expects($this->once())
+                ->method('create')
+                ->willReturn([$this->getMockForAbstractClass(Mutable::class)]);
 
-        return [[$sut]];
+        return $factory;
     }
 
-    /** @dataProvider create */
-    public function testPopulation($sut) {
-        $this->assertEquals(10, $sut->getSize());
-        $sut->evolve(3, 0.05);
+    public function testPopulation() {
+        $factory = $this->getFactoryMock();
+        $sut = $this->getMockForAbstractClass(DarwinWorld::class, [$factory]);
+        $this->assertEquals(1, $sut->getSize());
     }
 
-    /** @dataProvider create */
-    public function testEvolve($sut) {
-        $this->assertEquals(['dummy'], $sut->evolve(3, 0.05));
+    public function testEvolve() {
+        $factory = $this->getFactoryMock();
+        $sut = $this->getMockBuilder(DarwinWorld::class)
+                ->setConstructorArgs([$factory])
+                ->getMockForAbstractClass();
+        $sut->evolve(3, 0.5);
     }
 
 }

@@ -17,9 +17,9 @@ class CharacterTest extends TestCase {
      * @dataProvider getFighter
      */
     public function testWinningCount($o) {
-        $this->assertEquals(0, $o->getWinningCount());
+        $this->assertEquals(0, $o->getVictory());
         $o->incVictory();
-        $this->assertEquals(1, $o->getWinningCount());
+        $this->assertEquals(1, $o->getVictory());
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Trismegiste\Genetic\Game\L5r;
 
+use Trismegiste\Genetic\Game\Fighter;
 use Trismegiste\Genetic\Game\L5r\Property\Ring;
 use Trismegiste\Genetic\Game\L5r\Property\RingTrait;
 use Trismegiste\Genetic\Game\L5r\Property\Skill;
@@ -14,7 +15,7 @@ use Trismegiste\Genetic\Game\Property;
 /**
  * A L5R character
  */
-class Character implements Mutable {
+class Character implements Mutable, Fighter {
 
     protected $name;
     protected $weaponRoll = 4; // + strength
@@ -101,7 +102,7 @@ class Character implements Mutable {
      * WARNING : this object is modified if Void Point is used
      * @return int
      */
-    public function receiveAttack(Character $f) {
+    public function receiveAttack(Fighter $f) {
         $att = $f->getAttack();
         $tn = $this->getArmorTN();
 
@@ -201,10 +202,6 @@ class Character implements Mutable {
         $this->winningCount ++;
     }
 
-    public function getWinningCount() {
-        return $this->winningCount;
-    }
-
     public function getCost() {
         $s = 0;
         foreach ($this->genome as $gene) {
@@ -215,7 +212,7 @@ class Character implements Mutable {
     }
 
     public function getFitness() {
-        return $this->getWinningCount();
+        return $this->getVictory();
     }
 
     public function mutate() {
@@ -244,6 +241,10 @@ class Character implements Mutable {
             $tmp[$key] = clone $gene;
         }
         $this->genome = $tmp;
+    }
+
+    public function getVictory() {
+        return $this->winningCount;
     }
 
 }

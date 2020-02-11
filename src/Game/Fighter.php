@@ -1,6 +1,6 @@
 <?php
 
-namespace Trismegiste\Genetic\Game\SaWo;
+namespace Trismegiste\Genetic\Game;
 
 /**
  * this object can fight

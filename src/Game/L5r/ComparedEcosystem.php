@@ -41,7 +41,7 @@ class ComparedEcosystem extends Ecosystem {
         $report = parent::getReport();
 
         usort($this->referencePop, function($a, $b) {
-            return $b->getWinningCount() - $a->getWinningCount();
+            return $b->getVictory() - $a->getVictory();
         });
 
         array_unshift($report, "Ref: " . $this->referencePop[0]);

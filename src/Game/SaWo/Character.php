@@ -3,6 +3,7 @@
 namespace Trismegiste\Genetic\Game\SaWo;
 
 use Trismegiste\Genetic\Game\Mutable;
+use Trismegiste\Genetic\Game\Fighter;
 
 /**
  * A SaWo character

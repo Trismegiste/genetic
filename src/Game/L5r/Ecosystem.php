@@ -3,6 +3,9 @@
 namespace Trismegiste\Genetic\Game\L5r;
 
 use Trismegiste\Genetic\Game\DarwinWorld;
+use Trismegiste\Genetic\Game\Fighter;
+use Trismegiste\Genetic\Game\L5r\Property\Stance;
+use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
 
 /**
  * Generic Ecosystem for L5R
@@ -13,8 +16,8 @@ abstract class Ecosystem extends DarwinWorld {
         $population = [];
         for ($k = 0; $k < $popSize; $k++) {
             $pc = $this->createPc("L5R", [
-                'voidStrat' => Property\VoidStrategy::getRandomStrat(),
-                'stance' => Property\Stance::getRandomStrat(),
+                'voidStrat' => VoidStrategy::getRandomStrat(),
+                'stance' => Stance::getRandomStrat(),
                 'agility' => mt_rand(2, 6),
                 'reflexe' => mt_rand(2, 6),
                 'earth' => mt_rand(2, 6),
@@ -28,14 +31,7 @@ abstract class Ecosystem extends DarwinWorld {
         return $population;
     }
 
-    /**
-     * Battle between 2 PC
-     * 
-     * @param Character $pc1
-     * @param Character $pc2
-     * @return Character the winner
-     */
-    protected function battle(Character $pc1, Character $pc2) {
+    protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2) {
         $player = [];
 
         $init1 = $pc1->rollInit();
@@ -53,16 +49,7 @@ abstract class Ecosystem extends DarwinWorld {
             $player = [$pc2, $pc1];
         }
 
-        while (!$pc1->isDead() && !$pc2->isDead()) {
-            if (!$player[0]->isDead()) {
-                $player[1]->receiveAttack($player[0]);
-            }
-            if (!$player[1]->isDead()) {
-                $player[0]->receiveAttack($player[1]);
-            }
-        }
-
-        return $pc1->isDead() ? $pc2 : $pc1;
+        return $player;
     }
 
     /**
@@ -83,28 +70,6 @@ abstract class Ecosystem extends DarwinWorld {
         }
 
         return $report;
-    }
-
-    protected function evaluateBestFighter($round, Character $pc1, Character $pc2) {
-        $delta = $pc1->getCost() - $pc2->getCost();
-
-        $key1 = spl_object_hash($pc1);
-        $key2 = spl_object_hash($pc2);
-        $win = [$key1 => 0, $key2 => 0];
-        for ($k = 0; $k < $round; $k++) {
-            $pc1->restart();
-            $pc2->restart();
-            $winner = $this->battle($pc1, $pc2);
-            $win[spl_object_hash($winner)] ++;
-        }
-
-        if (($win[$key1] > $win[$key2]) && ($delta <= 0)) {
-            $pc1->incVictory();
-        }
-        if (($win[$key1] < $win[$key2]) && ($delta >= 0)) {
-            $pc2->incVictory();
-        }
-        // many cases are missed : equality. We don't care, we want a threshold effect
     }
 
 }
