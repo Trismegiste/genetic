@@ -11,7 +11,7 @@ class RingTrait extends CappedProperty {
         return 4 * $this->attribute * ($this->attribute + 1) / 2 - 12;
     }
 
-    public function __construct($v) {
+    public function __construct(int $v) {
         parent::__construct($v, 2, 10);
     }
 

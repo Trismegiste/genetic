@@ -9,7 +9,7 @@ class Skill extends SaWoTrait {
 
     protected $attribute;
 
-    public function __construct(Attribute $attr, $dice) {
+    public function __construct(Attribute $attr, int $dice) {
         $this->attribute = $attr;
         parent::__construct($dice);
     }

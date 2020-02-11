@@ -7,7 +7,7 @@ namespace Trismegiste\Genetic\Game\L5r;
  */
 class FreeEcosystem extends Ecosystem {
 
-    protected function tournament($round) {
+    protected function tournament(int $round) {
         foreach ($this->population as $idx1 => $pc1) {
             foreach ($this->population as $idx2 => $pc2) {
                 if ($idx2 <= $idx1) {

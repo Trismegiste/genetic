@@ -15,7 +15,7 @@ abstract class DarwinWorldMock extends DarwinWorld {
         parent::__construct($size);
     }
 
-    protected function createPopulation($popSize) {
+    protected function createPopulation(int $popSize) {
         $pop = [];
         for ($k = 0; $k < $popSize; $k++) {
             $pc = $this->build->getMockBuilder(Trismegiste\Genetic\Game\Mutable::class)->getMock();

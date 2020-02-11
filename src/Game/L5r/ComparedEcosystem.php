@@ -21,7 +21,7 @@ class ComparedEcosystem extends Ecosystem {
         }
     }
 
-    protected function tournament($round) {
+    protected function tournament(int $round) {
         foreach ($this->referencePop as $pc1) {
             foreach ($this->population as $pc2) {
                 $this->evaluateBestFighter($round, $pc1, $pc2);
@@ -29,7 +29,7 @@ class ComparedEcosystem extends Ecosystem {
         }
     }
 
-    public function evolve($round, $extinctRatio) {
+    public function evolve(int $round, $extinctRatio) {
         foreach ($this->referencePop as $pc) {
             $pc->newGeneration();
         }

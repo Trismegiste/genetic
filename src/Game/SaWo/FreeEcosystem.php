@@ -11,7 +11,7 @@ use Trismegiste\Genetic\Game\SaWo\Character;
  */
 class FreeEcosystem extends DarwinWorld {
 
-    protected function createPopulation($popSize): array {
+    protected function createPopulation(int $popSize): array {
         $pop = [];
         for ($k = 0; $k < $popSize; $k++) {
             $pc = new Character([
@@ -40,7 +40,7 @@ class FreeEcosystem extends DarwinWorld {
         ];
     }
 
-    protected function tournament($round) {
+    protected function tournament(int $round) {
         foreach ($this->population as $idx1 => $pc1) {
             foreach ($this->population as $idx2 => $pc2) {
                 if ($idx2 <= $idx1) {

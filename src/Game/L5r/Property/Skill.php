@@ -11,7 +11,7 @@ class Skill extends CappedProperty {
         return $this->attribute * ($this->attribute + 1) / 2 - 1;
     }
 
-    public function __construct($v) {
+    public function __construct(int $v) {
         parent::__construct($v, 1, 10);
     }
 

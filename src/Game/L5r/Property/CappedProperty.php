@@ -13,7 +13,7 @@ abstract class CappedProperty implements Property {
     protected $minValue;
     protected $maxValue;
 
-    public function __construct($v, $inf, $sup) {
+    public function __construct(int $v, int $inf, int $sup) {
         if (($v < $inf) || ($v > $sup)) {
             throw new \OutOfBoundsException("$inf < $v < $sup");
         }

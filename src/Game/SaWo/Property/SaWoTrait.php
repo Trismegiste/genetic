@@ -15,7 +15,7 @@ abstract class SaWoTrait implements Property {
 
     protected $dice;
 
-    public function __construct($dice) {
+    public function __construct(int $dice) {
         if (!in_array($dice, self::diceChoice)) {
             throw new \DomainException("The die d$dice is invalid");
         }
