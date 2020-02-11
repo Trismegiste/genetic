@@ -204,7 +204,12 @@ class Character implements Mutable, Fighter {
             return 0;
         }
 
-        return $this->roll('fighting');
+        $roll = $this->roll('fighting');
+        if (($roll < 4) && ($this->genome['benny']->get() === 'attack') && $this->hasBenny()) {
+            $roll = $this->roll('fighting');
+            $this->useBenny();
+        }
+        return $roll;
     }
 
     public function getWoundsPenalty() {
