@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\SaWo\Factory;
 use Trismegiste\Genetic\Game\SaWo\FreeEcosystem;
-use Trismegiste\Genetic\Util\PlotterXY;
+use Trismegiste\Genetic\Game\SaWo\Logger;
 
 /**
  * Free evolution for SaWo
@@ -22,6 +22,7 @@ class SaWoFree extends Command {
     protected $univers;
     protected $maxGeneration;
     protected $plotFile;
+    protected $logger;
 
     protected function configure() {
         $this->setDescription("Compute free evolution for SaWo")
@@ -39,24 +40,20 @@ class SaWoFree extends Command {
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
         $this->plotFile = $input->getOption('plot');
 
-        $this->univers = new FreeEcosystem(new Factory($popSize));
+        $this->logger = new Logger($output);
+        $this->univers = new FreeEcosystem(new Factory($popSize), $this->logger);
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
         $output->writeln("Free evolution");
 
-        $grafx = [];
         for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
             $output->writeln("======== Generation $generation ========");
-            $report = $this->univers->evolve($this->round, $this->extinctRatio);
-            $output->writeln($report['text']);
-            $grafx[$generation] = $report['grafx'];
+            $this->univers->evolve($this->round, $this->extinctRatio);
         }
 
         if (!is_null($this->plotFile)) {
-            $im = new PlotterXY(1920, 1080);
-            $im->draw($grafx);
-            $im->writePng($this->plotFile);
+            $this->logger->writeGraphic($this->plotFile);
         }
     }
 

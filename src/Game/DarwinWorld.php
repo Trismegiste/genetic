@@ -10,12 +10,14 @@ abstract class DarwinWorld {
 
     /** @var Mutable */
     protected $population = [];
+    protected $logger;
 
     /**
      * Ctor
      */
-    public function __construct(PopulationFactory $fac) {
+    public function __construct(PopulationFactory $fac, PopulationLogger $log) {
         $this->population = $fac->create();
+        $this->logger = $log;
     }
 
     /**
@@ -66,9 +68,10 @@ abstract class DarwinWorld {
 
         $this->selectAndMutate($extinctRatio);
 
-        $report = $this->getReport();
+        //   $report = $this->getReport();
+        $this->logger->log($this->population);
 
-        return $report;
+        // return $report;
     }
 
     /**
@@ -116,9 +119,9 @@ abstract class DarwinWorld {
     /**
      * Battle between 2 PC
      * 
-     * @param Character $pc1
-     * @param Character $pc2
-     * @return Character the winner
+     * @param Fighter $pc1
+     * @param Fighter $pc2
+     * @return Fighter the winner
      */
     protected function battle(Fighter $pc1, Fighter $pc2) {
         $player = $this->getInitiativeTurn($pc1, $pc2);
