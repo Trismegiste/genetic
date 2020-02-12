@@ -10,7 +10,7 @@ class Factory implements \Trismegiste\Genetic\Game\PopulationFactory {
         $this->size = $s;
     }
 
-    public function create() {
+    public function create(): array {
         $pop = [];
         for ($k = 0; $k < $this->size; $k++) {
             $pc = new Character([

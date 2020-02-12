@@ -7,5 +7,9 @@ namespace Trismegiste\Genetic\Game;
  */
 interface PopulationFactory {
 
-    public function create();
+    /**
+     * Builds the population for the ecosystem
+     * @return array An array of objects implementing Mutable and Fighter interfaces
+     */
+    public function create(): array;
 }
