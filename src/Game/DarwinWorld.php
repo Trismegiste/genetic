@@ -102,9 +102,13 @@ abstract class DarwinWorld {
         if (($win[$key1] < $win[$key2]) && ($delta >= 0)) {
             $pc2->incVictory();
         }
-        // many cases are missed : equality. We don't care, we want a threshold effect
+        // many cases are missed : equality for example. We don't care, we want a threshold effect
     }
 
+    /**
+     * Who strikes first ?
+     * @return array [$pc1, $pc2] or [$pc2, $pc1]
+     */
     abstract protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2);
 
     /**
