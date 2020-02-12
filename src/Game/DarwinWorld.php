@@ -68,10 +68,7 @@ abstract class DarwinWorld {
 
         $this->selectAndMutate($extinctRatio);
 
-        //   $report = $this->getReport();
         $this->logger->log($this->population);
-
-        // return $report;
     }
 
     /**

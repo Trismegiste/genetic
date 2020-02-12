@@ -5,6 +5,7 @@ namespace Trismegiste\Genetic\Game\L5r;
 use Trismegiste\Genetic\Game\L5r\Property\Stance;
 use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
 use Trismegiste\Genetic\Game\PopulationFactory;
+use Trismegiste\Genetic\Game\PopulationLogger;
 
 /**
  * ComparedEcosystem is a competition with reference population
@@ -13,8 +14,8 @@ class ComparedEcosystem extends Ecosystem {
 
     protected $referencePop = [];
 
-    public function __construct(PopulationFactory $fac, $opponent, $refSize) {
-        parent::__construct($fac);
+    public function __construct(PopulationFactory $fac, PopulationLogger $log, $opponent, $refSize) {
+        parent::__construct($fac, $log);
 
         // init population for reference
         for ($k = 0; $k < $refSize; $k++) {
@@ -26,7 +27,7 @@ class ComparedEcosystem extends Ecosystem {
     }
 
     /**
-     * Override because new tournament
+     * Completely override because new tournament algorithm
      */
     protected function tournament(int $round) {
         foreach ($this->referencePop as $pc1) {
@@ -44,7 +45,7 @@ class ComparedEcosystem extends Ecosystem {
             $pc->newGeneration();
         }
 
-        return parent::evolve($round, $extinctRatio);
+        parent::evolve($round, $extinctRatio);
     }
 
     /**

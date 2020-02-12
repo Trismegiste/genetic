@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\L5r\Factory;
 use Trismegiste\Genetic\Game\L5r\FreeEcosystem;
-use Trismegiste\Genetic\Util\PlotterXY;
+use Trismegiste\Genetic\Game\L5r\GrfxLogger;
 
 /**
  * Free evolution
@@ -23,6 +23,7 @@ class L5rFree extends Command {
     protected $univers;
     protected $maxGeneration;
     protected $plotFile;
+    protected $logger;
 
     protected function configure() {
         $this->setDescription("Compute free evolution")
@@ -40,7 +41,8 @@ class L5rFree extends Command {
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
         $this->plotFile = $input->getOption('plot');
 
-        $this->univers = new FreeEcosystem(new Factory($popSize));
+        $this->logger = new GrfxLogger($output);
+        $this->univers = new FreeEcosystem(new Factory($popSize), $this->logger);
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
@@ -55,9 +57,7 @@ class L5rFree extends Command {
         }
 
         if (!is_null($this->plotFile)) {
-            $im = new PlotterXY(1920, 1080);
-            $im->draw($grafx);
-            $im->writePng($this->plotFile);
+            $this->logger->writeGraphic($this->plotFile);
         }
     }
 

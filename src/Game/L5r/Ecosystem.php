@@ -4,8 +4,6 @@ namespace Trismegiste\Genetic\Game\L5r;
 
 use Trismegiste\Genetic\Game\DarwinWorld;
 use Trismegiste\Genetic\Game\Fighter;
-use Trismegiste\Genetic\Game\L5r\Property\Stance;
-use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
 
 /**
  * Generic Ecosystem for L5R
