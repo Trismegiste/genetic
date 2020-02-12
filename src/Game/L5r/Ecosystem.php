@@ -8,7 +8,7 @@ use Trismegiste\Genetic\Game\Fighter;
 /**
  * Generic Ecosystem for L5R
  */
-abstract class Ecosystem extends DarwinWorld {
+class Ecosystem extends DarwinWorld {
 
     protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2) {
         $player = [];
@@ -29,15 +29,6 @@ abstract class Ecosystem extends DarwinWorld {
         }
 
         return $player;
-    }
-
-    protected function getReport() {
-        $report = [];
-        foreach ([0, 1, 2, 5, 9] as $idx) {
-            $report[] = "$idx - " . $this->population[$idx];
-        }
-
-        return $report;
     }
 
 }

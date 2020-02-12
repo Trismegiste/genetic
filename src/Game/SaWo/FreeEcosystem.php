@@ -10,20 +10,6 @@ use Trismegiste\Genetic\Game\Fighter;
  */
 class FreeEcosystem extends DarwinWorld {
 
-    public function getReport() {
-        $report = [];
-        foreach ([0, 1, 2, 5, 9] as $idx) {
-            $report[] = "$idx - " . $this->population[$idx];
-        }
-
-        return [
-            'grafx' => array_map(function($pc) {
-                        return ['x' => $pc->getCost(), 'y' => $pc->getVictory()];
-                    }, $this->population),
-            'text' => $report
-        ];
-    }
-
     protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2) {
         $player = [];
         if (mt_rand(0, 1)) {

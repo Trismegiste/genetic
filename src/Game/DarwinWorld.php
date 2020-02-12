@@ -35,12 +35,6 @@ abstract class DarwinWorld {
     }
 
     /**
-     * Returns a report
-     * @return array an array of string
-     */
-    abstract protected function getReport();
-
-    /**
      * Getter for population size
      * @return int
      */

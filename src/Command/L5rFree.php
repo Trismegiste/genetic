@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\L5r\Factory;
-use Trismegiste\Genetic\Game\L5r\FreeEcosystem;
+use Trismegiste\Genetic\Game\L5r\Ecosystem;
 use Trismegiste\Genetic\Game\L5r\GrfxLogger;
 
 /**
@@ -42,7 +42,7 @@ class L5rFree extends Command {
         $this->plotFile = $input->getOption('plot');
 
         $this->logger = new GrfxLogger($output);
-        $this->univers = new FreeEcosystem(new Factory($popSize), $this->logger);
+        $this->univers = new Ecosystem(new Factory($popSize), $this->logger);
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {

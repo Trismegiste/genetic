@@ -48,19 +48,4 @@ class ComparedEcosystem extends Ecosystem {
         parent::evolve($round, $extinctRatio);
     }
 
-    /**
-     * Overload for adding referencePop
-     */
-    protected function getReport() {
-        $report = parent::getReport();
-
-        usort($this->referencePop, function($a, $b) {
-            return $b->getVictory() - $a->getVictory();
-        });
-
-        array_unshift($report, "Ref: " . $this->referencePop[0]);
-
-        return $report;
-    }
-
 }
