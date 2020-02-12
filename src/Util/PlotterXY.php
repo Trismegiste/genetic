@@ -20,6 +20,30 @@ class PlotterXY {
         imagecolordeallocate($this->handle, $background);
     }
 
+    public function getBoundaries(array& $data) {
+        $maxHori = $minHori = $data[0]['x'];
+        $maxVert = $minVert = $data[0]['y'];
+
+        foreach ($data as $plot) {
+            $c = $plot['x'];
+            $w = $plot['y'];
+            if ($c < $minHori) {
+                $minHori = $c;
+            }
+            if ($c > $maxHori) {
+                $maxHori = $c;
+            }
+            if ($w < $minVert) {
+                $minVert = $w;
+            }
+            if ($w > $maxVert) {
+                $maxVert = $w;
+            }
+        }
+
+        return (object) ['infX' => $minHori, 'supX' => $maxHori, 'infY' => $minVert, 'supY' => $maxVert];
+    }
+
     public function draw($data) {
         $minVert = $minHori = 99999;
         $maxVert = $maxHori = 0;
