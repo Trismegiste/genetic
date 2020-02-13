@@ -40,4 +40,21 @@ class PlotterXYTest extends TestCase {
         ];
     }
 
+    public function testDrawing() {
+        $sut = new PlotterXY(500, 500);
+        $data = [];
+        for ($k = 0; $k < 10; $k++) {
+            $data[$k] = [];
+            for ($c = 0; $c < 500; $c += 10) {
+                $data[$k][] = ['x' => $c, 'y' => $k * 50];
+            }
+        }
+        $sut->draw($data);
+        $fch = tempnam(__DIR__, 'test');
+        $this->assertFileExists($fch);
+        $sut->writePng($fch);
+        $this->assertFileEquals(__DIR__ . '/../testplotter.png', $fch);
+        unlink($fch);
+    }
+
 }
