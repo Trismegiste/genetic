@@ -62,7 +62,7 @@ class PlotterXY {
             // legend
             $step = floor($idx / $curvesCount * 10) / 10;
             if ($lastStep !== $step) {
-                imagefttext($this->handle, 24, 0, $this->width * 0.92, 50 + $this->height * $step, $plotColor, './bin/akukamu.otf', "Curve $idx");
+                imagefttext($this->handle, $this->height / 50, 0, $this->width * 0.92, $this->height * ($step + 1 / 20), $plotColor, './bin/akukamu.otf', "Curve $idx");
                 $lastStep = $step;
             }
             // plotting
