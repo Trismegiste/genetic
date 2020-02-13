@@ -1,22 +1,28 @@
 <?php
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 namespace Trismegiste\Genetic\Util;
 
 /**
- * A plotter for points with color
+ * Description of AnimateXY
+ *
+ * @author flo
  */
-class PlotterXY {
+class AnimateXY {
 
     use GrafxCommon;
 
-    protected $handle;
     protected $width;
     protected $height;
 
     public function __construct($width, $height) {
         $this->height = $height;
         $this->width = $width;
-        $this->handle = $this->createImage($width, $height, 0, 0, 0);
     }
 
     public function draw($data) {
@@ -30,31 +36,26 @@ class PlotterXY {
         $curvesCount = count($data);
         $lastStep = -1;
         foreach ($data as $idx => $generation) {
+            $handle = $this->createImage($this->width, $this->height, 0, 0, 0);
             $hue = 270.0 * $idx / $curvesCount;
             $rgb = $this->hsv2rgb($hue, 1.0, 1.0);
-            $plotColor = imagecolorallocate($this->handle, $rgb[0], $rgb[1], $rgb[2]);
+            $plotColor = imagecolorallocate($handle, $rgb[0], $rgb[1], $rgb[2]);
             // legend
             $step = floor($idx / $curvesCount * 10) / 10;
             if ($lastStep !== $step) {
-                imagefttext($this->handle, $this->height / 50, 0, $this->width * 0.92, $this->height * ($step + 1 / 20), $plotColor, './bin/akukamu.otf', "Curve $idx");
+                imagefttext($handle, $this->height / 50, 0, $this->width * 0.92, $this->height * ($step + 1 / 20), $plotColor, './bin/akukamu.otf', "Curve $idx");
                 $lastStep = $step;
             }
             // plotting
             foreach ($generation as $plot) {
                 $x = $this->width * 0.05 + ($plot['x'] - $deltaX) / $scaleX;
                 $y = $this->height - ($this->height * 0.05 + ($plot['y'] - $deltaY) / $scaleY);
-                imagefilledellipse($this->handle, $x, $y, 4, 4, $plotColor);
+                imagefilledellipse($handle, $x, $y, 4, 4, $plotColor);
             }
-            imagecolordeallocate($this->handle, $plotColor);
+            imagecolordeallocate($handle, $plotColor);
+            imagepng($handle, "plot-$generation.png");
+            imagedestroy($handle);
         }
-    }
-
-    public function writePng($name) {
-        imagepng($this->handle, $name);
-    }
-
-    public function __destruct() {
-        imagedestroy($this->handle);
     }
 
 }

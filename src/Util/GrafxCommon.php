@@ -7,6 +7,15 @@ namespace Trismegiste\Genetic\Util;
  */
 trait GrafxCommon {
 
+    public function createImage($width, $height, $red, $green, $blue) {
+        $handle = imagecreatetruecolor($width, $height);
+        $background = imagecolorallocate($handle, $red, $green, $blue);
+        imagefill($handle, 0, 0, $background);
+        imagecolordeallocate($handle, $background);
+
+        return $handle;
+    }
+
     /**
      * Gets the min and max for x and y
      * @param array $curves an array of array of ['x' => x, 'y' => y]
