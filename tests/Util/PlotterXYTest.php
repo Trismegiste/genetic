@@ -19,7 +19,8 @@ class PlotterXYTest extends TestCase {
     /** @dataProvider dataSet */
     public function testExtremum($data, $expect) {
         $sut = new PlotterXY(50, 50);
-        $boundaries = $sut->getBoundaries($data);
+        $grafx[0] = $data;
+        $boundaries = $sut->getBoundaries($grafx);
         $this->assertEquals($expect, $boundaries);
     }
 
