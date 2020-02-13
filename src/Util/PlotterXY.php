@@ -21,10 +21,9 @@ class PlotterXY {
     }
 
     public function getBoundaries(array& $curves) {
+        $maxHori = $minHori = $curves[0][0]['x'];
+        $maxVert = $minVert = $curves[0][0]['y'];
         foreach ($curves as $data) {
-            $maxHori = $minHori = $data[0]['x'];
-            $maxVert = $minVert = $data[0]['y'];
-
             foreach ($data as $plot) {
                 $c = $plot['x'];
                 $w = $plot['y'];
@@ -47,31 +46,12 @@ class PlotterXY {
     }
 
     public function draw($data) {
-        $minVert = $minHori = 99999;
-        $maxVert = $maxHori = 0;
-        foreach ($data as $generation) {
-            foreach ($generation as $plot) {
-                $c = $plot['x'];
-                $w = $plot['y'];
-                if ($c < $minHori) {
-                    $minHori = $c;
-                }
-                if ($c > $maxHori) {
-                    $maxHori = $c;
-                }
-                if ($w < $minVert) {
-                    $minVert = $w;
-                }
-                if ($w > $maxVert) {
-                    $maxVert = $w;
-                }
-            }
-        }
+        $extrem = $this->getBoundaries($data);
 
-        $deltaX = $minHori;
-        $deltaY = $minVert;
-        $scaleX = ($maxHori - $minHori) / ($this->width * 0.9);
-        $scaleY = ($maxVert - $minVert) / ($this->height * 0.9);
+        $deltaX = $extrem->infX;
+        $deltaY = $extrem->infY;
+        $scaleX = ($extrem->supX - $extrem->infX) / ($this->width * 0.9);
+        $scaleY = ($extrem->supY - $extrem->infY) / ($this->height * 0.9);
 
         $curvesCount = count($data);
         $lastStep = -1;
