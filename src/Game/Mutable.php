@@ -31,4 +31,9 @@ interface Mutable {
      * Returns the cost of genome
      */
     public function getCost();
+
+    /**
+     * Must be printable
+     */
+    public function __toString();
 }

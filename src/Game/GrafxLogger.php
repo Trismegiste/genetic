@@ -22,7 +22,7 @@ class GrafxLogger extends TextLogger {
         parent::log($pop);
 
         $this->plotData[] = array_map(function($pc) {
-            return ['x' => $pc->getCost(), 'y' => $pc->getVictory()];
+            return ['x' => $pc->getCost(), 'y' => $pc->getFitness()];
         }, $pop);
     }
 
