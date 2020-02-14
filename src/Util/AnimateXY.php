@@ -53,7 +53,7 @@ class AnimateXY {
                 imagefilledellipse($handle, $x, $y, 4, 4, $plotColor);
             }
             imagecolordeallocate($handle, $plotColor);
-            imagepng($handle, "plot-$generation.png");
+            imagepng($handle, "plot-$idx.png");
             imagedestroy($handle);
         }
     }
