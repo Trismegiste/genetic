@@ -11,6 +11,7 @@ use Trismegiste\Genetic\Game\SaWo\Factory;
 use Trismegiste\Genetic\Game\SaWo\FreeEcosystem;
 use Trismegiste\Genetic\Game\SaWo\GrafxLogger;
 use Trismegiste\Genetic\Game\SaWo\TextLogger;
+use Trismegiste\Genetic\Util\AnimateXY;
 use Trismegiste\Genetic\Util\PlotterXY;
 
 /**
@@ -32,7 +33,8 @@ class SaWoFree extends Command {
                 ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration")
                 ->addOption('round', NULL, InputOption::VALUE_REQUIRED, 'How many round between 2 PC', 5)
                 ->addOption('extinct', NULL, InputOption::VALUE_REQUIRED, 'Percentage of how many population are extinct between generation', 10)
-                ->addOption('plot', NULL, InputOption::VALUE_REQUIRED, 'File name of plotting PNG picture');
+                ->addOption('plot', NULL, InputOption::VALUE_REQUIRED, 'File name of plotting PNG picture')
+                ->addOption('animate', NULL, InputOption::VALUE_NONE, 'Multiple PNG file for animation');
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
@@ -43,7 +45,12 @@ class SaWoFree extends Command {
         $plotFile = $input->getOption('plot');
 
         if (!is_null($plotFile)) {
-            $this->logger = new GrafxLogger($output, new PlotterXY(1920, 1080, $plotFile));
+            if ($input->getOption('animate')) {
+                $plotter = new AnimateXY(1920, 1080, $plotFile);
+            } else {
+                $plotter = new PlotterXY(1920, 1080, $plotFile);
+            }
+            $this->logger = new GrafxLogger($output, $plotter);
         } else {
             $this->logger = new TextLogger($output);
         }
