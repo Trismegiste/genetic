@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Trismegiste\Genetic\Util;
 
 /**
@@ -15,12 +9,8 @@ namespace Trismegiste\Genetic\Util;
  */
 class AnimateXY extends ImagickPlotter {
 
-    protected $width;
-    protected $height;
-
     public function __construct($width, $height) {
-        $this->height = $height;
-        $this->width = $width;
+        parent::__construct($width, $height);
     }
 
     public function draw($data) {

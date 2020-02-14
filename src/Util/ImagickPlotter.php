@@ -7,6 +7,14 @@ namespace Trismegiste\Genetic\Util;
  */
 abstract class ImagickPlotter implements ImagePlotter {
 
+    protected $width;
+    protected $height;
+
+    public function __construct($w, $h) {
+        $this->width = $w;
+        $this->height = $h;
+    }
+
     public function createImage($width, $height, $red, $green, $blue) {
         $handle = imagecreatetruecolor($width, $height);
         $background = imagecolorallocate($handle, $red, $green, $blue);

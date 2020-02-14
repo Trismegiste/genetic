@@ -8,13 +8,10 @@ namespace Trismegiste\Genetic\Util;
 class PlotterXY extends ImagickPlotter {
 
     protected $handle;
-    protected $width;
-    protected $height;
     protected $filename;
 
     public function __construct(int $width, int $height, string $filename) {
-        $this->height = $height;
-        $this->width = $width;
+        parent::__construct($width, $height);
         $this->filename = $filename;
         $this->handle = $this->createImage($width, $height, 0, 0, 0);
     }
