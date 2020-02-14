@@ -9,7 +9,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\SaWo\Factory;
 use Trismegiste\Genetic\Game\SaWo\FreeEcosystem;
-use Trismegiste\Genetic\Game\SaWo\Logger;
+use Trismegiste\Genetic\Game\SaWo\GrafxLogger;
+use Trismegiste\Genetic\Game\SaWo\TextLogger;
 use Trismegiste\Genetic\Util\PlotterXY;
 
 /**
@@ -39,9 +40,13 @@ class SaWoFree extends Command {
         $this->maxGeneration = $input->getArgument('maxIter');
         $this->round = $input->getOption('round');
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
-        $this->plotFile = $input->getOption('plot');
+        $plotFile = $input->getOption('plot');
 
-        $this->logger = new Logger($output, new PlotterXY(1920, 1080, 'yolo.png'));
+        if (!is_null($plotFile)) {
+            $this->logger = new GrafxLogger($output, new PlotterXY(1920, 1080, $plotFile));
+        } else {
+            $this->logger = new TextLogger($output);
+        }
         $this->univers = new FreeEcosystem(new Factory($popSize), $this->logger);
     }
 
