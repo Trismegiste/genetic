@@ -5,21 +5,21 @@ namespace Trismegiste\Genetic\Util;
 /**
  * A plotter for points with color
  */
-class PlotterXY {
-
-    use GrafxCommon;
+class PlotterXY extends ImagickPlotter {
 
     protected $handle;
     protected $width;
     protected $height;
+    protected $filename;
 
-    public function __construct($width, $height) {
+    public function __construct(int $width, int $height, string $filename) {
         $this->height = $height;
         $this->width = $width;
+        $this->filename = $filename;
         $this->handle = $this->createImage($width, $height, 0, 0, 0);
     }
 
-    public function draw($data) {
+    public function draw(array& $data) {
         $extrem = $this->getBoundaries($data);
 
         $deltaX = $extrem->infX;
@@ -47,10 +47,7 @@ class PlotterXY {
             }
             imagecolordeallocate($this->handle, $plotColor);
         }
-    }
-
-    public function writePng($name) {
-        imagepng($this->handle, $name);
+        imagepng($this->handle, $this->filename);
     }
 
     public function __destruct() {

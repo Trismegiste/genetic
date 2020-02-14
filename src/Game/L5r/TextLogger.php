@@ -22,4 +22,8 @@ class TextLogger implements PopulationLogger {
         }
     }
 
+    public function endLog() {
+        
+    }
+
 }

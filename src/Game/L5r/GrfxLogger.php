@@ -2,7 +2,8 @@
 
 namespace Trismegiste\Genetic\Game\L5r;
 
-use Trismegiste\Genetic\Util\PlotterXY;
+use Symfony\Component\Console\Output\OutputInterface;
+use Trismegiste\Genetic\Util\ImagePlotter;
 
 /**
  * Logger with plotting
@@ -10,6 +11,12 @@ use Trismegiste\Genetic\Util\PlotterXY;
 class GrfxLogger extends TextLogger {
 
     protected $plotData;
+    protected $plotter;
+
+    public function __construct(OutputInterface $out, ImagePlotter $plot) {
+        parent::__construct($out);
+        $this->plotter = $plot;
+    }
 
     public function log(array &$pop) {
         parent::log($pop);
@@ -19,10 +26,8 @@ class GrfxLogger extends TextLogger {
         }, $pop);
     }
 
-    public function writeGraphic(string $filename) {
-        $im = new PlotterXY(1920, 1080);
-        $im->draw($this->plotData);
-        $im->writePng($filename);
+    public function endLog() {
+        $this->plotter->draw($this->plotData);
     }
 
 }

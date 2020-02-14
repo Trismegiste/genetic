@@ -8,4 +8,6 @@ namespace Trismegiste\Genetic\Game;
 interface PopulationLogger {
 
     public function log(array& $pop);
+
+    public function endLog();
 }

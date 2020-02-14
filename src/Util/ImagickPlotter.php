@@ -3,9 +3,9 @@
 namespace Trismegiste\Genetic\Util;
 
 /**
- * Common methods for plotting
+ * An ImagePlotter with image magick
  */
-trait GrafxCommon {
+abstract class ImagickPlotter implements ImagePlotter {
 
     public function createImage($width, $height, $red, $green, $blue) {
         $handle = imagecreatetruecolor($width, $height);

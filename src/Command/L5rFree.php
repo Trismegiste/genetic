@@ -7,9 +7,11 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Trismegiste\Genetic\Game\L5r\Factory;
 use Trismegiste\Genetic\Game\L5r\Ecosystem;
+use Trismegiste\Genetic\Game\L5r\Factory;
 use Trismegiste\Genetic\Game\L5r\GrfxLogger;
+use Trismegiste\Genetic\Game\L5r\TextLogger;
+use Trismegiste\Genetic\Util\PlotterXY;
 
 /**
  * Free evolution
@@ -39,9 +41,13 @@ class L5rFree extends Command {
         $this->maxGeneration = $input->getArgument('maxIter');
         $this->round = $input->getOption('round');
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
-        $this->plotFile = $input->getOption('plot');
+        $plotFile = $input->getOption('plot');
 
-        $this->logger = new GrfxLogger($output);
+        if (!is_null($plotFile)) {
+            $this->logger = new GrfxLogger($output, new PlotterXY(1920, 1080, $plotFile));
+        } else {
+            $this->logger = new TextLogger($output);
+        }
         $this->univers = new Ecosystem(new Factory($popSize), $this->logger);
     }
 
@@ -55,10 +61,7 @@ class L5rFree extends Command {
             $output->writeln($report['text']);
             $grafx[$generation] = $report['grafx'];
         }
-
-        if (!is_null($this->plotFile)) {
-            $this->logger->writeGraphic($this->plotFile);
-        }
+        $this->logger->endLog();
     }
 
 }
