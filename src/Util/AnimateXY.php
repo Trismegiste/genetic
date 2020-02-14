@@ -13,9 +13,7 @@ namespace Trismegiste\Genetic\Util;
  *
  * @author flo
  */
-class AnimateXY {
-
-    use GrafxCommon;
+class AnimateXY extends ImagickPlotter {
 
     protected $width;
     protected $height;

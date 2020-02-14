@@ -5,20 +5,9 @@ use Trismegiste\Genetic\Util\PlotterXY;
 
 class PlotterXYTest extends TestCase {
 
-    public function testWriteImage() {
-        $sut = new PlotterXY(50, 50);
-        $fch = tempnam(__DIR__, 'test');
-        $this->assertFileExists($fch);
-        $sut->writePng($fch);
-        list($width, $height, $type, $attr) = getimagesize($fch);
-        $this->assertEquals(50, $width);
-        $this->assertEquals(50, $height);
-        unlink($fch);
-    }
-
     /** @dataProvider dataSet */
     public function testExtremum($data, $expect) {
-        $sut = new PlotterXY(50, 50);
+        $sut = new PlotterXY(50, 50, 'dummy');
         $grafx[0] = $data;
         $boundaries = $sut->getBoundaries($grafx);
         $this->assertEquals($expect, $boundaries);
@@ -42,7 +31,9 @@ class PlotterXYTest extends TestCase {
     }
 
     public function testDrawing() {
-        $sut = new PlotterXY(500, 500);
+        $fch = tempnam(__DIR__, 'test');
+        $this->assertFileExists($fch);
+        $sut = new PlotterXY(500, 500, $fch);
         $data = [];
         for ($k = 0; $k < 10; $k++) {
             $data[$k] = [];
@@ -51,9 +42,6 @@ class PlotterXYTest extends TestCase {
             }
         }
         $sut->draw($data);
-        $fch = tempnam(__DIR__, 'test');
-        $this->assertFileExists($fch);
-        $sut->writePng($fch);
         $this->assertFileEquals(__DIR__ . '/../testplotter.png', $fch);
         unlink($fch);
     }

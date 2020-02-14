@@ -34,4 +34,8 @@ class Logger implements PopulationLogger {
         $im->writePng($filename);
     }
 
+    public function endLog() {
+        // nothing to do
+    }
+
 }
