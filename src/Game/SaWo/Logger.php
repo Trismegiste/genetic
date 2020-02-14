@@ -4,7 +4,7 @@ namespace Trismegiste\Genetic\Game\SaWo;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\PopulationLogger;
-use Trismegiste\Genetic\Util\PlotterXY;
+use Trismegiste\Genetic\Util\ImagePlotter;
 
 /**
  * Logger
@@ -13,9 +13,11 @@ class Logger implements PopulationLogger {
 
     protected $plotData;
     protected $console;
+    protected $plotter;
 
-    public function __construct(OutputInterface $out) {
+    public function __construct(OutputInterface $out, ImagePlotter $im) {
         $this->console = $out;
+        $this->plotter = $im;
     }
 
     public function log(array& $pop) {
@@ -28,14 +30,8 @@ class Logger implements PopulationLogger {
         }, $pop);
     }
 
-    public function writeGraphic(string $filename) {
-        $im = new PlotterXY(1920, 1080);
-        $im->draw($this->plotData);
-        $im->writePng($filename);
-    }
-
     public function endLog() {
-        // nothing to do
+        $this->plotter->draw($this->plotData);
     }
 
 }

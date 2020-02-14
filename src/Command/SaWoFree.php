@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\SaWo\Factory;
 use Trismegiste\Genetic\Game\SaWo\FreeEcosystem;
 use Trismegiste\Genetic\Game\SaWo\Logger;
+use Trismegiste\Genetic\Util\PlotterXY;
 
 /**
  * Free evolution for SaWo
@@ -40,7 +41,7 @@ class SaWoFree extends Command {
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
         $this->plotFile = $input->getOption('plot');
 
-        $this->logger = new Logger($output);
+        $this->logger = new Logger($output, new PlotterXY(1920, 1080, 'yolo.png'));
         $this->univers = new FreeEcosystem(new Factory($popSize), $this->logger);
     }
 
@@ -52,9 +53,7 @@ class SaWoFree extends Command {
             $this->univers->evolve($this->round, $this->extinctRatio);
         }
 
-        if (!is_null($this->plotFile)) {
-            $this->logger->writeGraphic($this->plotFile);
-        }
+        $this->logger->endLog();
     }
 
 }
