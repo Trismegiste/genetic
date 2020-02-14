@@ -9,8 +9,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\SaWo\Factory;
 use Trismegiste\Genetic\Game\SaWo\FreeEcosystem;
-use Trismegiste\Genetic\Game\SaWo\GrafxLogger;
-use Trismegiste\Genetic\Game\SaWo\TextLogger;
+use Trismegiste\Genetic\Game\GrafxLogger;
+use Trismegiste\Genetic\Game\TextLogger;
 use Trismegiste\Genetic\Util\AnimateXY;
 use Trismegiste\Genetic\Util\PlotterXY;
 
@@ -32,7 +32,7 @@ class SaWoFree extends Command {
                 ->addArgument('popSize', InputArgument::REQUIRED, "Population size")
                 ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration")
                 ->addOption('round', NULL, InputOption::VALUE_REQUIRED, 'How many round between 2 PC', 5)
-                ->addOption('extinct', NULL, InputOption::VALUE_REQUIRED, 'Percentage of how many population are extinct between generation', 10)
+                ->addOption('extinct', NULL, InputOption::VALUE_REQUIRED, 'Percentage of how many population are extinct between generation', 5)
                 ->addOption('plot', NULL, InputOption::VALUE_REQUIRED, 'File name of plotting PNG picture')
                 ->addOption('animate', NULL, InputOption::VALUE_NONE, 'Multiple PNG file for animation');
     }
@@ -50,9 +50,9 @@ class SaWoFree extends Command {
             } else {
                 $plotter = new PlotterXY(1920, 1080, $plotFile);
             }
-            $this->logger = new GrafxLogger($output, $plotter);
+            $this->logger = new GrafxLogger($output, $this->extinctRatio, $plotter);
         } else {
-            $this->logger = new TextLogger($output);
+            $this->logger = new TextLogger($output, $this->extinctRatio);
         }
         $this->univers = new FreeEcosystem(new Factory($popSize), $this->logger);
     }

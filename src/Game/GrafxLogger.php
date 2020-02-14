@@ -1,9 +1,8 @@
 <?php
 
-namespace Trismegiste\Genetic\Game\SaWo;
+namespace Trismegiste\Genetic\Game;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Trismegiste\Genetic\Game\SaWo\TextLogger;
 use Trismegiste\Genetic\Util\ImagePlotter;
 
 /**
@@ -14,8 +13,8 @@ class GrafxLogger extends TextLogger {
     protected $plotData;
     protected $plotter;
 
-    public function __construct(OutputInterface $out, ImagePlotter $plot) {
-        parent::__construct($out);
+    public function __construct(OutputInterface $out, float $viewed, ImagePlotter $plot) {
+        parent::__construct($out, $viewed);
         $this->plotter = $plot;
     }
 
