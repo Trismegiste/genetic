@@ -9,11 +9,14 @@ namespace Trismegiste\Genetic\Util;
  */
 class AnimateXY extends ImagickPlotter {
 
-    public function __construct($width, $height) {
+    protected $pattern;
+
+    public function __construct($width, $height, $patternName) {
         parent::__construct($width, $height);
+        $this->pattern = $patternName;
     }
 
-    public function draw($data) {
+    public function draw(array& $data) {
         $extrem = $this->getBoundaries($data);
 
         $deltaX = $extrem->infX;
@@ -41,7 +44,7 @@ class AnimateXY extends ImagickPlotter {
                 imagefilledellipse($handle, $x, $y, 4, 4, $plotColor);
             }
             imagecolordeallocate($handle, $plotColor);
-            imagepng($handle, "plot-" . sprintf('%03d', $idx) . ".png");
+            imagepng($handle, sprintf($this->pattern, $idx) . ".png");
             imagedestroy($handle);
         }
     }
