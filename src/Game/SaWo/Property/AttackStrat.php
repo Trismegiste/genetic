@@ -1,17 +1,9 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Trismegiste\Genetic\Game\SaWo\Property;
 
 /**
- * Description of AttackStrat
- *
- * @author flo
+ * Attack strategy
  */
 class AttackStrat implements \Trismegiste\Genetic\Game\Property {
 
@@ -27,7 +19,7 @@ class AttackStrat implements \Trismegiste\Genetic\Game\Property {
     }
 
     public function get() {
-        return $v;
+        return $this->strategy;
     }
 
     public function getCost() {
@@ -44,6 +36,10 @@ class AttackStrat implements \Trismegiste\Genetic\Game\Property {
 
     public function __toString() {
         return $this->strategy;
+    }
+
+    public function getBonus() {
+        return ($this->strategy === 'wild') ? 2 : 0;
     }
 
 }

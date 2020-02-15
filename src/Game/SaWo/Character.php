@@ -49,7 +49,7 @@ class Character implements Mutable, Fighter {
             'benny' => new Property\BennyStrat($default['benny']),
             'block' => new Property\BlockEdge($default['block']),
             'trademark' => new Property\TradeWeaponEdge($default['trademark']),
-                'attack' => new Property\AttackStrat($default['attack'])
+            'attack' => new Property\AttackStrat($default['attack'])
         ];
     }
 
@@ -153,7 +153,10 @@ class Character implements Mutable, Fighter {
 
     public function getDamage() {
         $dice = min([$this->genome['strength']->get(), $this->weapon]);
-        return DiceRoller::roll($this->genome['strength']) + DiceRoller::rollExplodingDie($dice);
+
+        return DiceRoller::roll($this->genome['strength']) +
+                DiceRoller::rollExplodingDie($dice) +
+                $this->genome['attack']->getBonus();
     }
 
     public function restart() {
@@ -167,7 +170,9 @@ class Character implements Mutable, Fighter {
     }
 
     public function getParry() {
-        return $this->genome['fighting']->getDifficulty() + $this->genome['block']->get();
+        return $this->genome['fighting']->getDifficulty() +
+                $this->genome['block']->get() -
+                $this->genome['attack']->getBonus();
     }
 
     public function getToughness() {
@@ -216,7 +221,8 @@ class Character implements Mutable, Fighter {
             $roll = $this->roll('fighting');
             $this->useBenny();
         }
-        return $roll;
+
+        return $roll + $this->genome['attack']->getBonus();
     }
 
     public function getWoundsPenalty() {
