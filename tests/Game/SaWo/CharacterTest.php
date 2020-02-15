@@ -22,6 +22,12 @@ class CharacterTest extends TestCase {
     }
 
     /** @dataProvider factory */
+    public function testWildParry($face, $diff) {
+        $sut = new Character(['attack' => 'wild', 'fighting' => $face]);
+        $this->assertEquals($diff - 2, $sut->getParry());
+    }
+
+    /** @dataProvider factory */
     public function testToughness($face, $diff) {
         $sut = new Character(['vigor' => $face]);
         $this->assertEquals($diff, $sut->getToughness());
