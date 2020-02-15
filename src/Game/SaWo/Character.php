@@ -28,7 +28,8 @@ class Character implements Mutable, Fighter {
             'spirit' => 6,
             'benny' => 'attack',
             'block' => 0,
-            'trademark' => 0
+            'trademark' => 0,
+            'attack' => 'standard'
         ];
 
         // override
@@ -47,7 +48,8 @@ class Character implements Mutable, Fighter {
             'spirit' => new Property\Attribute($default['spirit']),
             'benny' => new Property\BennyStrat($default['benny']),
             'block' => new Property\BlockEdge($default['block']),
-            'trademark' => new Property\TradeWeaponEdge($default['trademark'])
+            'trademark' => new Property\TradeWeaponEdge($default['trademark']),
+                'attack' => new Property\AttackStrat($default['attack'])
         ];
     }
 

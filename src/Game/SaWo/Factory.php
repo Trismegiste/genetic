@@ -21,7 +21,8 @@ class Factory implements \Trismegiste\Genetic\Game\PopulationFactory {
                 'agility' => 2 * mt_rand(2, 6),
                 'benny' => Property\BennyStrat::getRandomStrat(),
                 'block' => mt_rand(0, 2),
-                'trademark' => mt_rand(0, 2)
+                'trademark' => mt_rand(0, 2),
+                'attack' => Property\AttackStrat::getRandomStrat()
             ]);
             $pop[] = $pc;
         }
