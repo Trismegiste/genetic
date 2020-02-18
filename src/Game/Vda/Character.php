@@ -32,4 +32,13 @@ class Character extends MutableFighter {
         
     }
 
+    public function __toString() {
+        $compil = '';
+        foreach ($this->genome as $key => $gene) {
+            $compil .= $key . ':' . $gene . ' ';
+        }
+
+        return $compil . 'win:' . $this->victory . ' cost:' . $this->getCost();
+    }
+
 }

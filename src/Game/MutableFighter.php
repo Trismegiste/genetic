@@ -39,15 +39,6 @@ abstract class MutableFighter implements Mutable, Fighter {
         }
     }
 
-    public function __toString() {
-        $compil = '';
-        foreach ($this->genome as $key => $gene) {
-            $compil .= $key . ':' . $gene . ' ';
-        }
-
-        return $compil;
-    }
-
     public function getCost() {
         $cost = 0;
         foreach ($this->genome as $gene) {
