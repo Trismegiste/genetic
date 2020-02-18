@@ -20,7 +20,7 @@ class FreeEvolution extends DarwinWorld {
     }
 
     protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2): array {
-        
+        return [$pc1, $pc2];
     }
 
 }

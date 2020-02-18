@@ -10,6 +10,8 @@ use Trismegiste\Genetic\Game\MutableFighter;
  */
 class Character extends MutableFighter {
 
+    protected $health;
+
     public function getFitness() {
         return $this->victory;
     }

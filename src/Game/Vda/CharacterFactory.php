@@ -10,11 +10,11 @@ class CharacterFactory {
     const defaultGenome = [
         'strength' => 2,
         'dexterity' => 2,
-        'vigor' => 2,
-        'melee' => 2
+        'stamina' => 2,
+        'melee' => 3
     ];
 
-    public function create(array $param) {
+    public function create(array $param = []) {
         $default = self::defaultGenome;
 
         // override
@@ -25,10 +25,10 @@ class CharacterFactory {
         }
 
         $genome = [
-            'strength' => 2,
-            'dexterity' => 2,
-            'vigor' => 2,
-            'melee' => 2
+            'strength' => new Property\Attribute($default['strength']),
+            'dexterity' => new Property\Attribute($default['dexterity']),
+            'stamina' => new Property\Attribute($default['stamina']),
+            'melee' => new Property\Ability($default['melee'])
         ];
 
         return new Character($genome);
@@ -38,7 +38,7 @@ class CharacterFactory {
         return $this->create([
                     'strength' => mt_rand(1, 5),
                     'dexterity' => mt_rand(1, 5),
-                    'vigor' => mt_rand(1, 5),
+                    'stamina' => mt_rand(1, 5),
                     'melee' => mt_rand(1, 5)
         ]);
     }
