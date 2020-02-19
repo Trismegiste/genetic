@@ -14,7 +14,7 @@ class Attribute extends CappedProperty {
     }
 
     public function getCost() {
-        
+        return 2 * $this->attribute * ($this->attribute - 1);
     }
 
 }

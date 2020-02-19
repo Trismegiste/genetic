@@ -9,6 +9,7 @@ class CharacterFactory {
 
     const defaultGenome = [
         'strength' => 2,
+        'wits' => 2,
         'dexterity' => 2,
         'stamina' => 2,
         'melee' => 3
@@ -26,6 +27,7 @@ class CharacterFactory {
 
         $genome = [
             'strength' => new Property\Attribute($default['strength']),
+            'wits' => new Property\Attribute($default['wits']),
             'dexterity' => new Property\Attribute($default['dexterity']),
             'stamina' => new Property\Attribute($default['stamina']),
             'melee' => new Property\Ability($default['melee'])

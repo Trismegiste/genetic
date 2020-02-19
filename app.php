@@ -9,4 +9,5 @@ $app = new Application;
 $app->add(new Command\L5rCompare());
 $app->add(new Command\L5rFree());
 $app->add(new Command\SaWoFree());
+$app->add(new Command\VdaFree());
 $app->run();
