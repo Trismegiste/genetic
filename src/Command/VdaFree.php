@@ -37,7 +37,7 @@ class VdaFree extends Command {
                 ->addOption('animate', NULL, InputOption::VALUE_NONE, 'Multiple PNG file for animation');
     }
 
-    public function initialize(InputInterface $input, OutputInterface $output) {
+    public function start(InputInterface $input, OutputInterface $output) {
         $popSize = $input->getArgument('popSize');
         $this->maxGeneration = $input->getArgument('maxIter');
         $this->round = $input->getOption('round');
@@ -58,6 +58,7 @@ class VdaFree extends Command {
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
+        $this->start($input, $output);
         $output->writeln("Free evolution");
 
         for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
