@@ -39,6 +39,7 @@ class CharacterFactory {
     public function createRandom() {
         return $this->create([
                     'strength' => mt_rand(1, 5),
+                    'wits' => mt_rand(1, 5),
                     'dexterity' => mt_rand(1, 5),
                     'stamina' => mt_rand(1, 5),
                     'melee' => mt_rand(1, 5)
