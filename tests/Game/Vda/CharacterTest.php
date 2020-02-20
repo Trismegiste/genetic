@@ -49,11 +49,15 @@ class CharacterTest extends TestCase {
         $this->assertLessThan(0.1, ($sum - 2.0) / $sum);  // 0.4 * (2+3)
     }
 
+    protected function getMockCharacter() {
+        return $this->getMockBuilder(Character::class)
+                        ->setConstructorArgs([[]])
+                        ->getMock();
+    }
+
     /** @dataProvider getDefaultCharacter */
     public function testReceiveAttackFailed($sut) {
-        $attacker = $this->getMockBuilder(Character::class)
-                ->setConstructorArgs([[]])
-                ->getMock();
+        $attacker = $this->getMockCharacter();
         $attacker->expects($this->once())
                 ->method('getAttack')
                 ->willReturn(0);
@@ -64,9 +68,7 @@ class CharacterTest extends TestCase {
 
     /** @dataProvider getDefaultCharacter */
     public function testReceiveAttackSucced($sut) {
-        $attacker = $this->getMockBuilder(Character::class)
-                ->setConstructorArgs([[]])
-                ->getMock();
+        $attacker = $this->getMockCharacter();
         $attacker->expects($this->once())
                 ->method('getAttack')
                 ->willReturn(10);
