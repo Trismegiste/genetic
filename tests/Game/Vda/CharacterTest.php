@@ -3,6 +3,7 @@
 namespace test\Vda;
 
 use PHPUnit\Framework\TestCase;
+use Trismegiste\Genetic\Game\MutableFighter;
 use Trismegiste\Genetic\Game\Vda\Character;
 use Trismegiste\Genetic\Game\Vda\CharacterFactory;
 
@@ -45,7 +46,18 @@ class CharacterTest extends TestCase {
             $sum += $sut->getAttack();
         }
         $sum /= $n;
-        $this->assertLessThan(0.1, ($sum - 2.0) / $sum);  // 5.5+2+2
+        $this->assertLessThan(0.1, ($sum - 2.0) / $sum);  // 0.4 * (2+3)
+    }
+
+    /** @dataProvider getDefaultCharacter */
+    public function testReceiveAttack($sut) {
+        $attacker = $this->getMockBuilder(Character::class)
+                ->setConstructorArgs([[]])
+                ->getMock();
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(0);
+        $sut->receiveAttack($attacker);
     }
 
 }
