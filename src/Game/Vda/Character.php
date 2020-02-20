@@ -12,11 +12,10 @@ class Character extends MutableFighter {
 
     const woundPenalty = [0 => 0, 1 => 0, 2 => -1, 3 => -1, 4 => -2, 5 => -2, 6 => -5];
 
-    protected $health;
+    protected $health = 0;
     protected $weapon = 2;
     protected $actionCounter = 0;
     protected $actionPerRd = 1;
-    protected $currentInitiative;
 
     public function getFitness() {
         return $this->victory;
@@ -79,7 +78,6 @@ class Character extends MutableFighter {
     public function restart() {
         $this->health = 0;
         $this->actionCounter = 0;
-        $this->currentInitiative = 0;
     }
 
     public function __toString() {

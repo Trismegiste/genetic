@@ -21,4 +21,16 @@ class CharacterTest extends TestCase {
         $this->assertEquals($cost, $sut->getCost());
     }
 
+    public function testInitiative() {
+        $f = new CharacterFactory();
+        $sut = $f->create();
+        $n = 1000;
+        $sum = 0;
+        for ($k = 0; $k < $n; $k++) {
+            $sum += $sut->rollInitiative();
+        }
+        $sum /= $n;
+        $this->assertLessThan(0.1, ($sum - 9.5) / $sum);  // 5.5+2+2
+    }
+
 }
