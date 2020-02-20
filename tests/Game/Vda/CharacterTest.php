@@ -50,13 +50,28 @@ class CharacterTest extends TestCase {
     }
 
     /** @dataProvider getDefaultCharacter */
-    public function testReceiveAttack($sut) {
+    public function testReceiveAttackFailed($sut) {
         $attacker = $this->getMockBuilder(Character::class)
                 ->setConstructorArgs([[]])
                 ->getMock();
         $attacker->expects($this->once())
                 ->method('getAttack')
                 ->willReturn(0);
+        $attacker->expects($this->never())
+                ->method('getDamage');
+        $sut->receiveAttack($attacker);
+    }
+
+    /** @dataProvider getDefaultCharacter */
+    public function testReceiveAttackSucced($sut) {
+        $attacker = $this->getMockBuilder(Character::class)
+                ->setConstructorArgs([[]])
+                ->getMock();
+        $attacker->expects($this->once())
+                ->method('getAttack')
+                ->willReturn(10);
+        $attacker->expects($this->once())
+                ->method('getDamage');
         $sut->receiveAttack($attacker);
     }
 
