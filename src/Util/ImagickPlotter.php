@@ -10,7 +10,7 @@ abstract class ImagickPlotter implements ImagePlotter {
     protected $width;
     protected $height;
 
-    public function __construct($w, $h) {
+    public function __construct(int $w, int $h) {
         $this->width = $w;
         $this->height = $h;
     }

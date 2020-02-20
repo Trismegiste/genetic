@@ -29,7 +29,7 @@ class Character implements Mutable, Fighter {
     /** @var Property */
     protected $genome = [];
 
-    public function __construct($n, $genomeValues = []) {
+    public function __construct($n, array $genomeValues = []) {
         $this->name = $n;
 
         // default values

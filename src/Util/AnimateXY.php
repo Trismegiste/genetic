@@ -11,7 +11,7 @@ class AnimateXY extends ImagickPlotter {
 
     protected $pattern;
 
-    public function __construct($width, $height, $patternName) {
+    public function __construct(int $width, int $height, string $patternName) {
         parent::__construct($width, $height);
         $this->pattern = $patternName;
     }
@@ -44,7 +44,7 @@ class AnimateXY extends ImagickPlotter {
                 imagefilledellipse($handle, $x, $y, 4, 4, $plotColor);
             }
             imagecolordeallocate($handle, $plotColor);
-            imagepng($handle, sprintf($this->pattern, $idx) . ".png");
+            imagepng($handle, sprintf($this->pattern, $idx));
             imagedestroy($handle);
         }
     }

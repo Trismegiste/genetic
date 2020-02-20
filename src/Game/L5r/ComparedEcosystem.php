@@ -14,7 +14,7 @@ class ComparedEcosystem extends Ecosystem {
 
     protected $referencePop = [];
 
-    public function __construct(PopulationFactory $fac, PopulationLogger $log, $opponent, $refSize) {
+    public function __construct(PopulationFactory $fac, PopulationLogger $log, array $opponent, int $refSize) {
         parent::__construct($fac, $log);
 
         // init population for reference
@@ -40,7 +40,7 @@ class ComparedEcosystem extends Ecosystem {
     /**
      * Overload for reinitialising referencePop
      */
-    public function evolve(int $round, $extinctRatio) {
+    public function evolve(int $round, float $extinctRatio) {
         foreach ($this->referencePop as $pc) {
             $pc->newGeneration();
         }

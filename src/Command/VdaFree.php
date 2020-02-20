@@ -3,6 +3,7 @@
 namespace Trismegiste\Genetic\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -33,8 +34,20 @@ class VdaFree extends Command {
                 ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration")
                 ->addOption('round', NULL, InputOption::VALUE_REQUIRED, 'How many round between 2 PC', 5)
                 ->addOption('extinct', NULL, InputOption::VALUE_REQUIRED, 'Percentage of how many population are extinct between generation', 5)
-                ->addOption('plot', NULL, InputOption::VALUE_REQUIRED, 'File name of plotting PNG picture')
+                ->addOption('plot', NULL, InputOption::VALUE_REQUIRED, 'File name (without extension) of plotting PNG picture')
                 ->addOption('animate', NULL, InputOption::VALUE_NONE, 'Multiple PNG file for animation');
+    }
+
+    protected function checkPositiveInteger(InputInterface $arg, $name) {
+        $val = intval($arg->getArgument($name));
+        if (!($val > 0)) {
+            throw new InvalidArgumentException("$name is not a positive integer");
+        }
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output) {
+        $this->checkPositiveInteger($input, 'popSize');
+        $this->checkPositiveInteger($input, 'maxIter');
     }
 
     public function start(InputInterface $input, OutputInterface $output) {
@@ -46,9 +59,9 @@ class VdaFree extends Command {
 
         if (!is_null($plotFile)) {
             if ($input->getOption('animate')) {
-                $plotter = new AnimateXY(1920, 1080, $plotFile);
+                $plotter = new AnimateXY(1920, 1080, $plotFile . '%04d.png');
             } else {
-                $plotter = new PlotterXY(1920, 1080, $plotFile);
+                $plotter = new PlotterXY(1920, 1080, $plotFile . 'png');
             }
             $this->logger = new GrafxLogger($output, $this->extinctRatio, $plotter);
         } else {

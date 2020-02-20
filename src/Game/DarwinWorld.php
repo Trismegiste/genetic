@@ -48,7 +48,7 @@ abstract class DarwinWorld {
      * @param float $extinctRatio A ratio between [0,1] of how many PC gets extinct by the natural selection. Ex: 0.05 means 5% of PC will be replaced by the best fitted with mutation
      * @return array an array of string containing a selection of PC for printing
      */
-    public function evolve(int $round, $extinctRatio) {
+    public function evolve(int $round, float $extinctRatio) {
         // re-initialise pop
         foreach ($this->population as $pc) {
             $pc->newGeneration();
