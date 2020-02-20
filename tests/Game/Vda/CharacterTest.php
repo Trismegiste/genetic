@@ -16,14 +16,18 @@ class CharacterTest extends TestCase {
         ];
     }
 
+    public function getDefaultCharacter() {
+        $f = new CharacterFactory();
+        return [[$f->create()]];
+    }
+
     /** @dataProvider factory */
     public function testCost(Character $sut, $cost) {
         $this->assertEquals($cost, $sut->getCost());
     }
 
-    public function testInitiative() {
-        $f = new CharacterFactory();
-        $sut = $f->create();
+    /** @dataProvider getDefaultCharacter */
+    public function testInitiative($sut) {
         $n = 1000;
         $sum = 0;
         for ($k = 0; $k < $n; $k++) {
@@ -31,6 +35,17 @@ class CharacterTest extends TestCase {
         }
         $sum /= $n;
         $this->assertLessThan(0.1, ($sum - 9.5) / $sum);  // 5.5+2+2
+    }
+
+    /** @dataProvider getDefaultCharacter */
+    public function testAttack($sut) {
+        $n = 1000;
+        $sum = 0;
+        for ($k = 0; $k < $n; $k++) {
+            $sum += $sut->getAttack();
+        }
+        $sum /= $n;
+        $this->assertLessThan(0.1, ($sum - 2.0) / $sum);  // 5.5+2+2
     }
 
 }
