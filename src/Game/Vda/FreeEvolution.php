@@ -40,13 +40,13 @@ class FreeEvolution extends DarwinWorld {
         $this->startBattle($pc1, $pc2);
 
         while (!$pc1->isDead() && !$pc2->isDead()) {
+            $pc1->startTurn();
+            $pc2->startTurn();
             $player = $this->getInitiativeTurn($pc1, $pc2);
-            if (!$player[0]->isDead()) {
-                $player[1]->receiveAttack($player[0]);
-            }
-            if (!$player[1]->isDead()) {
-                $player[0]->receiveAttack($player[1]);
-            }
+            do {
+                $player[0]->evolve($player[1]);
+                $player[1]->evolve($player[0]);
+            } while ($pc1->canMakeAction() || $pc2->canMakeAction());
         }
 
         return $pc1->isDead() ? $pc2 : $pc1;

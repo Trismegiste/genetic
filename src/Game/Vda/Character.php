@@ -21,10 +21,6 @@ class Character extends MutableFighter {
         return $this->victory;
     }
 
-    public function hasActionLeft() {
-        return $this->actionCounter < $this->actionPerRd;
-    }
-
     protected function getWoundPenalty() {
         return ($this->health >= 7) ? -1000 : self::woundPenalty[$this->health];
     }
@@ -42,7 +38,7 @@ class Character extends MutableFighter {
     }
 
     public function getAttack() {
-        return $this->hasActionLeft() ? $this->roll('dexterity', 'melee', 6) : 0;
+        return $this->roll('dexterity', 'melee', 6);
     }
 
     protected function roll(string $attr, string $abil, int $diff) {
@@ -52,7 +48,7 @@ class Character extends MutableFighter {
     }
 
     public function getParry() {
-        return $this->hasActionLeft() ? $this->roll('dexterity', 'melee', 6) : 0;
+        return$this->roll('dexterity', 'melee', 6);
     }
 
     public function getDamage(int $delta) {
@@ -61,18 +57,58 @@ class Character extends MutableFighter {
         return PoolRoller::roll($pool, 6);
     }
 
-    public function receiveAttack(Fighter $pc) {
-        $attack = $pc->getAttack();
+    public function canMakeAction(): bool {
+        if ($this->isDead()) {
+            return false;
+        }
+        if ($this->actionCounter >= $this->actionPerRd) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function startTurn() {
+        $this->actionCounter = 0;
+    }
+
+    public function evolve(Fighter $opponent) {
+        if (!$this->canMakeAction()) {
+            return;
+        }
+
+        $attack = $this->getAttack();
+        $this->actionCounter++;
+
         if ($attack > 0) {
-            $delta = $attack - $this->getParry();
-            if ($delta > 0) {
-                $damage = $pc->getDamage($delta);
-                $wound = $damage - PoolRoller::roll($this->genome['stamina']->get(), 6);
-                if ($wound > 0) {
-                    $this->health += $wound;
-                }
+            $margin = $opponent->getMarginForAttack($attack);
+            if ($margin > 0) {
+                $damage = $this->getDamage($margin);
+                $opponent->receiveDamage($damage);
             }
         }
+    }
+
+    public function getMarginForAttack(int $attack) {
+        if (!$this->canMakeAction()) {
+            return $attack;
+        }
+
+        $parry = $this->getParry();
+        $this->actionCounter++;
+
+        return $attack - $parry;
+    }
+
+    public function receiveDamage(int $damage) {
+        $wound = $damage - PoolRoller::roll($this->genome['stamina']->get(), 6);
+        if ($wound > 0) {
+            $this->health += $wound;
+        }
+    }
+
+    public function receiveAttack(Fighter $pc) {
+        throw new \LogicException("receiveAttack");
     }
 
     public function restart() {
