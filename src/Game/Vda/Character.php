@@ -15,7 +15,6 @@ class Character extends MutableFighter {
     protected $health = 0;
     protected $weapon = 2;
     protected $actionCounter = 0;
-    protected $actionPerRd = 1;
 
     public function getFitness() {
         return $this->victory;
@@ -41,10 +40,15 @@ class Character extends MutableFighter {
         return $this->roll('dexterity', 'melee', 6);
     }
 
-    protected function roll(string $attr, string $abil, int $diff) {
-        $pool = $this->genome[$attr]->get() + $this->genome[$abil]->get() - $this->getWoundPenalty();
+    protected function getMultipleActionsPenalty() {
+        return($this->genome['action']->get() > 1) ? $this->actionCounter + 1 : 0;
+    }
 
-        return PoolRoller::roll($pool, $diff);
+    protected function roll(string $attr, string $abil, int $diff) {
+        $map = $this->getMultipleActionsPenalty();
+        $pool = $this->genome[$attr]->get() + $this->genome[$abil]->get() - $this->getWoundPenalty() - $map;
+
+        return PoolRoller::roll($pool, $diff + $map);
     }
 
     public function getParry() {
@@ -61,7 +65,7 @@ class Character extends MutableFighter {
         if ($this->isDead()) {
             return false;
         }
-        if ($this->actionCounter >= $this->actionPerRd) {
+        if ($this->actionCounter >= $this->genome['action']->get()) {
             return false;
         }
 
