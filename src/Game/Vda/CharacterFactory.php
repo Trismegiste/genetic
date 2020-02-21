@@ -13,7 +13,9 @@ class CharacterFactory {
         'dexterity' => 2,
         'stamina' => 2,
         'melee' => 3,
-        'action' => 1
+        'action' => 1,
+        'fortitude' => 0,
+        'potence' => 0,
     ];
 
     public function create(array $param = []) {
@@ -32,7 +34,9 @@ class CharacterFactory {
             'dexterity' => new Property\Attribute($default['dexterity']),
             'stamina' => new Property\Attribute($default['stamina']),
             'melee' => new Property\Ability($default['melee']),
-            'action' => new Property\MultipleActionStrat($default['action'])
+            'action' => new Property\MultipleActionStrat($default['action']),
+            'fortitude' => new Property\Discipline($default['fortitude']),
+            'potence' => new Property\Discipline($default['potence'])
         ];
 
         return new Character($genome);
@@ -45,7 +49,9 @@ class CharacterFactory {
                     'dexterity' => mt_rand(1, 5),
                     'stamina' => mt_rand(1, 5),
                     'melee' => mt_rand(1, 5),
-                    'action' => mt_rand(1, 2)
+                    'action' => mt_rand(1, 2),
+                    'fortitude' => mt_rand(0, 4),
+                    'potence' => mt_rand(0, 4)
         ]);
     }
 

@@ -19,10 +19,6 @@ class FreeEvolution extends DarwinWorld {
         }
     }
 
-    protected function startBattle(Fighter $pc1, Fighter $pc2) {
-        
-    }
-
     protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2) {
         $init1 = $pc1->rollInitiative();
         $init2 = $pc2->rollInitiative();
@@ -37,8 +33,6 @@ class FreeEvolution extends DarwinWorld {
     }
 
     protected function battle(Fighter $pc1, Fighter $pc2) {
-        $this->startBattle($pc1, $pc2);
-
         while (!$pc1->isDead() && !$pc2->isDead()) {
             $pc1->startTurn();
             $pc2->startTurn();

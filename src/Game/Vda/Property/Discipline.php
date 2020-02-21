@@ -5,16 +5,17 @@ namespace Trismegiste\Genetic\Game\Vda\Property;
 use Trismegiste\Genetic\Game\CappedProperty;
 
 /**
- * How many actions per round strategy
+ * A VDA discipline
  */
-class MultipleActionStrat extends CappedProperty {
+class Discipline extends CappedProperty {
 
     public function __construct(int $v) {
-        parent::__construct($v, 1, 2);
+        parent::__construct($v, 0, 5);
     }
 
     public function getCost() {
-        return 0;
+
+        return ($this->attribute > 0) ? 10 + 5 * $this->attribute * ($this->attribute - 1) / 2 : 0;
     }
 
 }

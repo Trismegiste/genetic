@@ -56,7 +56,7 @@ class Character extends MutableFighter {
     }
 
     public function getDamage(int $delta) {
-        $pool = $delta + $this->genome['strength']->get() + $this->weapon;
+        $pool = $delta + $this->genome['strength']->get() + $this->weapon + $this->genome['potence']->get();
 
         return PoolRoller::roll($pool, 6);
     }
@@ -105,10 +105,14 @@ class Character extends MutableFighter {
     }
 
     public function receiveDamage(int $damage) {
-        $wound = $damage - PoolRoller::roll($this->genome['stamina']->get(), 6);
+        $wound = $damage - $this->rollSoak();
         if ($wound > 0) {
             $this->health += $wound;
         }
+    }
+
+    protected function rollSoak() {
+        return PoolRoller::roll($this->genome['stamina']->get() + $this->genome['fortitude']->get(), 6);
     }
 
     public function receiveAttack(Fighter $pc) {
