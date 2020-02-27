@@ -10,7 +10,7 @@ use Trismegiste\Genetic\Game\CappedProperty;
 class MultipleActionStrat extends CappedProperty {
 
     public function __construct(int $v) {
-        parent::__construct($v, 1, 2);
+        parent::__construct($v, 1, 8);
     }
 
     public function getCost() {

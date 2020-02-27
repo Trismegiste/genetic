@@ -15,6 +15,7 @@ class Character extends MutableFighter {
     protected $health = 0;
     protected $weapon = 2;
     protected $actionCounter = 0;
+    protected $attackCounter = 0;
 
     public function getFitness() {
         return $this->victory;
@@ -29,26 +30,33 @@ class Character extends MutableFighter {
     }
 
     public function rollInitiative() {
-        return mt_rand(1, 10) + $this->genome['wits']->get() + $this->genome['dexterity']->get() - $this->getWoundPenalty();
+        return mt_rand(1, 10) +
+                $this->genome['wits']->get() +
+                $this->genome['dexterity']->get() -
+                $this->getWoundPenalty() +
+                $this->genome['celerity']->get();
     }
 
     public function newGeneration() {
         $this->victory = 0;
     }
 
-    public function getAttack() {
-        return $this->roll('dexterity', 'melee', 6);
-    }
-
     protected function getMultipleActionsPenalty() {
-        return($this->genome['action']->get() > 1) ? $this->actionCounter + 1 : 0;
+        return ($this->genome['action']->get() > 1) ? $this->actionCounter + 1 : 0;
     }
 
     protected function roll(string $attr, string $abil, int $diff) {
         $map = $this->getMultipleActionsPenalty();
         $pool = $this->genome[$attr]->get() + $this->genome[$abil]->get() - $this->getWoundPenalty() - $map;
+        if ($attr === 'dexterity') {
+            $pool += $this->genome['celerity']->get();
+        }
 
         return PoolRoller::roll($pool, $diff + $map);
+    }
+
+    public function getAttack() {
+        return $this->roll('dexterity', 'melee', 6);
     }
 
     public function getParry() {
@@ -72,17 +80,24 @@ class Character extends MutableFighter {
         return true;
     }
 
+    public function canMakeAttack(): bool {
+        return $this->canMakeAction() &&
+                ($this->attackCounter < (1 + floor($this->genome['celerity']->get()) / 2));
+    }
+
     public function startTurn() {
         $this->actionCounter = 0;
+        $this->attackCounter = 0;
     }
 
     public function evolve(Fighter $opponent) {
-        if (!$this->canMakeAction()) {
+        if (!$this->canMakeAttack()) {
             return;
         }
 
         $attack = $this->getAttack();
         $this->actionCounter++;
+        $this->attackCounter++;
 
         if ($attack > 0) {
             $margin = $opponent->getMarginForAttack($attack);

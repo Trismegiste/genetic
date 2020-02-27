@@ -23,13 +23,11 @@ class FreeEvolution extends DarwinWorld {
         $init1 = $pc1->rollInitiative();
         $init2 = $pc2->rollInitiative();
 
-        if ($init1 > $init2) {
-            return [$pc1, $pc2];
-        } else if ($init1 < $init2) {
-            return [$pc2, $pc1];
-        } else {
-            return mt_rand(0, 1) ? [$pc1, $pc2] : [$pc2, $pc1];
+        if ($init1 === $init2) {
+            $init1 += 2 * mt_rand(0, 1) - 1;
         }
+
+        return ($init1 > $init2) ? [$pc1, $pc2] : [$pc2, $pc1];
     }
 
     protected function battle(Fighter $pc1, Fighter $pc2) {
@@ -40,7 +38,7 @@ class FreeEvolution extends DarwinWorld {
             do {
                 $player[0]->evolve($player[1]);
                 $player[1]->evolve($player[0]);
-            } while ($pc1->canMakeAction() || $pc2->canMakeAction());
+            } while ($pc1->canMakeAttack() || $pc2->canMakeAttack());
         }
 
         return $pc1->isDead() ? $pc2 : $pc1;
