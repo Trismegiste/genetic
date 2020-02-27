@@ -56,4 +56,8 @@ abstract class MutableFighter implements Mutable, Fighter {
         $this->victory++;
     }
 
+    public function getGenome(): array {
+        return $this->genome;
+    }
+
 }

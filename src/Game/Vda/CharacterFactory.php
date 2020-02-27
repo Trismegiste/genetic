@@ -46,6 +46,7 @@ class CharacterFactory {
 
     public function createRandom() {
         $action = mt_rand(0, 4);
+
         return $this->create([
                     'strength' => mt_rand(1, 5),
                     'wits' => mt_rand(1, 5),
@@ -57,6 +58,18 @@ class CharacterFactory {
                     'potence' => mt_rand(0, 4),
                     'celerity' => $action
         ]);
+    }
+
+    public function createSpawn(array $partner): Character {
+        $gb = count($partner);
+        $crossed = [];
+        $reference = $partner[0]->getGenome();
+        foreach ($reference as $key => $gene) {
+            $choice = mt_rand(0, $gb - 1);
+            $crossed[$key] = clone $partner[$choice]->getGenome()[$key];
+        }
+
+        return new Character($crossed);
     }
 
 }

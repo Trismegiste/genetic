@@ -11,7 +11,10 @@ use Trismegiste\Genetic\Game\PopulationLogger;
  */
 class FreeEvolution extends DarwinWorld {
 
+    protected $factory;
+
     public function __construct(int $size, CharacterFactory $fac, PopulationLogger $log) {
+        $this->factory = $fac;
         $this->logger = $log;
         $this->population = [];
         for ($k = 0; $k < $size; $k++) {
@@ -42,6 +45,16 @@ class FreeEvolution extends DarwinWorld {
         }
 
         return $pc1->isDead() ? $pc2 : $pc1;
+    }
+
+    protected function selectAndMutate($extinctRatio) {
+        $extinctCount = $extinctRatio * $this->getSize();
+        for ($idx = 0; $idx < $extinctCount; $idx++) {
+            $partnerIdx = $this->getSize() - 1 - $idx;
+            $child = $this->factory->createSpawn([$this->population[$idx], $this->population[$partnerIdx]]);
+            $child->mutate();
+            $this->population[$partnerIdx] = $child;
+        }
     }
 
 }
