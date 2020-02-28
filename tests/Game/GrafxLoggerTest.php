@@ -10,7 +10,7 @@ class GrafxLoggerTest extends TestCase {
 
     public function testLog() {
         $out = $this->getMockForAbstractClass(OutputInterface::class);
-        $out->expects($this->exactly(5))
+        $out->expects($this->exactly(6))
                 ->method('writeln');
 
         $plot = $this->getMockForAbstractClass(ImagePlotter::class);
