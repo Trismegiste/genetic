@@ -46,9 +46,9 @@ class SaWoFree extends Command {
 
         if (!is_null($plotFile)) {
             if ($input->getOption('animate')) {
-                $plotter = new AnimateXY(1920, 1080, $plotFile);
+                $plotter = new AnimateXY(1920, 1080, $plotFile . '%04d.png');
             } else {
-                $plotter = new PlotterXY(1920, 1080, $plotFile);
+                $plotter = new PlotterXY(1920, 1080, $plotFile . '.png');
             }
             $this->logger = new GrafxLogger($output, $this->extinctRatio, $plotter);
         } else {
