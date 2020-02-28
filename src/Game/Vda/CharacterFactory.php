@@ -2,10 +2,12 @@
 
 namespace Trismegiste\Genetic\Game\Vda;
 
+use Trismegiste\Genetic\Game\MutableFighter;
+
 /**
  * A factory for Character
  */
-class CharacterFactory {
+class CharacterFactory implements \Trismegiste\Genetic\Game\MutableFighterFactory {
 
     const defaultGenome = [
         'strength' => 2,
@@ -19,7 +21,7 @@ class CharacterFactory {
         'celerity' => 0,
     ];
 
-    public function create(array $param = []) {
+    public function create(array $param = []): MutableFighter {
         $default = self::defaultGenome;
 
         // override
@@ -44,7 +46,7 @@ class CharacterFactory {
         return new Character($genome);
     }
 
-    public function createRandom() {
+    public function createRandom(): MutableFighter {
         $action = mt_rand(0, 4);
 
         return $this->create([
@@ -60,7 +62,7 @@ class CharacterFactory {
         ]);
     }
 
-    public function createSpawn(array $partner): Character {
+    public function createSpawn(array $partner): MutableFighter {
         $gb = count($partner);
         $crossed = [];
         $reference = $partner[0]->getGenome();
