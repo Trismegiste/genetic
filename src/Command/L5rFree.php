@@ -7,9 +7,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Trismegiste\Genetic\Game\L5r\Ecosystem;
-use Trismegiste\Genetic\Game\L5r\Factory;
 use Trismegiste\Genetic\Game\GrafxLogger;
+use Trismegiste\Genetic\Game\L5r\CharacterFactory;
+use Trismegiste\Genetic\Game\L5r\Ecosystem;
 use Trismegiste\Genetic\Game\TextLogger;
 use Trismegiste\Genetic\Util\AnimateXY;
 use Trismegiste\Genetic\Util\PlotterXY;
@@ -47,15 +47,15 @@ class L5rFree extends Command {
 
         if (!is_null($plotFile)) {
             if ($input->getOption('animate')) {
-                $plotter = new AnimateXY(1920, 1080, $plotFile);
+                $plotter = new AnimateXY(1920, 1080, $plotFile . '%04d.png');
             } else {
-                $plotter = new PlotterXY(1920, 1080, $plotFile);
+                $plotter = new PlotterXY(1920, 1080, $plotFile . '.png');
             }
             $this->logger = new GrafxLogger($output, $this->extinctRatio, $plotter);
         } else {
             $this->logger = new TextLogger($output, $this->extinctRatio);
         }
-        $this->univers = new Ecosystem(new Factory($popSize), $this->logger);
+        $this->univers = new Ecosystem($popSize, new CharacterFactory(), $this->logger);
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {

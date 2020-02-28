@@ -4,11 +4,22 @@ namespace Trismegiste\Genetic\Game\L5r;
 
 use Trismegiste\Genetic\Game\DarwinWorld;
 use Trismegiste\Genetic\Game\Fighter;
+use Trismegiste\Genetic\Game\MutableFighterFactory;
+use Trismegiste\Genetic\Game\PopulationLogger;
 
 /**
  * Generic Ecosystem for L5R
  */
 class Ecosystem extends DarwinWorld {
+
+    public function __construct(int $size, MutableFighterFactory $fac, PopulationLogger $log) {
+        $this->factory = $fac;
+        $this->logger = $log;
+        $this->population = [];
+        for ($k = 0; $k < $size; $k++) {
+            $this->population[] = $fac->createRandom();
+        }
+    }
 
     protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2) {
         $player = [];
