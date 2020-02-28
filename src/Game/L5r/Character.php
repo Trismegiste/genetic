@@ -2,67 +2,22 @@
 
 namespace Trismegiste\Genetic\Game\L5r;
 
+use InvalidArgumentException;
 use Trismegiste\Genetic\Game\Fighter;
-use Trismegiste\Genetic\Game\L5r\Property\Ring;
-use Trismegiste\Genetic\Game\L5r\Property\RingTrait;
-use Trismegiste\Genetic\Game\L5r\Property\Skill;
-use Trismegiste\Genetic\Game\L5r\Property\Stance;
-use Trismegiste\Genetic\Game\L5r\Property\VoidRing;
-use Trismegiste\Genetic\Game\L5r\Property\VoidStrategy;
-use Trismegiste\Genetic\Game\Mutable;
+use Trismegiste\Genetic\Game\MutableFighter;
 use Trismegiste\Genetic\Game\Property;
 
 /**
  * A L5R character
  */
-class Character implements Mutable, Fighter {
+class Character extends MutableFighter {
 
-    protected $name;
     protected $weaponRoll = 4; // + strength
     protected $weaponKeep = 2;
     protected $wounds = 0;
     protected $usedVoidPoint = 0;
     protected $levelPenalty = [3, 5, 10, 15, 20, 40];
     protected $insightRank = 1;
-    protected $winningCount = 0;
-
-    /** @var Property */
-    protected $genome = [];
-
-    public function __construct($n, array $genomeValues = []) {
-        $this->name = $n;
-
-        // default values
-        $default = [
-            "agility" => 3,
-            "kenjutsu" => 3,
-            "void" => 3,
-            "reflexe" => 3,
-            "earth" => 3,
-            "voidStrat" => "attack",
-            "stance" => "standard",
-            "strength" => 2
-        ];
-
-        // override
-        foreach ($genomeValues as $key => $val) {
-            if (array_key_exists($key, $default)) {
-                $default[$key] = $val;
-            }
-        }
-
-        // initialise
-        $this->genome = [
-            'agility' => new RingTrait($default['agility']),
-            'kenjutsu' => new Skill($default['kenjutsu']),
-            'void' => new VoidRing($default['void']),
-            'reflexe' => new RingTrait($default['reflexe']),
-            'earth' => new Ring($default['earth']),
-            'voidStrat' => new VoidStrategy($default['voidStrat']),
-            'stance' => new Stance($default['stance']),
-            'strength' => new RingTrait($default['strength'])
-        ];
-    }
 
     public function getVoidStrat() {
         return $this->genome['voidStrat']->get();
@@ -77,10 +32,6 @@ class Character implements Mutable, Fighter {
         }
 
         $this->wounds += $val;
-    }
-
-    public function getName() {
-        return $this->name;
     }
 
     public function isDead() {
@@ -198,32 +149,12 @@ class Character implements Mutable, Fighter {
         return DiceRoller::rollAndKeep($this->genome['reflexe']->get() + $this->insightRank, $this->genome['reflexe']->get());
     }
 
-    public function incVictory() {
-        $this->winningCount ++;
-    }
-
-    public function getCost() {
-        $s = 0;
-        foreach ($this->genome as $gene) {
-            $s += $gene->getCost();
-        }
-
-        return $s;
-    }
-
     public function getFitness() {
         return $this->getVictory();
     }
 
-    public function mutate() {
-        $pickAGene = mt_rand(0, count($this->genome) - 1);
-        $geneName = array_keys($this->genome);
-        $gene = $this->genome[$geneName[$pickAGene]];
-        $gene->mutate();
-    }
-
     public function newGeneration() {
-        $this->winningCount = 0;
+        $this->victory = 0;
     }
 
     public function __toString() {
@@ -232,19 +163,7 @@ class Character implements Mutable, Fighter {
             $compil .= $key . ':' . $gene->get() . ' ';
         }
 
-        return $this->getName() . ' ' . $compil . 'win:' . $this->winningCount . ' cost:' . $this->getCost();
-    }
-
-    public function __clone() {
-        $tmp = [];
-        foreach ($this->genome as $key => $gene) {
-            $tmp[$key] = clone $gene;
-        }
-        $this->genome = $tmp;
-    }
-
-    public function getVictory() {
-        return $this->winningCount;
+        return $compil . 'win:' . $this->victory . ' cost:' . $this->getCost();
     }
 
 }

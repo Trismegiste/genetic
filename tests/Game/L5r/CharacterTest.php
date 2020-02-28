@@ -9,7 +9,6 @@ class CharacterTest extends TestCase {
      * @dataProvider getFighter
      */
     public function testCreation($o) {
-        $this->assertEquals("yolo", $o->getName());
         $this->assertEquals('attack', $o->getVoidStrat());
     }
 
@@ -71,8 +70,13 @@ class CharacterTest extends TestCase {
         $o->receiveAttack($attacker);
     }
 
+    protected function createSut(array $param) {
+        $f = new Trismegiste\Genetic\Game\L5r\CharacterFactory();
+        return $f->create($param);
+    }
+
     public function testFailedAttackWithArmorStrat() {
-        $o = new Character("yolo", ['voidStrat' => 'armor']);
+        $o = $this->createSut(['voidStrat' => 'armor']);
         $this->assertEquals('armor', $o->getVoidStrat());
 
         $attacker = $this->createMock(Character::class);
@@ -87,7 +91,7 @@ class CharacterTest extends TestCase {
     }
 
     public function testSuccedAttackWithArmorStrat() {
-        $o = new Character("yolo", ['voidStrat' => 'armor']);
+        $o = $this->createSut(['voidStrat' => 'armor']);
         $this->assertEquals('armor', $o->getVoidStrat());
 
         $attacker = $this->createMock(Character::class);
@@ -120,7 +124,7 @@ class CharacterTest extends TestCase {
     }
 
     public function testAttackWoundsWithSoak() {
-        $o = new Character('yolo', ['voidStrat' => 'soak']);
+        $o = $this->createSut(['voidStrat' => 'soak']);
         $this->assertFalse($o->isDead());
 
         $attacker = $this->createMock(Character::class);
@@ -136,7 +140,7 @@ class CharacterTest extends TestCase {
     }
 
     public function testAttackWoundsWithSoakButDeadAnyway() {
-        $o = new Character('yolo', ['voidStrat' => 'soak']);
+        $o = $this->createSut(['voidStrat' => 'soak']);
         $this->assertFalse($o->isDead());
 
         $attacker = $this->createMock(Character::class);
@@ -166,7 +170,8 @@ class CharacterTest extends TestCase {
 
     // providers
     public function getFighter() {
-        return [[new Character("yolo")]];
+        $f = new Trismegiste\Genetic\Game\L5r\CharacterFactory();
+        return [[$f->create()]];
     }
 
     /**
@@ -188,7 +193,7 @@ class CharacterTest extends TestCase {
      * @dataProvider getFighter
      */
     public function testStringable(Character $o) {
-        $this->assertStringStartsWith("yolo", (string) $o);
+        $this->assertStringStartsWith("agility:", (string) $o);
     }
 
     /**

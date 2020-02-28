@@ -4,6 +4,7 @@ namespace Trismegiste\Genetic\Game\Vda;
 
 use Trismegiste\Genetic\Game\DarwinWorld;
 use Trismegiste\Genetic\Game\Fighter;
+use Trismegiste\Genetic\Game\MutableFighterFactory;
 use Trismegiste\Genetic\Game\PopulationLogger;
 
 /**
@@ -13,7 +14,7 @@ class FreeEvolution extends DarwinWorld {
 
     protected $factory;
 
-    public function __construct(int $size, CharacterFactory $fac, PopulationLogger $log) {
+    public function __construct(int $size, MutableFighterFactory $fac, PopulationLogger $log) {
         $this->factory = $fac;
         $this->logger = $log;
         $this->population = [];
