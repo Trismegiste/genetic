@@ -7,9 +7,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Trismegiste\Genetic\Game\SaWo\Factory;
-use Trismegiste\Genetic\Game\SaWo\FreeEcosystem;
 use Trismegiste\Genetic\Game\GrafxLogger;
+use Trismegiste\Genetic\Game\SaWo\CharacterFactory;
+use Trismegiste\Genetic\Game\SaWo\FreeEcosystem;
 use Trismegiste\Genetic\Game\TextLogger;
 use Trismegiste\Genetic\Util\AnimateXY;
 use Trismegiste\Genetic\Util\PlotterXY;
@@ -54,7 +54,7 @@ class SaWoFree extends Command {
         } else {
             $this->logger = new TextLogger($output, $this->extinctRatio);
         }
-        $this->univers = new FreeEcosystem(new Factory($popSize), $this->logger);
+        $this->univers = new FreeEcosystem($popSize, new CharacterFactory(), $this->logger);
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
