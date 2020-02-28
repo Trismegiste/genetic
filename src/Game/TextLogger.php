@@ -27,6 +27,12 @@ class TextLogger implements PopulationLogger {
         for ($idx = 0; $idx < ($this->viewedRatio * count($pop)); $idx++) {
             $this->console->writeln("$idx - " . $pop[$idx]);
         }
+        // print average cost
+        $sum = array_reduce($pop, function ($carry, $item) {
+            $carry += $item->getCost();
+            return $carry;
+        }, 0);
+        $this->console->writeln("Average Cost = " . $sum / count($pop));
     }
 
     public function endLog() {
