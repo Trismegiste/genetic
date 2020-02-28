@@ -3,11 +3,16 @@
 namespace Trismegiste\Genetic\Game\Vda;
 
 use Trismegiste\Genetic\Game\MutableFighter;
+use Trismegiste\Genetic\Game\MutableFighterFactory;
+use Trismegiste\Genetic\Game\Vda\Property\Ability;
+use Trismegiste\Genetic\Game\Vda\Property\Attribute;
+use Trismegiste\Genetic\Game\Vda\Property\Discipline;
+use Trismegiste\Genetic\Game\Vda\Property\MultipleActionStrat;
 
 /**
  * A factory for Character
  */
-class CharacterFactory implements \Trismegiste\Genetic\Game\MutableFighterFactory {
+class CharacterFactory implements MutableFighterFactory {
 
     const defaultGenome = [
         'strength' => 2,
@@ -32,15 +37,15 @@ class CharacterFactory implements \Trismegiste\Genetic\Game\MutableFighterFactor
         }
 
         $genome = [
-            'strength' => new Property\Attribute($default['strength']),
-            'wits' => new Property\Attribute($default['wits']),
-            'dexterity' => new Property\Attribute($default['dexterity']),
-            'stamina' => new Property\Attribute($default['stamina']),
-            'melee' => new Property\Ability($default['melee']),
-            'action' => new Property\MultipleActionStrat($default['action']),
-            'fortitude' => new Property\Discipline($default['fortitude']),
-            'potence' => new Property\Discipline($default['potence']),
-            'celerity' => new Property\Discipline($default['celerity']),
+            'strength' => new Attribute($default['strength']),
+            'wits' => new Attribute($default['wits']),
+            'dexterity' => new Attribute($default['dexterity']),
+            'stamina' => new Attribute($default['stamina']),
+            'melee' => new Ability($default['melee']),
+            'action' => new MultipleActionStrat($default['action']),
+            'fortitude' => new Discipline($default['fortitude']),
+            'potence' => new Discipline($default['potence']),
+            'celerity' => new Discipline($default['celerity']),
         ];
 
         return new Character($genome);
