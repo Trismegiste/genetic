@@ -4,8 +4,15 @@ namespace test\SaWo;
 
 use PHPUnit\Framework\TestCase;
 use Trismegiste\Genetic\Game\SaWo\Character;
+use Trismegiste\Genetic\Game\SaWo\CharacterFactory;
 
 class CharacterTest extends TestCase {
+
+    protected static $factory;
+
+    public static function setUpBeforeClass() {
+        self::$factory = new CharacterFactory();
+    }
 
     public function factory() {
         return [
@@ -17,25 +24,27 @@ class CharacterTest extends TestCase {
 
     /** @dataProvider factory */
     public function testParry($face, $diff) {
-        $sut = new Character(['fighting' => $face]);
+        $sut = self::$factory->create(['fighting' => $face]);
         $this->assertEquals($diff, $sut->getParry());
     }
 
     /** @dataProvider factory */
     public function testWildParry($face, $diff) {
-        $sut = new Character(['attack' => 'wild', 'fighting' => $face]);
+        $sut = self::$factory->create(['attack' => 'wild', 'fighting' => $face]);
         $this->assertEquals($diff - 2, $sut->getParry());
     }
 
     /** @dataProvider factory */
     public function testToughness($face, $diff) {
-        $sut = new Character(['vigor' => $face]);
+        $sut = self::$factory->create(['vigor' => $face]);
         $this->assertEquals($diff, $sut->getToughness());
     }
 
     /** @dataProvider factoryFight */
     public function testFailedAttack($sut) {
-        $attacker = $this->getMockBuilder(Character::class)->getMock();
+        $attacker = $this->getMockBuilder(Character::class)
+                ->setConstructorArgs([[]])
+                ->getMock();
         $attacker->expects($this->once())
                 ->method('getAttack')
                 ->willReturn(5);
@@ -46,13 +55,16 @@ class CharacterTest extends TestCase {
     }
 
     public function factoryFight() {
-        $sut = new Character(['fighting' => 8]);
+        $f = new CharacterFactory();
+        $sut = $f->create(['fighting' => 8]);
         return [[$sut]];
     }
 
     /** @dataProvider factoryFight */
     public function testSuccessAttackNoDamage($sut) {
-        $attacker = $this->getMockBuilder(Character::class)->getMock();
+        $attacker = $this->getMockBuilder(Character::class)
+                ->setConstructorArgs([[]])
+                ->getMock();
         $attacker->expects($this->once())
                 ->method('getAttack')
                 ->willReturn(6);
@@ -66,7 +78,9 @@ class CharacterTest extends TestCase {
 
     /** @dataProvider factoryFight */
     public function testSuccessAttackShaken($sut) {
-        $attacker = $this->getMockBuilder(Character::class)->getMock();
+        $attacker = $this->getMockBuilder(Character::class)
+                ->setConstructorArgs([[]])
+                ->getMock();
         $attacker->expects($this->once())
                 ->method('getAttack')
                 ->willReturn(6);
@@ -81,7 +95,9 @@ class CharacterTest extends TestCase {
 
     /** @dataProvider factoryFight */
     public function testSuccessAttackWound($sut) {
-        $attacker = $this->getMockBuilder(Character::class)->getMock();
+        $attacker = $this->getMockBuilder(Character::class)
+                ->setConstructorArgs([[]])
+                ->getMock();
         $attacker->expects($this->once())
                 ->method('getAttack')
                 ->willReturn(6);
@@ -96,7 +112,10 @@ class CharacterTest extends TestCase {
 
     /** @dataProvider factoryFight */
     public function testSuccessAttack3Wound($sut) {
-        $attacker = $this->getMockBuilder(Character::class)->getMock();
+        $attacker = $this->getMockBuilder(Character::class)
+                ->setConstructorArgs([[]])
+                ->getMock();
+
         $attacker->expects($this->once())
                 ->method('getAttack')
                 ->willReturn(6);
@@ -139,7 +158,9 @@ class CharacterTest extends TestCase {
 
     /** @dataProvider factoryFight */
     public function testRestart(Character $sut) {
-        $attacker = $this->getMockBuilder(Character::class)->getMock();
+        $attacker = $this->getMockBuilder(Character::class)
+                ->setConstructorArgs([[]])
+                ->getMock();
         $attacker->expects($this->once())
                 ->method('getAttack')
                 ->willReturn(12);
@@ -157,7 +178,7 @@ class CharacterTest extends TestCase {
     }
 
     public function testCost() {
-        $sut = new Character();
+        $sut = self::$factory->create();
         $this->assertEquals(9, $sut->getCost());
     }
 

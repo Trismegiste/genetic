@@ -2,13 +2,14 @@
 
 namespace Trismegiste\Genetic\Game\SaWo;
 
-use Trismegiste\Genetic\Game\Mutable;
+use RuntimeException;
 use Trismegiste\Genetic\Game\Fighter;
+use Trismegiste\Genetic\Game\MutableFighter;
 
 /**
  * A SaWo character
  */
-class Character implements Mutable, Fighter {
+class Character extends MutableFighter {
 
     protected $wound = 0;
     protected $fighting = 6;
@@ -19,70 +20,12 @@ class Character implements Mutable, Fighter {
     protected $shaken = false;
     protected $weapon = 8;
 
-    public function __construct($param = []) {
-        $default = [
-            'agility' => 6,
-            'fighting' => 6,
-            'vigor' => 6,
-            'strength' => 6,
-            'spirit' => 6,
-            'benny' => 'attack',
-            'block' => 0,
-            'trademark' => 0,
-            'attack' => 'standard'
-        ];
-
-        // override
-        foreach ($param as $key => $val) {
-            if (array_key_exists($key, $default)) {
-                $default[$key] = $val;
-            }
-        }
-
-        $agility = new Property\Attribute($default['agility']);
-        $this->genome = [
-            'agility' => $agility,
-            'fighting' => new Property\Skill($agility, $default['fighting']),
-            'vigor' => new Property\Attribute($default['vigor']),
-            'strength' => new Property\Attribute($default['strength']),
-            'spirit' => new Property\Attribute($default['spirit']),
-            'benny' => new Property\BennyStrat($default['benny']),
-            'block' => new Property\BlockEdge($default['block']),
-            'trademark' => new Property\TradeWeaponEdge($default['trademark']),
-            'attack' => new Property\AttackStrat($default['attack'])
-        ];
-    }
-
-    public function __clone() {
-        $tmp = [];
-        foreach ($this->genome as $key => $gene) {
-            $tmp[$key] = clone $gene;
-        }
-        $this->genome = $tmp;
-    }
-
     public function getFitness() {
         return $this->victory;
     }
 
-    public function mutate() {
-        $search = mt_rand(0, count($this->genome) - 1);
-        $idx = 0;
-        foreach ($this->genome as $gene) {
-            if ($idx === $search) {
-                $gene->mutate();
-                break;
-            }
-            $idx++;
-        }
-    }
-
     public function newGeneration() {
         $this->victory = 0;
-    }
-
-    public function incVictory() {
-        $this->victory++;
     }
 
     public function isDead() {
@@ -142,7 +85,7 @@ class Character implements Mutable, Fighter {
 
     protected function useBenny() {
         if (!$this->hasBenny()) {
-            throw new \RuntimeException("No more benny to use");
+            throw new RuntimeException("No more benny to use");
         }
         $this->usedBenny++;
     }
@@ -165,10 +108,6 @@ class Character implements Mutable, Fighter {
         $this->shaken = false;
     }
 
-    public function getVictory() {
-        return $this->victory;
-    }
-
     public function getParry() {
         return $this->genome['fighting']->getDifficulty() +
                 $this->genome['block']->get() -
@@ -177,15 +116,6 @@ class Character implements Mutable, Fighter {
 
     public function getToughness() {
         return $this->genome['vigor']->getDifficulty();
-    }
-
-    public function getCost() {
-        $cost = 0;
-        foreach ($this->genome as $gene) {
-            $cost += $gene->getCost();
-        }
-
-        return $cost;
     }
 
     public function __toString() {
