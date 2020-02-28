@@ -35,14 +35,8 @@ class FreeEvolution extends DarwinWorld {
         return $pc1->isDead() ? $pc2 : $pc1;
     }
 
-    protected function selectAndMutate($extinctRatio) {
-        $extinctCount = $extinctRatio * $this->getSize();
-        for ($idx = 0; $idx < $extinctCount; $idx++) {
-            $partnerIdx = $this->getSize() - 1 - $idx;
-            $child = $this->factory->createSpawn([$this->population[$idx], $this->population[$partnerIdx]]);
-            $child->mutate();
-            $this->population[$partnerIdx] = $child;
-        }
+    protected function selectPopulation(float $extinctRatio) {
+        $this->crossingAndMutateStrategy($extinctRatio);
     }
 
 }

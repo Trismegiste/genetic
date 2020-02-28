@@ -65,9 +65,28 @@ abstract class DarwinWorld {
             return $b->getFitness() - $a->getFitness();
         });
 
-        $this->selectAndMutate($extinctRatio);
+        $this->selectPopulation($extinctRatio);
 
         $this->logger->log($this->population);
+    }
+
+    /**
+     * Selection processus for the population
+     */
+    abstract protected function selectPopulation(float $extinctRatio);
+
+    /**
+     * Kills the worst fitted PC and replaces them with children from the worst and best PC and mutate
+     * @param float $extinctRatio
+     */
+    protected function crossingAndMutateStrategy(float $extinctRatio) {
+        $extinctCount = $extinctRatio * $this->getSize();
+        for ($idx = 0; $idx < $extinctCount; $idx++) {
+            $partnerIdx = $this->getSize() - 1 - $idx;
+            $child = $this->factory->createSpawn([$this->population[$idx], $this->population[$partnerIdx]]);
+            $child->mutate();
+            $this->population[$partnerIdx] = $child;
+        }
     }
 
     /**
@@ -75,7 +94,7 @@ abstract class DarwinWorld {
      * @param float $extinctRatio A ratio between [0,1]
      * @see class::evolve()
      */
-    protected function selectAndMutate($extinctRatio) {
+    protected function cloneAndMutateStrategy(float $extinctRatio) {
         $extinctIdx = (1 - $extinctRatio) * $this->getSize();
         // select & mutate
         foreach ($this->population as $idx => $pc) {

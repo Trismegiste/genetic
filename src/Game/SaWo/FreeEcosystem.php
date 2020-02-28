@@ -21,4 +21,8 @@ class FreeEcosystem extends DarwinWorld {
         return $player;
     }
 
+    protected function selectPopulation(float $extinctRatio) {
+        $this->crossingAndMutateStrategy($extinctRatio);
+    }
+
 }
