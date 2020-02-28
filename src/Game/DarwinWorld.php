@@ -11,13 +11,18 @@ abstract class DarwinWorld {
     /** @var Mutable */
     protected $population = [];
     protected $logger;
+    protected $factory;
 
     /**
      * Ctor
      */
-    public function __construct(PopulationFactory $fac, PopulationLogger $log) {
-        $this->population = $fac->create();
+    public function __construct(int $size, MutableFighterFactory $fac, PopulationLogger $log) {
+        $this->factory = $fac;
         $this->logger = $log;
+        $this->population = [];
+        for ($k = 0; $k < $size; $k++) {
+            $this->population[] = $fac->createRandom();
+        }
     }
 
     /**

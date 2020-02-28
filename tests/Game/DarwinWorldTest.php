@@ -2,8 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 use Trismegiste\Genetic\Game\DarwinWorld;
-use Trismegiste\Genetic\Game\Mutable;
-use Trismegiste\Genetic\Game\PopulationFactory;
+use Trismegiste\Genetic\Game\MutableFighter;
+use Trismegiste\Genetic\Game\MutableFighterFactory;
 use Trismegiste\Genetic\Game\PopulationLogger;
 
 /**
@@ -11,11 +11,21 @@ use Trismegiste\Genetic\Game\PopulationLogger;
  */
 class DarwinWorldTest extends TestCase {
 
+    const popSize = 10;
+
     protected function getFactoryMock() {
-        $factory = $this->getMockForAbstractClass(PopulationFactory::class);
-        $factory->expects($this->once())
-                ->method('create')
-                ->willReturn([$this->getMockForAbstractClass(Mutable::class)]);
+        $factory = $this->getMockBuilder(MutableFighterFactory::class)
+                ->enableOriginalConstructor()
+                ->getMock();
+        $pc = $this->getMockBuilder(MutableFighter::class)
+                ->setConstructorArgs([[]])
+                ->getMock();
+        $pc->expects($this->any())
+                ->method('isDead')
+                ->willReturn(true);
+        $factory->expects($this->exactly(self::popSize))
+                ->method('createRandom')
+                ->willReturn($pc);
 
         return $factory;
     }
@@ -24,8 +34,8 @@ class DarwinWorldTest extends TestCase {
         $factory = $this->getFactoryMock();
         $log = $this->getMockForAbstractClass(PopulationLogger::class);
 
-        $sut = $this->getMockForAbstractClass(DarwinWorld::class, [$factory, $log]);
-        $this->assertEquals(1, $sut->getSize());
+        $sut = $this->getMockForAbstractClass(DarwinWorld::class, [self::popSize, $factory, $log]);
+        $this->assertEquals(self::popSize, $sut->getSize());
     }
 
     public function testEvolve() {
@@ -33,7 +43,7 @@ class DarwinWorldTest extends TestCase {
         $log = $this->getMockForAbstractClass(PopulationLogger::class);
 
         $sut = $this->getMockBuilder(DarwinWorld::class)
-                ->setConstructorArgs([$factory, $log])
+                ->setConstructorArgs([self::popSize, $factory, $log])
                 ->getMockForAbstractClass();
         $sut->evolve(3, 0.5);
     }
