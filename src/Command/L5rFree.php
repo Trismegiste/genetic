@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Trismegiste\Genetic\Game\AggregateLogger;
 use Trismegiste\Genetic\Game\GrafxLogger;
 use Trismegiste\Genetic\Game\L5r\CharacterFactory;
 use Trismegiste\Genetic\Game\L5r\Ecosystem;
@@ -45,16 +46,16 @@ class L5rFree extends Command {
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
         $plotFile = $input->getOption('plot');
 
+        $this->logger = new AggregateLogger([new TextLogger($output, $this->extinctRatio)]);
         if (!is_null($plotFile)) {
             if ($input->getOption('animate')) {
                 $plotter = new AnimateXY(1920, 1080, $plotFile . '%04d.png');
             } else {
                 $plotter = new PlotterXY(1920, 1080, $plotFile . '.png');
             }
-            $this->logger = new GrafxLogger($output, $this->extinctRatio, $plotter);
-        } else {
-            $this->logger = new TextLogger($output, $this->extinctRatio);
+            $this->logger->push(new GrafxLogger($plotter));
         }
+
         $this->univers = new Ecosystem($popSize, new CharacterFactory(), $this->logger);
     }
 

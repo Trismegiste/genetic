@@ -9,7 +9,7 @@ class AggregateLogger implements PopulationLogger {
 
     protected $logger;
 
-    public function __construct(array $log) {
+    public function __construct(array $log = []) {
         foreach ($log as $idx => $item) {
             if (!($item instanceof PopulationLogger)) {
                 throw new \InvalidArgumentException("Logger $idx is not a PopulationLogger");
@@ -28,6 +28,10 @@ class AggregateLogger implements PopulationLogger {
         foreach ($this->logger as $log) {
             $log->log($pop);
         }
+    }
+
+    public function push(PopulationLogger $log) {
+        $this->logger[] = $log;
     }
 
 }
