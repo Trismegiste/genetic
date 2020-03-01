@@ -2,20 +2,10 @@
 
 namespace Trismegiste\Genetic\Command;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Trismegiste\Genetic\Game\AggregateLogger;
-use Trismegiste\Genetic\Game\FileLogger;
-use Trismegiste\Genetic\Game\GrafxLogger;
 use Trismegiste\Genetic\Game\L5r\CharacterFactory;
 use Trismegiste\Genetic\Game\L5r\Ecosystem;
-use Trismegiste\Genetic\Game\StatLogger;
-use Trismegiste\Genetic\Game\TextLogger;
-use Trismegiste\Genetic\Util\AnimateXY;
-use Trismegiste\Genetic\Util\PlotterXY;
 
 /**
  * Free evolution
