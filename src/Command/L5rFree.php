@@ -12,7 +12,6 @@ use Trismegiste\Genetic\Game\L5r\Ecosystem;
  */
 class L5rFree extends GameFree {
 
-    // the name of the command
     protected static $defaultName = 'l5r:free';
 
     protected function configure() {
@@ -30,13 +29,11 @@ class L5rFree extends GameFree {
 
         $output->writeln("Free evolution");
 
-        $grafx = [];
         for ($generation = 0; $generation < $maxGeneration; $generation++) {
             $output->writeln("======== Generation $generation ========");
-            $report = $univers->evolve($round, $extinctRatio);
-            $output->writeln($report['text']);
-            $grafx[$generation] = $report['grafx'];
+            $univers->evolve($round, $extinctRatio);
         }
+
         $logger->endLog();
     }
 
