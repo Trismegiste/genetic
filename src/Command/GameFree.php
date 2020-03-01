@@ -9,8 +9,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\AggregateLogger;
+use Trismegiste\Genetic\Game\DarwinWorld;
 use Trismegiste\Genetic\Game\FileLogger;
 use Trismegiste\Genetic\Game\GrafxLogger;
+use Trismegiste\Genetic\Game\MutableFighterFactory;
+use Trismegiste\Genetic\Game\PopulationLogger;
 use Trismegiste\Genetic\Game\StatLogger;
 use Trismegiste\Genetic\Game\TextLogger;
 use Trismegiste\Genetic\Util\AnimateXY;
@@ -67,4 +70,26 @@ abstract class GameFree extends Command {
         return $logger;
     }
 
+    public function execute(InputInterface $input, OutputInterface $output) {
+        $popSize = $input->getArgument('popSize');
+        $maxGeneration = $input->getArgument('maxIter');
+        $round = $input->getOption('round');
+        $extinctRatio = $input->getOption('extinct') / 100.0;
+        $logger = $this->buildLogger($input, $output);
+        $factory = $this->buildFactory();
+        $univers = $this->buildWorld($popSize, $factory, $logger);
+
+        $output->writeln("Free evolution");
+
+        for ($generation = 0; $generation < $maxGeneration; $generation++) {
+            $output->writeln("======== Generation $generation ========");
+            $univers->evolve($round, $extinctRatio);
+        }
+
+        $logger->endLog();
+    }
+
+    abstract protected function buildFactory(): MutableFighterFactory;
+
+    abstract protected function buildWorld(int $n, MutableFighterFactory $fac, PopulationLogger $log): DarwinWorld;
 }

@@ -2,8 +2,9 @@
 
 namespace Trismegiste\Genetic\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Trismegiste\Genetic\Game\DarwinWorld;
+use Trismegiste\Genetic\Game\MutableFighterFactory;
+use Trismegiste\Genetic\Game\PopulationLogger;
 use Trismegiste\Genetic\Game\Vda\CharacterFactory;
 use Trismegiste\Genetic\Game\Vda\FreeEvolution;
 
@@ -19,22 +20,12 @@ class VdaFree extends GameFree {
         $this->setDescription("Compute free evolution for VDA");
     }
 
-    public function execute(InputInterface $input, OutputInterface $output) {
-        $popSize = $input->getArgument('popSize');
-        $maxGeneration = $input->getArgument('maxIter');
-        $round = $input->getOption('round');
-        $extinctRatio = $input->getOption('extinct') / 100.0;
-        $logger = $this->buildLogger($input, $output);
-        $univers = new FreeEvolution($popSize, new CharacterFactory(), $logger);
+    protected function buildFactory(): MutableFighterFactory {
+        return new CharacterFactory();
+    }
 
-        $output->writeln("Free evolution");
-
-        for ($generation = 0; $generation < $maxGeneration; $generation++) {
-            $output->writeln("======== Generation $generation ========");
-            $univers->evolve($round, $extinctRatio);
-        }
-
-        $logger->endLog();
+    protected function buildWorld(int $n, MutableFighterFactory $fac, PopulationLogger $log): DarwinWorld {
+        return new FreeEvolution($n, $fac, $log);
     }
 
 }

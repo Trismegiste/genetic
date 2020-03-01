@@ -2,10 +2,11 @@
 
 namespace Trismegiste\Genetic\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Trismegiste\Genetic\Game\DarwinWorld;
 use Trismegiste\Genetic\Game\L5r\CharacterFactory;
 use Trismegiste\Genetic\Game\L5r\Ecosystem;
+use Trismegiste\Genetic\Game\MutableFighterFactory;
+use Trismegiste\Genetic\Game\PopulationLogger;
 
 /**
  * Free evolution
@@ -19,22 +20,12 @@ class L5rFree extends GameFree {
         $this->setDescription("Compute free evolution for L5R");
     }
 
-    public function execute(InputInterface $input, OutputInterface $output) {
-        $popSize = $input->getArgument('popSize');
-        $maxGeneration = $input->getArgument('maxIter');
-        $round = $input->getOption('round');
-        $extinctRatio = $input->getOption('extinct') / 100.0;
-        $logger = $this->buildLogger($input, $output);
-        $univers = new Ecosystem($popSize, new CharacterFactory(), $logger);
+    protected function buildFactory(): MutableFighterFactory {
+        return new CharacterFactory();
+    }
 
-        $output->writeln("Free evolution");
-
-        for ($generation = 0; $generation < $maxGeneration; $generation++) {
-            $output->writeln("======== Generation $generation ========");
-            $univers->evolve($round, $extinctRatio);
-        }
-
-        $logger->endLog();
+    protected function buildWorld(int $n, MutableFighterFactory $fac, PopulationLogger $log): DarwinWorld {
+        return new Ecosystem($n, $fac, $log);
     }
 
 }
