@@ -49,10 +49,10 @@ abstract class GameFree extends Command {
 
         $logger = new AggregateLogger([new TextLogger($output, $extinctRatio)]);
         if ($input->getOption('dump')) {
-            $this->logger->push(new FileLogger());
+            $logger->push(new FileLogger());
         }
         if ($input->getOption('stat')) {
-            $this->logger->push(new StatLogger($output));
+            $logger->push(new StatLogger($output));
         }
         if (!is_null($plotFile)) {
             if ($input->getOption('animate')) {
@@ -60,7 +60,7 @@ abstract class GameFree extends Command {
             } else {
                 $plotter = new PlotterXY(1920, 1080, $plotFile . '.png');
             }
-            $this->logger->push(new GrafxLogger($plotter));
+            $logger->push(new GrafxLogger($plotter));
         }
 
         return $logger;

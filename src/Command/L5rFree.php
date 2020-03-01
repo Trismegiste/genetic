@@ -20,66 +20,34 @@ use Trismegiste\Genetic\Util\PlotterXY;
 /**
  * Free evolution
  */
-class L5rFree extends Command {
+class L5rFree extends GameFree {
 
     // the name of the command
     protected static $defaultName = 'l5r:free';
-    protected $round;
-    protected $extinctRatio;
-    protected $univers;
-    protected $maxGeneration;
-    protected $plotFile;
-    protected $logger;
 
     protected function configure() {
-        $this->setDescription("Compute free evolution")
-                ->addArgument('popSize', InputArgument::REQUIRED, "Population size")
-                ->addArgument('maxIter', InputArgument::REQUIRED, "Max iteration")
-                ->addOption('round', NULL, InputOption::VALUE_REQUIRED, 'How many round between 2 PC', 5)
-                ->addOption('extinct', NULL, InputOption::VALUE_REQUIRED, 'Percentage of how many population are extinct between generation', 5)
-                ->addOption('plot', NULL, InputOption::VALUE_REQUIRED, 'File name of plotting PNG picture')
-                ->addOption('animate', NULL, InputOption::VALUE_NONE, 'Multiple PNG file for animation')
-                ->addOption('stat', NULL, InputOption::VALUE_NONE, 'Create stats file')
-                ->addOption('dump', NULL, InputOption::VALUE_NONE, 'Dump all data');
-    }
-
-    public function initialize(InputInterface $input, OutputInterface $output) {
-        $popSize = $input->getArgument('popSize');
-        $this->maxGeneration = $input->getArgument('maxIter');
-        $this->round = $input->getOption('round');
-        $this->extinctRatio = $input->getOption('extinct') / 100.0;
-        $plotFile = $input->getOption('plot');
-
-        $this->logger = new AggregateLogger([new TextLogger($output, $this->extinctRatio)]);
-        if ($input->getOption('dump')) {
-            $this->logger->push(new FileLogger());
-        }
-        if ($input->getOption('stat')) {
-            $this->logger->push(new StatLogger($output));
-        }
-        if (!is_null($plotFile)) {
-            if ($input->getOption('animate')) {
-                $plotter = new AnimateXY(1920, 1080, $plotFile . '%04d.png');
-            } else {
-                $plotter = new PlotterXY(1920, 1080, $plotFile . '.png');
-            }
-            $this->logger->push(new GrafxLogger($plotter));
-        }
-
-        $this->univers = new Ecosystem($popSize, new CharacterFactory(), $this->logger);
+        parent::configure();
+        $this->setDescription("Compute free evolution for L5R");
     }
 
     public function execute(InputInterface $input, OutputInterface $output) {
+        $popSize = $input->getArgument('popSize');
+        $maxGeneration = $input->getArgument('maxIter');
+        $round = $input->getOption('round');
+        $extinctRatio = $input->getOption('extinct') / 100.0;
+        $logger = $this->buildLogger($input, $output);
+        $univers = new Ecosystem($popSize, new CharacterFactory(), $logger);
+
         $output->writeln("Free evolution");
 
         $grafx = [];
-        for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
+        for ($generation = 0; $generation < $maxGeneration; $generation++) {
             $output->writeln("======== Generation $generation ========");
-            $report = $this->univers->evolve($this->round, $this->extinctRatio);
+            $report = $univers->evolve($round, $extinctRatio);
             $output->writeln($report['text']);
             $grafx[$generation] = $report['grafx'];
         }
-        $this->logger->endLog();
+        $logger->endLog();
     }
 
 }
