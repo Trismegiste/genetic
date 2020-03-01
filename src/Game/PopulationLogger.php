@@ -7,6 +7,10 @@ namespace Trismegiste\Genetic\Game;
  */
 interface PopulationLogger {
 
+    /**
+     * Log a population
+     * @param array $pop un tableau de MutableFighter classés par Victory décroissant
+     */
     public function log(array& $pop);
 
     public function endLog();
