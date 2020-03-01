@@ -72,12 +72,16 @@ abstract class DarwinWorld {
 
     /**
      * Selection processus for the population
+     * Create your own selection process or use one the two method below
+     * @see crossingAndMutateStrategy()
+     * @see cloneAndMutateStrategy()
      */
     abstract protected function selectPopulation(float $extinctRatio);
 
     /**
-     * Kills the worst fitted PC and replaces them with children from the worst and best PC and mutate
+     * Kills the worst fitted PC and replaces them with mutated children from the worst and best PC
      * @param float $extinctRatio
+     * @see selectPopulation()
      */
     protected function crossingAndMutateStrategy(float $extinctRatio) {
         $extinctCount = $extinctRatio * $this->getSize();
@@ -90,9 +94,9 @@ abstract class DarwinWorld {
     }
 
     /**
-     * Kills the worst fitted PC and replaces them with best fitted PC with mutation
+     * Kills the worst fitted PC and replaces them with mutated clones of the best fitted PC
      * @param float $extinctRatio A ratio between [0,1]
-     * @see class::evolve()
+     * @see selectPopulation()
      */
     protected function cloneAndMutateStrategy(float $extinctRatio) {
         $extinctIdx = (1 - $extinctRatio) * $this->getSize();
