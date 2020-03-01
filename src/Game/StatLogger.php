@@ -10,9 +10,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class StatLogger implements PopulationLogger {
 
     protected $console;
+    protected $percentile;
 
-    public function __construct(OutputInterface $out) {
+    public function __construct(OutputInterface $out, float $percentile = 0.1) {
         $this->console = $out;
+        $this->percentile = $percentile;
     }
 
     public function endLog() {
@@ -30,7 +32,7 @@ class StatLogger implements PopulationLogger {
         $medianWin = $medianCost = 0;
         $minCost = $maxCost = $totalCost / $card;
         $idx = 0;
-        while ($medianWin < ($totalWin / 2)) {
+        while ($medianWin < ($totalWin * $this->percentile)) {
             $pc = $pop[$idx];
             $cost = $pc->getCost();
             if ($cost > $maxCost) {
@@ -44,8 +46,15 @@ class StatLogger implements PopulationLogger {
             $idx++;
         }
 
-        $this->console->writeln(sprintf("Avg win = %.1f / Median win = %.1f", $totalWin / $card, $medianWin / $idx));
-        $this->console->writeln(sprintf("Avg cost = %.1f / Median cost = %.1f / [min,max] = [%d,%d]", $totalCost / $card, $medianCost / $idx, $minCost, $maxCost));
+        $this->console->writeln(sprintf("Avg win = %.1f / Avg of %.0f%% best win = %.1f (%.0f%% of population)"
+                        , $totalWin / $card
+                        , $this->percentile * 100
+                        , $medianWin / $idx
+                        , 100 * $idx / $card));
+        $this->console->writeln(sprintf("Avg cost = %.1f / Avg cost of best win = %.1f / [min,max] = [%d,%d]"
+                        , $totalCost / $card
+                        , $medianCost / $idx
+                        , $minCost, $maxCost));
     }
 
 }
