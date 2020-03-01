@@ -11,14 +11,17 @@ class StatLogger implements PopulationLogger {
 
     protected $console;
     protected $percentile;
+    protected $handle;
 
     public function __construct(OutputInterface $out, float $percentile = 0.1) {
         $this->console = $out;
         $this->percentile = $percentile;
+        $this->handle = fopen('export.csv', "w");
+        fputcsv($this->handle, ['best victory avg cost', 'min cost', 'max cost']);
     }
 
     public function endLog() {
-        
+        fclose($this->handle);
     }
 
     public function log(array &$pop) {
@@ -55,6 +58,8 @@ class StatLogger implements PopulationLogger {
                         , $totalCost / $card
                         , $medianCost / $idx
                         , $minCost, $maxCost));
+
+        fputcsv($this->handle, [$medianCost / $idx, $minCost, $maxCost]);
     }
 
 }

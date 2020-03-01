@@ -8,9 +8,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\AggregateLogger;
+use Trismegiste\Genetic\Game\FileLogger;
 use Trismegiste\Genetic\Game\GrafxLogger;
 use Trismegiste\Genetic\Game\L5r\CharacterFactory;
 use Trismegiste\Genetic\Game\L5r\Ecosystem;
+use Trismegiste\Genetic\Game\StatLogger;
 use Trismegiste\Genetic\Game\TextLogger;
 use Trismegiste\Genetic\Util\AnimateXY;
 use Trismegiste\Genetic\Util\PlotterXY;
@@ -36,7 +38,9 @@ class L5rFree extends Command {
                 ->addOption('round', NULL, InputOption::VALUE_REQUIRED, 'How many round between 2 PC', 5)
                 ->addOption('extinct', NULL, InputOption::VALUE_REQUIRED, 'Percentage of how many population are extinct between generation', 5)
                 ->addOption('plot', NULL, InputOption::VALUE_REQUIRED, 'File name of plotting PNG picture')
-                ->addOption('animate', NULL, InputOption::VALUE_NONE, 'Multiple PNG file for animation');
+                ->addOption('animate', NULL, InputOption::VALUE_NONE, 'Multiple PNG file for animation')
+                ->addOption('stat', NULL, InputOption::VALUE_NONE, 'Create stats file')
+                ->addOption('dump', NULL, InputOption::VALUE_NONE, 'Dump all data');
     }
 
     public function initialize(InputInterface $input, OutputInterface $output) {
@@ -47,6 +51,12 @@ class L5rFree extends Command {
         $plotFile = $input->getOption('plot');
 
         $this->logger = new AggregateLogger([new TextLogger($output, $this->extinctRatio)]);
+        if ($input->getOption('dump')) {
+            $this->logger->push(new FileLogger());
+        }
+        if ($input->getOption('stat')) {
+            $this->logger->push(new StatLogger($output));
+        }
         if (!is_null($plotFile)) {
             if ($input->getOption('animate')) {
                 $plotter = new AnimateXY(1920, 1080, $plotFile . '%04d.png');
