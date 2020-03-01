@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Trismegiste\Genetic\Game\AggregateLogger;
 use Trismegiste\Genetic\Game\GrafxLogger;
+use Trismegiste\Genetic\Game\StatLogger;
 use Trismegiste\Genetic\Game\TextLogger;
 use Trismegiste\Genetic\Game\Vda\CharacterFactory;
 use Trismegiste\Genetic\Game\Vda\FreeEvolution;
@@ -58,7 +59,7 @@ class VdaFree extends Command {
         $this->extinctRatio = $input->getOption('extinct') / 100.0;
         $plotFile = $input->getOption('plot');
 
-        $this->logger = new AggregateLogger([new TextLogger($output, $this->extinctRatio)]);
+        $this->logger = new AggregateLogger([new TextLogger($output, $this->extinctRatio), new StatLogger($output)]);
         if (!is_null($plotFile)) {
             if ($input->getOption('animate')) {
                 $plotter = new AnimateXY(1920, 1080, $plotFile . '%04d.png');
