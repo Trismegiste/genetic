@@ -45,12 +45,14 @@ You have 3 main tasks :
 # Printing solutions
 
 This app uses 4 different loggers : TextLogger for printing creature, GrafxLogger for viewing the population graphically, 
-StatLogger to estimate if the evolution process is convergent or not. 
+StatLogger to estimate if the evolution process is convergent or not and finally, FileLogger to store population genomes.
+An AggregateLogger is added to aggregate multiple loggers.
 
 # Results
 
 Here's an example with L5r. Running 200 iterations with 1000 characters.
 
+## Command
 ```
 php app.php l5r:free --extinct=1 --round=3 --plot=l5r --animate --stat --dump 1000 200
 ```
@@ -63,12 +65,14 @@ This command means 1% is extinct and replace each iteration.
 1000 creatures
 200 iterations
 
+## Evolution of cost and victory
 Horizontal axis is the genome cost and vertical axis is the victory count for each creatures :
 ![Evolution of population](/doc/l5r-200.gif)
 
 The evolution of average cost for the best creatures (10% of all victories) :
 ![Convergent cost](/doc/l5r-conv.png)
 
+## Best fit
 Final iteration :
 ```
 0 - agility:4 kenjutsu:5 void:2 reflexe:5 earth:2 voidStrat:soak stance:full strength:2 win:445 cost:90
