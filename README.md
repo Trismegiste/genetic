@@ -57,13 +57,13 @@ Here's an example with L5r. Running 200 iterations with 1000 characters.
 php app.php l5r:free --extinct=1 --round=3 --plot=l5r --animate --stat --dump 1000 200
 ```
 
-This command means 1% is extinct and replace each iteration.
-3 rounds are run to estimate which is the best fighter between two.
---plot is the prefix name for image plotting.
---animate option generates multiple images
---stat option prints statistics and creates a CSV file
-1000 creatures
-200 iterations
+* This command means 1% is extinct and replace each iteration.
+* 3 rounds are run to estimate which is the best fighter between two.
+* --plot is the prefix name for image plotting.
+* --animate option generates multiple PNG images (manually compiled with ffmpeg)
+* --stat option prints statistics and creates a CSV file
+* 1000 creatures
+* 200 iterations
 
 ## Evolution of cost and victory
 Horizontal axis is the genome cost and vertical axis is the victory count for each creatures :
