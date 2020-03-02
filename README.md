@@ -14,17 +14,17 @@ This app can simulate the Darwin's theory and find the best creature in a random
 * crossover 
 * and mutation
 
-This app is paticular as it could use gene with different costs and uses an innovative fitness algorithm.
+This app is particular as it could use gene with different costs and uses an innovative fitness algorithm.
 
 # Examples
 
-Configuring a genetic algorithms could be somewhat tediuos so I leave 3 samples in this app.
+Configuring a genetic algorithms could be somewhat tedious so I leave 3 samples in this app.
 Feel free to erase them as you wish. To make a real life challenge I simulate 3 roleplaying game rules
-and select the best character for fight. Of course not all rules are implemented (and need too many genes)
+and select the best character for fight. Of course, not all rules are implemented (and need too many genes)
 
 ## L5r namespace
 
-It simulate the Legend of the Five Rings. In a character, the are gene to simulate traits and skills of course but also void spending stategy ans stances.
+It simulate the Legend of the Five Rings. In a character, the are gene to simulate traits and skills of course but also void spending stategy and stances.
 
 ## SaWo namespace
 
@@ -33,7 +33,7 @@ implement Initiative card.
 
 ## Vda namespace
 
-Vampire Dark Age 20th anniversary. Meele fights with Potence, Celerity and Fortitude. Blood Pool is not simulated.
+Vampire Dark Age 20th anniversary. Melee fights with Potence, Celerity and Fortitude. Blood Pool is not simulated.
 
 # How I add my game ?
 
@@ -44,8 +44,8 @@ You have 3 main tasks :
 
 # Printing solutions
 
-This app uses 4 different loggers : TextLogger for printing creature, GrafxLogger for viewing the population graphically, 
-StatLogger to estimate if the evolution process is convergent or not and finally, FileLogger to store population genomes.
+This app uses 4 different loggers : TextLogger for printing creature, GrafxLogger for viewing the population graphically (requirement: GD2), 
+StatLogger to estimate if the evolution process is convergent or not and finally, FileLogger to store population genomes in files.
 An AggregateLogger is added to aggregate multiple loggers.
 
 # Results
