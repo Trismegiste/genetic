@@ -12,7 +12,15 @@ use Trismegiste\Genetic\Game\PopulationLogger;
 
 class GameFreeTest extends TestCase {
 
-    public function testExecute() {
+    public function dataConfig() {
+        return [
+            'withAnimate' => [true],
+            'oneImage' => [false]
+        ];
+    }
+
+    /** @dataProvider dataConfig */
+    public function testExecute($animate) {
         $application = new Application();
         $application->setAutoExit(false);
         $command = new MockCommand($this);
@@ -24,8 +32,8 @@ class GameFreeTest extends TestCase {
                     'maxIter' => 5,
                     '--round' => 3,
                     '--extinct' => 0.5,
-                    '--plot' => true,
-                    '--animate' => true,
+                    '--plot' => 'tmp',
+                    '--animate' => $animate,
                     '--stat' => true,
                     '--dump' => true
         ]));
