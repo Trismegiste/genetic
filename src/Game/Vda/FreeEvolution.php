@@ -10,7 +10,7 @@ use Trismegiste\Genetic\Game\Fighter;
  */
 class FreeEvolution extends DarwinWorld {
 
-    protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2) {
+    protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2): array {
         $init1 = $pc1->rollInitiative();
         $init2 = $pc2->rollInitiative();
 
@@ -21,7 +21,7 @@ class FreeEvolution extends DarwinWorld {
         return ($init1 > $init2) ? [$pc1, $pc2] : [$pc2, $pc1];
     }
 
-    protected function battle(Fighter $pc1, Fighter $pc2) {
+    protected function battle(Fighter $pc1, Fighter $pc2): Fighter {
         while (!$pc1->isDead() && !$pc2->isDead()) {
             $pc1->startTurn();
             $pc2->startTurn();

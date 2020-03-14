@@ -43,7 +43,7 @@ abstract class DarwinWorld {
      * Getter for population size
      * @return int
      */
-    public function getSize() {
+    public function getSize(): int {
         return count($this->population);
     }
 
@@ -111,7 +111,7 @@ abstract class DarwinWorld {
         }
     }
 
-    protected function evaluateBestFighter($round, Mutable $pc1, Mutable $pc2) {
+    protected function evaluateBestFighter(int $round, Mutable $pc1, Mutable $pc2) {
         $delta = $pc1->getCost() - $pc2->getCost();
 
         $key1 = spl_object_hash($pc1);
@@ -137,7 +137,7 @@ abstract class DarwinWorld {
      * Who strikes first ?
      * @return array [$pc1, $pc2] or [$pc2, $pc1]
      */
-    abstract protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2);
+    abstract protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2): array;
 
     /**
      * Battle between 2 PC
@@ -146,7 +146,7 @@ abstract class DarwinWorld {
      * @param Fighter $pc2
      * @return Fighter the winner
      */
-    protected function battle(Fighter $pc1, Fighter $pc2) {
+    protected function battle(Fighter $pc1, Fighter $pc2): Fighter {
         $player = $this->getInitiativeTurn($pc1, $pc2);
 
         while (!$pc1->isDead() && !$pc2->isDead()) {

@@ -10,7 +10,7 @@ use Trismegiste\Genetic\Game\Fighter;
  */
 class Ecosystem extends DarwinWorld {
 
-    protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2) {
+    protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2): array {
         $player = [];
 
         $init1 = $pc1->rollInit();

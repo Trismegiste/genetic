@@ -10,7 +10,7 @@ use Trismegiste\Genetic\Game\Fighter;
  */
 class FreeEcosystem extends DarwinWorld {
 
-    protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2) {
+    protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2): array {
         $player = [];
         if (mt_rand(0, 1)) {
             $player = [$pc1, $pc2];
