@@ -37,6 +37,19 @@ class GameFreeTest extends TestCase {
                     '--stat' => true,
                     '--dump' => true
         ]));
+
+        if ($animate) {
+            for ($k = 0; $k < 5; $k++) {
+                unlink("tmp000$k.png");
+            }
+        } else {
+            unlink('tmp.png');
+        }
+
+        unlink("export.csv");
+        for ($k = 0; $k < 5; $k++) {
+            unlink("pcdata-000$k.txt");
+        }
     }
 
 }
