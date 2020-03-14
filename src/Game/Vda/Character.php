@@ -25,7 +25,7 @@ class Character extends MutableFighter {
         return ($this->health >= 7) ? -1000 : self::woundPenalty[$this->health];
     }
 
-    public function isDead() {
+    public function isDead(): bool {
         return ($this->health >= 7);
     }
 

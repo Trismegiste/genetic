@@ -12,7 +12,7 @@ class DiceRoller {
      * 
      * @return int
      */
-    static public function rollD10() {
+    static public function rollD10(): int {
         $s = 0;
         do {
             $d = mt_rand(1, 10);
@@ -29,7 +29,7 @@ class DiceRoller {
      * @param int $k
      * @return int the sum
      */
-    static public function rollAndKeep(int $r, int $k) {
+    static public function rollAndKeep(int $r, int $k): int {
         $delta = 0;
         // cap r&k > 10
         if (($r >= 10) && ($k >= 10)) {

@@ -34,7 +34,7 @@ class Character extends MutableFighter {
         $this->wounds += $val;
     }
 
-    public function isDead() {
+    public function isDead(): bool {
         return $this->wounds > (19 * $this->genome['earth']->get());
     }
 

@@ -7,7 +7,7 @@ namespace Trismegiste\Genetic\Game\Vda;
  */
 class PoolRoller {
 
-    static public function roll(int $rating, int $difficulty) {
+    static public function roll(int $rating, int $difficulty): int {
         if ($rating <= 0) {
             return 0;
         }

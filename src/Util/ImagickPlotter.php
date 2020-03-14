@@ -58,7 +58,7 @@ abstract class ImagickPlotter implements ImagePlotter {
      * $c = array($hue, $saturation, $brightness)
      * $hue=[0..360], $saturation=[0..1], $brightness=[0..1]
      */
-    protected function hsv2rgb($h, $s, $v) {
+    protected function hsv2rgb($h, $s, $v): array {
         if ($s == 0) {
             return [$v, $v, $v];
         } else {
