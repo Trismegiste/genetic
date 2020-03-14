@@ -12,8 +12,8 @@ class BennyStratTest extends TestCase {
         return [[new BennyStrat('soak')]];
     }
 
-    /** @expectedException \DomainException */
     public function testInvalidStrat() {
+        $this->expectException(\DomainException::class);
         new BennyStrat(0);
     }
 

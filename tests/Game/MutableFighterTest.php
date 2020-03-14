@@ -2,8 +2,8 @@
 
 class MutableFighterTest extends \PHPUnit\Framework\TestCase {
 
-    /** @expectedException \InvalidArgumentException */
     public function testBadParameter() {
+        $this->expectException(\InvalidArgumentException::class);
         $this->getMockBuilder(\Trismegiste\Genetic\Game\MutableFighter::class)
                 ->setConstructorArgs([['yolo' => new \stdClass]])
                 ->getMock();

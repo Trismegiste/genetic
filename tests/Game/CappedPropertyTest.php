@@ -5,8 +5,8 @@ use Trismegiste\Genetic\Game\CappedProperty;
 
 class CappedPropertyTest extends TestCase {
 
-    /** @expectedException \OutOfBoundsException */
     public function testBounderiesConstructor() {
+        $this->expectException(\OutOfBoundsException::class);
         $this->getMockForAbstractClass(CappedProperty::class, [555, 1, 10]);
     }
 

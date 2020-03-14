@@ -24,18 +24,18 @@ class SaWoTraitTest extends TestCase {
         $this->assertEquals($expect, $sut->get());
     }
 
-    /** @expectedException \DomainException */
     public function testInvalidDice5() {
+        $this->expectException(\DomainException::class);
         $this->buildMock(5);
     }
 
-    /** @expectedException \DomainException */
     public function testInvalidDice3() {
+        $this->expectException(\DomainException::class);
         $this->buildMock(3);
     }
 
-    /** @expectedException \DomainException */
     public function testInvalidDice13() {
+        $this->expectException(\DomainException::class);
         $this->buildMock(13);
     }
 

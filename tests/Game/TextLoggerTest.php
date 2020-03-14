@@ -12,9 +12,7 @@ class TextLoggerTest extends TestCase {
         $out = $this->getMockForAbstractClass(OutputInterface::class);
         $out->expects($this->exactly($n))
                 ->method('writeln');
-        $pc = $this->getMockBuilder(Mutable::class)
-                ->setConstructorArgs([[]])
-                ->getMock();
+        $pc = $this->createStub(Mutable::class);
 
         $sut = new TextLogger($out, 0.5); // print half population
         $pop = array_fill(0, 2 * $n, $pc);

@@ -10,7 +10,7 @@ class CharacterTest extends TestCase {
 
     protected static $factory;
 
-    public static function setUpBeforeClass() {
+    public static function setUpBeforeClass(): void {
         self::$factory = new CharacterFactory();
     }
 

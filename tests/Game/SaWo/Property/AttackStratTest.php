@@ -12,8 +12,8 @@ class AttackStratTest extends TestCase {
         return [[new AttackStrat('wild')]];
     }
 
-    /** @expectedException \DomainException */
     public function testInvalidStrat() {
+        $this->expectException(\DomainException::class);
         new AttackStrat('yolo');
     }
 
