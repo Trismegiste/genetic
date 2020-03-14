@@ -28,7 +28,7 @@ class Character extends MutableFighter {
         $this->victory = 0;
     }
 
-    public function isDead() {
+    public function isDead(): bool {
         return $this->wound > 3;
     }
 
@@ -79,7 +79,7 @@ class Character extends MutableFighter {
         }
     }
 
-    protected function roll($trait) {
+    protected function roll(string $trait): int {
         return DiceRoller::rollJoker($this->genome[$trait]) + $this->getWoundsPenalty();
     }
 
@@ -90,7 +90,7 @@ class Character extends MutableFighter {
         $this->usedBenny++;
     }
 
-    protected function hasBenny() {
+    protected function hasBenny(): bool {
         return $this->usedBenny < $this->benniesCount;
     }
 
@@ -114,7 +114,7 @@ class Character extends MutableFighter {
                 $this->genome['attack']->getBonus();
     }
 
-    public function getToughness() {
+    public function getToughness(): int {
         return $this->genome['vigor']->getDifficulty();
     }
 
@@ -155,7 +155,7 @@ class Character extends MutableFighter {
         return $roll;
     }
 
-    protected function rollFighting() {
+    protected function rollFighting(): int {
         return $this->roll('fighting') + $this->genome['trademark']->get() + $this->genome['attack']->getBonus();
     }
 
@@ -163,7 +163,7 @@ class Character extends MutableFighter {
         return -$this->wound;
     }
 
-    public function isShaken() {
+    public function isShaken(): bool {
         return $this->shaken;
     }
 

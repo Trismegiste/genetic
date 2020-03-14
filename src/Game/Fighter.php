@@ -11,7 +11,7 @@ interface Fighter {
 
     public function incVictory();
 
-    public function isDead();
+    public function isDead(): bool;
 
     public function receiveAttack(Fighter $pc);
 
