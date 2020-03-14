@@ -87,6 +87,8 @@ abstract class GameFree extends Command {
         }
 
         $logger->endLog();
+
+        return 0;
     }
 
     abstract protected function buildFactory(): MutableFighterFactory;

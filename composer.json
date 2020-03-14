@@ -3,7 +3,7 @@
     "description": "Pet project",
     "type": "project",
     "require": {
-        "symfony/console": "^3.4"
+        "symfony/console": "^5"
     },
     "license": "MIT",
     "authors": [

@@ -53,6 +53,8 @@ class L5rCompare extends Command {
             $output->writeln($report);
             $output->writeln("-");
         }
+        
+        return 0;
     }
 
 }
