@@ -29,11 +29,12 @@ class StatLogger implements PopulationLogger {
         $totalWin = $totalCost = 0;
         foreach ($pop as $pc) {
             $totalCost += $pc->getCost();
-            $totalWin += $pc->getVictory();
+            $totalWin += $pc->getVictory();        
         }
 
         $medianWin = $medianCost = 0;
-        $minCost = $maxCost = $totalCost / $card;
+        $minCost = $totalCost;
+        $maxCost = 0;
         $idx = 0;
         while ($medianWin < ($totalWin * $this->percentile)) {
             $pc = $pop[$idx];
