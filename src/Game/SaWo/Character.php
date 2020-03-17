@@ -167,4 +167,11 @@ class Character extends MutableFighter {
         return $this->shaken;
     }
 
+    public function getInitiative() {
+        $first = $this->genome['levelhead']->drawCard();
+        $init = $this->genome['quick']->retryCard($first);
+
+        return $init;
+    }
+
 }

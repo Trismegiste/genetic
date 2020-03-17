@@ -8,6 +8,8 @@ use Trismegiste\Genetic\Game\SaWo\Property\AttackStrat;
 use Trismegiste\Genetic\Game\SaWo\Property\Attribute;
 use Trismegiste\Genetic\Game\SaWo\Property\BennyStrat;
 use Trismegiste\Genetic\Game\SaWo\Property\BlockEdge;
+use Trismegiste\Genetic\Game\SaWo\Property\LevelHeadedEdge;
+use Trismegiste\Genetic\Game\SaWo\Property\QuickEdge;
 use Trismegiste\Genetic\Game\SaWo\Property\Skill;
 use Trismegiste\Genetic\Game\SaWo\Property\TradeWeaponEdge;
 
@@ -22,7 +24,9 @@ class CharacterFactory implements MutableFighterFactory {
         'benny' => 'attack',
         'block' => 0,
         'trademark' => 0,
-        'attack' => 'standard'
+        'attack' => 'standard',
+        'levelhead' => 0,
+        'quick' => false
     ];
 
     public function create(array $param = array()): MutableFighter {
@@ -45,7 +49,9 @@ class CharacterFactory implements MutableFighterFactory {
             'benny' => new BennyStrat($default['benny']),
             'block' => new BlockEdge($default['block']),
             'trademark' => new TradeWeaponEdge($default['trademark']),
-            'attack' => new AttackStrat($default['attack'])
+            'attack' => new AttackStrat($default['attack']),
+            'levelhead' => new LevelHeadedEdge($default['levelhead']),
+            'quick' => new QuickEdge($default['quick'])
         ];
 
         return new Character($genome);
@@ -61,7 +67,9 @@ class CharacterFactory implements MutableFighterFactory {
                     'benny' => BennyStrat::getRandomStrat(),
                     'block' => mt_rand(0, 2),
                     'trademark' => mt_rand(0, 2),
-                    'attack' => AttackStrat::getRandomStrat()
+                    'attack' => AttackStrat::getRandomStrat(),
+                    'levelhead' => mt_rand(0, 2),
+                    'quick' => (bool) mt_rand(0, 1),
         ]);
     }
 
