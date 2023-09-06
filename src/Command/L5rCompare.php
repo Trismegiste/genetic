@@ -48,9 +48,8 @@ class L5rCompare extends Command {
 
             for ($generation = 0; $generation < $this->maxGeneration; $generation++) {
                 $output->writeln("======== Generation $generation ========");
-                $report = $univers->evolve($this->round, $this->extinctRatio);
+                $univers->evolve($this->round, $this->extinctRatio);
             }
-            $output->writeln($report);
             $output->writeln("-");
         }
         
