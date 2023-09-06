@@ -13,7 +13,7 @@ class ComparedEcosystemTest extends TestCase {
     public function testGetSize() {
         $log = $this->getMockForAbstractClass(PopulationLogger::class);
 
-        $sut = new ComparedEcosystem(10, new \Trismegiste\Genetic\Game\L5r\CharacterFactory(10), $log, [], 0.5);
+        $sut = new ComparedEcosystem(10, new \Trismegiste\Genetic\Game\L5r\CharacterFactory(10), $log, [], 5);
         $this->assertEquals(10, $sut->getSize());
     }
 
@@ -21,7 +21,7 @@ class ComparedEcosystemTest extends TestCase {
         $log = $this->getMockForAbstractClass(PopulationLogger::class);
         $log->expects($this->atLeastOnce())
                 ->method('log');
-        $sut = new ComparedEcosystem(10, new \Trismegiste\Genetic\Game\L5r\CharacterFactory(10), $log, [], 0.5);
+        $sut = new ComparedEcosystem(10, new \Trismegiste\Genetic\Game\L5r\CharacterFactory(10), $log, [], 5);
         $sut->evolve(3, 0.05);
     }
 

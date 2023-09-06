@@ -18,7 +18,7 @@ class L5rCompareTest extends TestCase {
                     'config' => __DIR__ . '/../testcmd.json'
         ]));
 
-        $this->assertRegExp("/Generation 0/", $tester->getDisplay());
+        $this->assertMatchesRegularExpression("/Generation 0/", $tester->getDisplay());
     }
 
 }

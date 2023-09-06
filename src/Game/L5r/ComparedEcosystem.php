@@ -10,11 +10,13 @@ use Trismegiste\Genetic\Game\PopulationLogger;
 /**
  * ComparedEcosystem is a competition with reference population
  */
-class ComparedEcosystem extends Ecosystem {
+class ComparedEcosystem extends Ecosystem
+{
 
     protected $referencePop = [];
 
-    public function __construct(int $size, MutableFighterFactory $fac, PopulationLogger $log, array $opponent, int $refSize) {
+    public function __construct(int $size, MutableFighterFactory $fac, PopulationLogger $log, array $opponent, int $refSize)
+    {
         parent::__construct($size, $fac, $log);
 
         // init population for reference
@@ -28,7 +30,8 @@ class ComparedEcosystem extends Ecosystem {
     /**
      * Completely override because new tournament algorithm
      */
-    protected function tournament(int $round) {
+    protected function tournament(int $round)
+    {
         foreach ($this->referencePop as $pc1) {
             foreach ($this->population as $pc2) {
                 $this->evaluateBestFighter($round, $pc1, $pc2);
@@ -39,7 +42,8 @@ class ComparedEcosystem extends Ecosystem {
     /**
      * Overload for reinitialising referencePop
      */
-    public function evolve(int $round, float $extinctRatio) {
+    public function evolve(int $round, float $extinctRatio)
+    {
         foreach ($this->referencePop as $pc) {
             $pc->newGeneration();
         }

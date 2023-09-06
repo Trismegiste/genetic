@@ -21,7 +21,7 @@ class SaWoFreeTest extends TestCase {
                     '--extinct' => 0.5
         ]));
 
-        $this->assertRegExp("/Generation 0/", $tester->getDisplay());
+        $this->assertMatchesRegularExpression("/Generation 0/", $tester->getDisplay());
     }
 
 }
