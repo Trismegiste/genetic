@@ -13,7 +13,8 @@ use Trismegiste\Genetic\Game\SaWo\Property\QuickEdge;
 use Trismegiste\Genetic\Game\SaWo\Property\Skill;
 use Trismegiste\Genetic\Game\SaWo\Property\TradeWeaponEdge;
 
-class CharacterFactory implements MutableFighterFactory {
+class CharacterFactory implements MutableFighterFactory
+{
 
     const defaultGenome = [
         'agility' => 6,
@@ -29,7 +30,8 @@ class CharacterFactory implements MutableFighterFactory {
         'quick' => false
     ];
 
-    public function create(array $param = array()): MutableFighter {
+    public function create(array $param = array()): MutableFighter
+    {
         $default = self::defaultGenome;
 
         // override
@@ -57,7 +59,8 @@ class CharacterFactory implements MutableFighterFactory {
         return new Character($genome);
     }
 
-    public function createRandom(): MutableFighter {
+    public function createRandom(): MutableFighter
+    {
         return $this->create([
                     'strength' => 2 * mt_rand(2, 6),
                     'vigor' => 2 * mt_rand(2, 6),
@@ -73,7 +76,8 @@ class CharacterFactory implements MutableFighterFactory {
         ]);
     }
 
-    public function createSpawn(array $partner): MutableFighter {
+    public function createSpawn(array $partner): MutableFighter
+    {
         $gb = count($partner);
         $crossed = [];
         $reference = $partner[0]->getGenome();

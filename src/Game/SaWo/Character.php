@@ -9,7 +9,8 @@ use Trismegiste\Genetic\Game\MutableFighter;
 /**
  * A SaWo character
  */
-class Character extends MutableFighter {
+class Character extends MutableFighter
+{
 
     protected $wound = 0;
     protected $fighting = 6;
@@ -20,19 +21,23 @@ class Character extends MutableFighter {
     protected $shaken = false;
     protected $weapon = 8;
 
-    public function getFitness() {
+    public function getFitness()
+    {
         return $this->victory;
     }
 
-    public function newGeneration() {
+    public function newGeneration()
+    {
         $this->victory = 0;
     }
 
-    public function isDead(): bool {
+    public function isDead(): bool
+    {
         return $this->wound > 3;
     }
 
-    public function receiveAttack(Fighter $pc) {
+    public function receiveAttack(Fighter $pc)
+    {
         $parry = $this->getParry();
         $attack = $pc->getAttack();
 
@@ -46,7 +51,8 @@ class Character extends MutableFighter {
         }
     }
 
-    protected function receiveDamage($damage) {
+    protected function receiveDamage($damage)
+    {
         // compare damage and toughness
         if ($damage >= $this->getToughness()) {
             $delta = floor(($damage - $this->getToughness()) / 4);
@@ -54,7 +60,8 @@ class Character extends MutableFighter {
         }
     }
 
-    protected function addWounds(int $w) {
+    protected function addWounds(int $w)
+    {
         if ($w === 0) {
             // new shaken condition :
             if ($this->shaken) {
@@ -79,22 +86,26 @@ class Character extends MutableFighter {
         }
     }
 
-    protected function roll(string $trait): int {
+    protected function roll(string $trait): int
+    {
         return DiceRoller::rollJoker($this->genome[$trait]) + $this->getWoundsPenalty();
     }
 
-    protected function useBenny() {
+    protected function useBenny()
+    {
         if (!$this->hasBenny()) {
             throw new RuntimeException("No more benny to use");
         }
         $this->usedBenny++;
     }
 
-    protected function hasBenny(): bool {
+    protected function hasBenny(): bool
+    {
         return $this->usedBenny < $this->benniesCount;
     }
 
-    public function getDamage() {
+    public function getDamage()
+    {
         $dice = min([$this->genome['strength']->get(), $this->weapon]);
 
         return DiceRoller::roll($this->genome['strength']) +
@@ -102,23 +113,27 @@ class Character extends MutableFighter {
                 $this->genome['attack']->getBonus();
     }
 
-    public function restart() {
+    public function restart()
+    {
         $this->wound = 0;
         $this->usedBenny = 0;
         $this->shaken = false;
     }
 
-    public function getParry() {
+    public function getParry()
+    {
         return $this->genome['fighting']->getDifficulty() +
                 $this->genome['block']->get() -
                 $this->genome['attack']->getBonus();
     }
 
-    public function getToughness(): int {
+    public function getToughness(): int
+    {
         return $this->genome['vigor']->getDifficulty();
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         $compil = '';
         foreach ($this->genome as $key => $gene) {
             $compil .= $key . ':' . $gene . ' ';
@@ -127,22 +142,26 @@ class Character extends MutableFighter {
         return $compil . 'win:' . $this->victory . ' cost:' . $this->getCost();
     }
 
-    public function getAttack() {
-        if ($this->shaken) {
-            $unshake = $this->roll('spirit');
-            if ($unshake >= 8) {
-                $this->shaken = false;
-            } else if ($unshake >= 4) {
-                $this->shaken = false;
-
-                return 0;
-            }
+    protected function tryUnshake(): void
+    {
+        $unshake = $this->roll('spirit');
+        if ($unshake >= 4) {
+            $this->shaken = false;
+            return;
         }
+
         if (($this->genome['benny']->get() === 'shaken') && ($this->hasBenny())) {
             $this->shaken = false;
             $this->useBenny();
         }
-        if ($this->shaken) {
+    }
+
+    public function getAttack()
+    {
+        if ($this->isShaken()) {
+            $this->tryUnshake();
+        }
+        if ($this->isShaken()) {
             return 0;
         }
 
@@ -155,19 +174,23 @@ class Character extends MutableFighter {
         return $roll;
     }
 
-    protected function rollFighting(): int {
+    protected function rollFighting(): int
+    {
         return $this->roll('fighting') + $this->genome['trademark']->get() + $this->genome['attack']->getBonus();
     }
 
-    public function getWoundsPenalty() {
+    public function getWoundsPenalty()
+    {
         return -$this->wound;
     }
 
-    public function isShaken(): bool {
+    public function isShaken(): bool
+    {
         return $this->shaken;
     }
 
-    public function getInitiative() {
+    public function getInitiative()
+    {
         $first = $this->genome['levelhead']->drawCard();
         $init = $this->genome['quick']->retryCard($first);
 
