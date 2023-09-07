@@ -67,7 +67,7 @@ abstract class ImagickPlotter implements ImagePlotter
         if ($s == 0) {
             return [$v, $v, $v];
         } else {
-            $h = ($h %= 360) / 60;
+            $h = (((int) $h) % 360) / 60;
             $i = floor($h);
             $f = $h - $i;
             $q[0] = $q[1] = $v * (1 - $s);

@@ -108,6 +108,18 @@ class Character extends MutableFighter
 
     public function getDamage()
     {
+        $damage = $this->rollDamage();
+
+        if (($damage < 8) && ($this->genome['benny']->get() === 'damage') && $this->hasBenny()) {
+            $damage = max($damage, $this->rollDamage());
+            $this->useBenny();
+        }
+
+        return $damage;
+    }
+
+    protected function rollDamage(): int
+    {
         $dice = min([$this->genome['strength']->get(), $this->weapon]);
 
         return DiceRoller::roll($this->genome['strength']) +
