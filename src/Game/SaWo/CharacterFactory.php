@@ -9,6 +9,7 @@ use Trismegiste\Genetic\Game\SaWo\Property\Attribute;
 use Trismegiste\Genetic\Game\SaWo\Property\BennyStrat;
 use Trismegiste\Genetic\Game\SaWo\Property\BlockEdge;
 use Trismegiste\Genetic\Game\SaWo\Property\LevelHeadedEdge;
+use Trismegiste\Genetic\Game\SaWo\Property\MultiAttackStrat;
 use Trismegiste\Genetic\Game\SaWo\Property\NerveOfSteelEdge;
 use Trismegiste\Genetic\Game\SaWo\Property\QuickEdge;
 use Trismegiste\Genetic\Game\SaWo\Property\Skill;
@@ -29,7 +30,8 @@ class CharacterFactory implements MutableFighterFactory
         'attack' => 'standard',
         'levelhead' => 0,
         'quick' => false,
-        'nervesteel' => 0
+        'nervesteel' => 0,
+        'multiattack' => 1
     ];
 
     public function create(array $param = array()): MutableFighter
@@ -56,7 +58,8 @@ class CharacterFactory implements MutableFighterFactory
             'attack' => new AttackStrat($default['attack']),
             'levelhead' => new LevelHeadedEdge($default['levelhead']),
             'quick' => new QuickEdge($default['quick']),
-            'nervesteel' => new NerveOfSteelEdge($default['nervesteel'])
+            'nervesteel' => new NerveOfSteelEdge($default['nervesteel']),
+            'multiattack' => new MultiAttackStrat($default['multiattack'])
         ];
 
         return new Character($genome);
@@ -77,6 +80,7 @@ class CharacterFactory implements MutableFighterFactory
                     'levelhead' => mt_rand(0, 2),
                     'quick' => (bool) mt_rand(0, 1),
                     'nervesteel' => mt_rand(0, 2),
+                    'multiattack' => mt_rand(1, 3),
         ]);
     }
 

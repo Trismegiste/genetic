@@ -36,18 +36,20 @@ class Character extends MutableFighter
         return $this->wound > 3;
     }
 
-    public function receiveAttack(Fighter $pc)
+    public function receiveAttack(Fighter $pc): void
     {
         $parry = $this->getParry();
-        $attack = $pc->getAttack();
+        $attacks = $pc->getAttack();
 
-        if ($attack >= $parry) {
-            $damage = $pc->getDamage();
-            // Raise ?
-            if (($attack - $parry) >= 4) {
-                $damage += DiceRoller::rollExplodingDie(6);
+        foreach ($attacks as $attack) {
+            if ($attack >= $parry) {
+                $damage = $pc->getDamage();
+                // Raise ?
+                if (($attack - $parry) >= 4) {
+                    $damage += DiceRoller::rollExplodingDie(6);
+                }
+                $this->receiveDamage($damage);
             }
-            $this->receiveDamage($damage);
         }
     }
 
@@ -156,15 +158,26 @@ class Character extends MutableFighter
         }
     }
 
-    public function getAttack()
+    public function getAttack(): array
     {
         if ($this->isShaken()) {
             $this->tryUnshake();
         }
         if ($this->isShaken()) {
-            return 0;
+            return [0];
         }
 
+        $nb = $this->genome['multiattack']->get();
+        $roll = [];
+        for ($k = 0; $k < $nb; $k++) {
+            $roll[] = $this->getOneAttack();
+        }
+
+        return $roll;
+    }
+
+    protected function getOneAttack(): int
+    {
         $roll = $this->rollFighting();
         if (($roll < 4) && ($this->genome['benny']->get() === 'attack') && $this->hasBenny()) {
             $roll = $this->rollFighting();
@@ -176,7 +189,10 @@ class Character extends MutableFighter
 
     protected function rollFighting(): int
     {
-        return $this->roll('fighting') + $this->genome['trademark']->get() + $this->genome['attack']->getBonus();
+        return $this->roll('fighting') +
+                $this->genome['trademark']->get() +
+                $this->genome['attack']->getBonus() +
+                $this->genome['multiattack']->getPenalty();
     }
 
     public function getWoundsPenalty()
