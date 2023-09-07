@@ -3,17 +3,20 @@
 use PHPUnit\Framework\TestCase;
 use Trismegiste\Genetic\Util\PlotterXY;
 
-class PlotterXYTest extends TestCase {
+class PlotterXYTest extends TestCase
+{
 
     /** @dataProvider dataSet */
-    public function testExtremum($data, $expect) {
+    public function testExtremum($data, $expect)
+    {
         $sut = new PlotterXY(50, 50, 'dummy');
         $grafx[0] = $data;
         $boundaries = $sut->getBoundaries($grafx);
         $this->assertEquals($expect, $boundaries);
     }
 
-    public function dataSet() {
+    public function dataSet()
+    {
         return [
             [
                 [['x' => 1, 'y' => 1], ['x' => 2, 'y' => 3]],
@@ -30,7 +33,8 @@ class PlotterXYTest extends TestCase {
         ];
     }
 
-    public function testDrawing() {
+    public function testDrawing()
+    {
         $fch = tempnam(__DIR__, 'test');
         $this->assertFileExists($fch);
         $sut = new PlotterXY(500, 500, $fch);
@@ -42,7 +46,9 @@ class PlotterXYTest extends TestCase {
             }
         }
         $sut->draw($data);
-    //    $this->assertFileEquals(__DIR__ . '/../testplotter.png', $fch);
+        list($width, $height) = getimagesize($fch);
+        $this->assertEquals(500, $width);
+        $this->assertEquals(500, $height);
         unlink($fch);
     }
 
