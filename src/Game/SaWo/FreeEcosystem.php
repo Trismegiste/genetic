@@ -28,7 +28,7 @@ class FreeEcosystem extends DarwinWorld {
     }
 
     protected function selectPopulation(float $extinctRatio) {
-        $this->crossingAndMutateStrategy($extinctRatio);
+        $this->cloneBestAndMutateStrategy($extinctRatio);
     }
 
     protected function battle(Fighter $pc1, Fighter $pc2): Fighter {

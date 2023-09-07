@@ -7,39 +7,48 @@ use Trismegiste\Genetic\Game\Property;
 /**
  * Strategy for Bennies
  */
-class BennyStrat implements Property {
+class BennyStrat implements Property
+{
 
-    const choice = ['attack', 'soak', 'shaken'];
+    const choice = ['attack', 'soak', 'shaken', 'damage'];
 
     protected $strat;
 
-    public function __construct(string $s) {
+    public function __construct(string $s)
+    {
         if (!in_array($s, self::choice, true)) {
             throw new \DomainException($s);
         }
         $this->strat = $s;
     }
 
-    public function get() {
+    public function get()
+    {
         return $this->strat;
     }
 
-    public function getCost() {
+    public function getCost()
+    {
         return 0;
     }
 
-    public function mutate() {
+    public function mutate()
+    {
         $old = $this->strat;
         do {
             $this->strat = self::getRandomStrat();
         } while ($this->strat === $old);
     }
 
-    static public function getRandomStrat() {
-        return self::choice[mt_rand(0, count(self::choice) - 1)];
+    static public function getRandomStrat()
+    {
+        $pick = array_rand(self::choice);
+
+        return self::choice[$pick];
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->strat;
     }
 

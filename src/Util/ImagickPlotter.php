@@ -5,17 +5,20 @@ namespace Trismegiste\Genetic\Util;
 /**
  * An ImagePlotter with image magick
  */
-abstract class ImagickPlotter implements ImagePlotter {
+abstract class ImagickPlotter implements ImagePlotter
+{
 
     protected $width;
     protected $height;
 
-    public function __construct(int $w, int $h) {
+    public function __construct(int $w, int $h)
+    {
         $this->width = $w;
         $this->height = $h;
     }
 
-    public function createImage($width, $height, $red, $green, $blue) {
+    public function createImage($width, $height, $red, $green, $blue)
+    {
         $handle = imagecreatetruecolor($width, $height);
         $background = imagecolorallocate($handle, $red, $green, $blue);
         imagefill($handle, 0, 0, $background);
@@ -29,7 +32,8 @@ abstract class ImagickPlotter implements ImagePlotter {
      * @param array $curves an array of array of ['x' => x, 'y' => y]
      * @return stdClass
      */
-    public function getBoundaries(array& $curves): \stdClass {
+    public function getBoundaries(array & $curves): \stdClass
+    {
         $maxHori = $minHori = $curves[0][0]['x'];
         $maxVert = $minVert = $curves[0][0]['y'];
         foreach ($curves as $data) {
@@ -58,7 +62,8 @@ abstract class ImagickPlotter implements ImagePlotter {
      * $c = array($hue, $saturation, $brightness)
      * $hue=[0..360], $saturation=[0..1], $brightness=[0..1]
      */
-    protected function hsv2rgb($h, $s, $v): array {
+    protected function hsv2rgb($h, $s, $v): array
+    {
         if ($s == 0) {
             return [$v, $v, $v];
         } else {

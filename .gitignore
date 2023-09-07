@@ -2,3 +2,4 @@
 /vendor
 /doc/coverage
 .phpunit.result.cache
+/img

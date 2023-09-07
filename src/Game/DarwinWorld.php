@@ -6,7 +6,8 @@ namespace Trismegiste\Genetic\Game;
  * An abstract class for genetic algorithm
  * Works with Mutable object
  */
-abstract class DarwinWorld {
+abstract class DarwinWorld
+{
 
     /** @var Mutable */
     protected $population = [];
@@ -16,7 +17,8 @@ abstract class DarwinWorld {
     /**
      * Ctor
      */
-    public function __construct(int $size, MutableFighterFactory $fac, PopulationLogger $log) {
+    public function __construct(int $size, MutableFighterFactory $fac, PopulationLogger $log)
+    {
         $this->factory = $fac;
         $this->logger = $log;
         $this->population = [];
@@ -28,7 +30,8 @@ abstract class DarwinWorld {
     /**
      * Tournament between population to evalute a Fitness
      */
-    protected function tournament(int $round) {
+    protected function tournament(int $round)
+    {
         foreach ($this->population as $idx1 => $pc1) {
             foreach ($this->population as $idx2 => $pc2) {
                 if ($idx2 <= $idx1) {
@@ -43,7 +46,8 @@ abstract class DarwinWorld {
      * Getter for population size
      * @return int
      */
-    public function getSize(): int {
+    public function getSize(): int
+    {
         return count($this->population);
     }
 
@@ -53,7 +57,8 @@ abstract class DarwinWorld {
      * @param float $extinctRatio A ratio between [0,1] of how many PC gets extinct by the natural selection. Ex: 0.05 means 5% of PC will be replaced by the best fitted with mutation
      * @return array an array of string containing a selection of PC for printing
      */
-    public function evolve(int $round, float $extinctRatio) {
+    public function evolve(int $round, float $extinctRatio)
+    {
         // re-initialise pop
         foreach ($this->population as $pc) {
             $pc->newGeneration();
@@ -61,7 +66,7 @@ abstract class DarwinWorld {
 
         $this->tournament($round);
 
-        usort($this->population, function($a, $b) {
+        usort($this->population, function ($a, $b) {
             return $b->getFitness() - $a->getFitness();
         });
 
@@ -83,7 +88,8 @@ abstract class DarwinWorld {
      * @param float $extinctRatio
      * @see selectPopulation()
      */
-    protected function crossingAndMutateStrategy(float $extinctRatio) {
+    protected function crossingAndMutateStrategy(float $extinctRatio)
+    {
         $extinctCount = $extinctRatio * $this->getSize();
         for ($idx = 0; $idx < $extinctCount; $idx++) {
             $partnerIdx = $this->getSize() - 1 - $idx;
@@ -94,11 +100,12 @@ abstract class DarwinWorld {
     }
 
     /**
-     * Kills the worst fitted PC and replaces them with mutated clones of the best fitted PC
+     * Kills the worst fitted PC and replaces them with mutated clones of the top fitted PCs
      * @param float $extinctRatio A ratio between [0,1]
      * @see selectPopulation()
      */
-    protected function cloneAndMutateStrategy(float $extinctRatio) {
+    protected function cloneAndMutateStrategy(float $extinctRatio)
+    {
         $extinctIdx = (1 - $extinctRatio) * $this->getSize();
         // select & mutate
         foreach ($this->population as $idx => $pc) {
@@ -111,7 +118,29 @@ abstract class DarwinWorld {
         }
     }
 
-    protected function evaluateBestFighter(int $round, Mutable $pc1, Mutable $pc2) {
+    /**
+     * Kills the worst fitted PC and replaces them with mutated clones of the best fitted PC
+     * @param float $extinctRatio A ratio between [0,1]
+     * @see selectPopulation()
+     */
+    protected function cloneBestAndMutateStrategy(float $extinctRatio)
+    {
+        $extinctIdx = (1 - $extinctRatio) * $this->getSize();
+        // select & mutate
+        foreach ($this->population as $idx => $pc) {
+            if ($idx >= $extinctIdx) {
+                // we clone & mutate the best fit to replace the worst fit
+                $npc = clone $this->population[0];
+                $npc->mutate();
+                $npc->mutate();
+                $npc->mutate();
+                $this->population[$idx] = $npc;
+            }
+        }
+    }
+
+    protected function evaluateBestFighter(int $round, Mutable $pc1, Mutable $pc2)
+    {
         $delta = $pc1->getCost() - $pc2->getCost();
 
         $key1 = spl_object_hash($pc1);
@@ -121,7 +150,7 @@ abstract class DarwinWorld {
             $pc1->restart();
             $pc2->restart();
             $winner = $this->battle($pc1, $pc2);
-            $win[spl_object_hash($winner)] ++;
+            $win[spl_object_hash($winner)]++;
         }
 
         if (($win[$key1] > $win[$key2]) && ($delta <= 0)) {
@@ -146,7 +175,8 @@ abstract class DarwinWorld {
      * @param Fighter $pc2
      * @return Fighter the winner
      */
-    protected function battle(Fighter $pc1, Fighter $pc2): Fighter {
+    protected function battle(Fighter $pc1, Fighter $pc2): Fighter
+    {
         $player = $this->getInitiativeTurn($pc1, $pc2);
 
         while (!$pc1->isDead() && !$pc2->isDead()) {

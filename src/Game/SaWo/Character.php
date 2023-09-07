@@ -181,7 +181,10 @@ class Character extends MutableFighter
 
     public function getWoundsPenalty()
     {
-        return -$this->wound;
+        $ignore = $this->genome['nervesteel']->get();
+        $effectiveWound = $this->wound > $ignore ? $this->wound - $ignore : 0;
+
+        return -$effectiveWound;
     }
 
     public function isShaken(): bool
