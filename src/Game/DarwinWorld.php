@@ -11,7 +11,7 @@ abstract class DarwinWorld
 
     /** @var Mutable */
     protected $population = [];
-    protected $logger;
+    protected PopulationLogger $logger;
     protected $factory;
 
     /**

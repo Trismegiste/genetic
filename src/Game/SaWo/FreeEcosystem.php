@@ -29,9 +29,38 @@ class FreeEcosystem extends DarwinWorld
         }
     }
 
+    private function selectBestPerCost(float $extinctRatio): void
+    {
+        $extinctCount = $extinctRatio * $this->getSize();
+        $bestCost = $this->population[0]->getCost();
+        $best = [];
+        foreach ($this->population as $fighter) {
+            $cost = $fighter->getCost();
+            if ($cost >= $bestCost) {
+                if (!key_exists($cost, $best)) {
+                    $best[$cost] = $fighter;
+                } else {
+                    if ($fighter->getFitness() > $best[$cost]->getFitness()) {
+                        $best[$cost] = $fighter;
+                    }
+                }
+            }
+            if (count($best) > $extinctCount) {
+                break;
+            }
+        }
+        $best = array_values($best);
+
+        for ($idx = $this->getSize() - $extinctCount; $idx < $this->getSize(); $idx++) {
+            $child = $this->factory->createSpawn($best);
+            $child->mutate();
+            $this->population[$idx] = $child;
+        }
+    }
+
     protected function selectPopulation(float $extinctRatio)
     {
-        $this->onlyBestReproduce($extinctRatio);
+        $this->selectBestPerCost($extinctRatio);
     }
 
     protected function battle(Fighter $pc1, Fighter $pc2): Fighter
