@@ -180,9 +180,15 @@ class Character extends MutableFighter
         }
 
         $nb = $this->genome['multiattack']->get();
+        $rofEdge = $rof = $this->genome['frenzy']->get();
         $roll = [];
         for ($k = 0; $k < $nb; $k++) {
-            $roll[] = $this->getOneAttack();
+            if ($rof === 0) {
+                $roll[] = $this->getOneAttack();
+            } else {
+                $roll = array_merge($roll, $this->getOneAttackRateOfFire($rofEdge));
+                $rof--;
+            }
         }
 
         return $roll;
@@ -199,12 +205,38 @@ class Character extends MutableFighter
         return $roll;
     }
 
+    protected function getOneAttackRateOfFire(int $rateOfFire): array
+    {
+        $roll = $this->rollFightingRateOfFire($rateOfFire);
+
+        if ((max($roll) < 4) && ($this->genome['benny']->get() === 'attack') && $this->hasBenny()) {
+            $roll = $this->rollFightingRateOfFire($rateOfFire);
+            $this->useBenny();
+        }
+
+        return $roll;
+    }
+
     protected function rollFighting(): int
     {
         return $this->roll('fighting') +
                 $this->genome['trademark']->get() +
                 $this->genome['attack']->getBonus() +
                 $this->genome['multiattack']->getPenalty();
+    }
+
+    protected function rollFightingRateOfFire(int $rateOfFire): array
+    {
+        $pool = DiceRoller::rollJokerRateOfFire($this->genome['fighting'], $rateOfFire);
+
+        array_walk($pool, function (int &$value) {
+            $value += $this->getWoundsPenalty() +
+                    $this->genome['trademark']->get() +
+                    $this->genome['attack']->getBonus() +
+                    $this->genome['multiattack']->getPenalty();
+        });
+
+        return $pool;
     }
 
     public function getWoundsPenalty()

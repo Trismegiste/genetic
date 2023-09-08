@@ -6,18 +6,21 @@ use PHPUnit\Framework\TestCase;
 use Trismegiste\Genetic\Game\SaWo\DiceRoller;
 use Trismegiste\Genetic\Game\SaWo\Property\SaWoTrait;
 
-class DiceRollerTest extends TestCase {
+class DiceRollerTest extends TestCase
+{
 
     const iter = 10000;
 
-    public function getStat() {
+    public function getStat()
+    {
         return [
             [6, 4.2],
             [10, 6.1]
         ];
     }
 
-    public function getStatJoker() {
+    public function getStatJoker()
+    {
         return [
             [4, 4, 0.62],
             [12, 4, 0.87],
@@ -28,7 +31,8 @@ class DiceRollerTest extends TestCase {
     }
 
     /** @dataProvider getStat */
-    public function testAverage($face, $average) {
+    public function testAverage($face, $average)
+    {
         $sum = 0;
         $dice = $this->getMockForAbstractClass(SaWoTrait::class, [$face]);
         for ($k = 0; $k < self::iter; $k++) {
@@ -39,7 +43,8 @@ class DiceRollerTest extends TestCase {
     }
 
     /** @dataProvider getStatJoker */
-    public function testSuccessJoker($face, $fd, $percent) {
+    public function testSuccessJoker($face, $fd, $percent)
+    {
         $sum = 0;
         $dice = $this->getMockForAbstractClass(SaWoTrait::class, [$face]);
         for ($k = 0; $k < self::iter; $k++) {
@@ -47,6 +52,13 @@ class DiceRollerTest extends TestCase {
         }
         $delta = ($sum / self::iter - $percent) / $percent;
         $this->assertLessThan(0.1, $delta);
+    }
+
+    public function testRateOfFire()
+    {
+        $dice = $this->getMockForAbstractClass(SaWoTrait::class, [8]);
+        $pool = DiceRoller::rollJokerRateOfFire($dice, 3);
+        $this->assertCount(3, $pool);
     }
 
 }

@@ -99,6 +99,17 @@ abstract class DarwinWorld
         }
     }
 
+    protected function onlyBestReproduce(float $extinctRatio): void
+    {
+        $extinctCount = $extinctRatio * $this->getSize();
+        $best = array_slice($this->population, 0, $extinctCount);
+        for ($idx = $this->getSize() - $extinctCount; $idx < $this->getSize(); $idx++) {
+            $child = $this->factory->createSpawn($best);
+            $child->mutate();
+            $this->population[$idx] = $child;
+        }
+    }
+
     /**
      * Kills the worst fitted PC and replaces them with mutated clones of the top fitted PCs
      * @param float $extinctRatio A ratio between [0,1]

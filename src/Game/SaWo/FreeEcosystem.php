@@ -8,9 +8,11 @@ use Trismegiste\Genetic\Game\Fighter;
 /**
  * A Free evolution for SaWo
  */
-class FreeEcosystem extends DarwinWorld {
+class FreeEcosystem extends DarwinWorld
+{
 
-    protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2): array {
+    protected function getInitiativeTurn(Fighter $pc1, Fighter $pc2): array
+    {
         $init1 = $pc1->getInitiative();
         $init2 = $pc2->getInitiative();
 
@@ -27,11 +29,13 @@ class FreeEcosystem extends DarwinWorld {
         }
     }
 
-    protected function selectPopulation(float $extinctRatio) {
-        $this->cloneBestAndMutateStrategy($extinctRatio);
+    protected function selectPopulation(float $extinctRatio)
+    {
+        $this->onlyBestReproduce($extinctRatio);
     }
 
-    protected function battle(Fighter $pc1, Fighter $pc2): Fighter {
+    protected function battle(Fighter $pc1, Fighter $pc2): Fighter
+    {
         while (!$pc1->isDead() && !$pc2->isDead()) {
             $player = $this->getInitiativeTurn($pc1, $pc2);
             if (!$player[0]->isDead()) {

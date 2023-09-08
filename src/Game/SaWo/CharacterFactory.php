@@ -31,6 +31,7 @@ class CharacterFactory implements MutableFighterFactory
         'levelhead' => 0,
         'quick' => false,
         'nervesteel' => 0,
+        'frenzy' => 0,
         'multiattack' => 1
     ];
 
@@ -59,6 +60,7 @@ class CharacterFactory implements MutableFighterFactory
             'levelhead' => new LevelHeadedEdge($default['levelhead']),
             'quick' => new QuickEdge($default['quick']),
             'nervesteel' => new NerveOfSteelEdge($default['nervesteel']),
+            'frenzy' => new Property\FrenzyEdge($default['frenzy']),
             'multiattack' => new MultiAttackStrat($default['multiattack'])
         ];
 
@@ -80,6 +82,7 @@ class CharacterFactory implements MutableFighterFactory
                     'levelhead' => mt_rand(0, 2),
                     'quick' => (bool) mt_rand(0, 1),
                     'nervesteel' => mt_rand(0, 2),
+                    'frenzy' => mt_rand(0, 2),
                     'multiattack' => mt_rand(1, 3),
         ]);
     }
@@ -88,8 +91,8 @@ class CharacterFactory implements MutableFighterFactory
     {
         $gb = count($partner);
         $crossed = [];
-        $reference = $partner[0]->getGenome();
-        foreach ($reference as $key => $gene) {
+        $reference = array_keys($partner[0]->getGenome());
+        foreach ($reference as $key) {
             $choice = mt_rand(0, $gb - 1);
             $crossed[$key] = clone $partner[$choice]->getGenome()[$key];
         }
