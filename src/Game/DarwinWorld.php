@@ -77,9 +77,10 @@ abstract class DarwinWorld
 
     /**
      * Selection processus for the population
-     * Create your own selection process or use one the two method below
+     * Create your own selection process or use one the 3 methods below
      * @see crossingAndMutateStrategy()
      * @see cloneAndMutateStrategy()
+     * @see onlyBestReproduce()
      */
     abstract protected function selectPopulation(float $extinctRatio);
 
@@ -99,6 +100,11 @@ abstract class DarwinWorld
         }
     }
 
+    /**
+     * Natural selection, only the best reproduce
+     * @param float $extinctRatio
+     * @return void
+     */
     protected function onlyBestReproduce(float $extinctRatio): void
     {
         $extinctCount = $extinctRatio * $this->getSize();
@@ -123,27 +129,6 @@ abstract class DarwinWorld
             if ($idx >= $extinctIdx) {
                 // we clone & mutate the best fit to replace the worst fit
                 $npc = clone $this->population[$idx - $extinctIdx];
-                $npc->mutate();
-                $this->population[$idx] = $npc;
-            }
-        }
-    }
-
-    /**
-     * Kills the worst fitted PC and replaces them with mutated clones of the best fitted PC
-     * @param float $extinctRatio A ratio between [0,1]
-     * @see selectPopulation()
-     */
-    protected function cloneBestAndMutateStrategy(float $extinctRatio)
-    {
-        $extinctIdx = (1 - $extinctRatio) * $this->getSize();
-        // select & mutate
-        foreach ($this->population as $idx => $pc) {
-            if ($idx >= $extinctIdx) {
-                // we clone & mutate the best fit to replace the worst fit
-                $npc = clone $this->population[0];
-                $npc->mutate();
-                $npc->mutate();
                 $npc->mutate();
                 $this->population[$idx] = $npc;
             }
